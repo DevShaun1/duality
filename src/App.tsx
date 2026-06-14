@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/button";
+
 function App() {
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50 ">
@@ -14,6 +16,8 @@ function App() {
           An AI reflection companion for daily journalling, alternative
           perspectives, and intentional growth.
         </p>
+
+        <Button>Get Started</Button>
       </section>
     </main>
   );
