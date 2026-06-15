@@ -6,6 +6,7 @@ import Login from "@/pages/Login";
 import Reflection from "@/pages/Reflection";
 import WeeklyReview from "@/pages/WeeklyReview";
 import NotFound from "@/pages/NotFound";
+import History from "@/pages/History";
 
 export function AppRoutes() {
   return (
@@ -16,6 +17,7 @@ export function AppRoutes() {
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/reflection/new" element={<Reflection />} />
       <Route path="/weekly-review" element={<WeeklyReview />} />
+      <Route path="/history" element={<History />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
