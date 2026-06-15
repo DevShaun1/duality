@@ -1,7 +1,7 @@
 import LoginForm from '@/features/auth/components/LoginForm';
 import { AuthCard } from '@/features/auth/components/AuthCard';
 
-export default function LoginPage() {
+export default function Login() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-slate-950 px-4 text-slate-100">
       <div className="w-full max-w-md">
