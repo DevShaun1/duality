@@ -1,9 +1,22 @@
-import { Navigate, NavLink } from 'react-router-dom';
+import { Navigate, NavLink, useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
 import { useAuth } from '@/features/auth/AuthProvider';
+import { supabase } from '@/lib/supabase';
 
 export default function TopNavigation() {
     const { isLoggedIn } = useAuth();
+    const navigate = useNavigate();
+
+    const handleSignOut = async () => {
+        const { error } = await supabase.auth.signOut();
+
+        if (error) {
+            console.error('Error signing out:', error.message);
+            return;
+        }
+
+        navigate('/login', { replace: true });
+    };
     if (!isLoggedIn) {
         return <Navigate to='/login' replace />;
     }
@@ -16,7 +29,7 @@ export default function TopNavigation() {
         }`;
 
     return (
-        <header className='sticky top-0 z-50 border-b border-border/70 bg-background/95 backdrop-blur supports-[ackdrop-filter:bg-background/85'>
+        <header className='sticky top-0 z-50 border-b border-border/70 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/85'>
             <div className='mx-auto flex h-16 max-w-6xl items-center justify-between px-6'>
                 <NavLink
                     to='/reflection'
@@ -42,6 +55,7 @@ export default function TopNavigation() {
                     <Button
                         variant='outline'
                         size='sm'
+                        onClick={handleSignOut}
                         className='border-border bg-card text-muted-foreground shadow-sm hover:border-primary hover:bg-primary hover:text-primary-foreground'
                     >
                         Sign out
