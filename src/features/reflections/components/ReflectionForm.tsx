@@ -1,16 +1,16 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { reflectionFormSchema } from '../schemas/reflectionSchema';
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
+import { reflectionFormSchema } from '../schemas/reflectionSchema'
 
-type ReflectionFormValues = z.infer<typeof reflectionFormSchema>;
+type ReflectionFormValues = z.infer<typeof reflectionFormSchema>
 
 export function ReflectionForm() {
   const {
@@ -29,13 +29,13 @@ export function ReflectionForm() {
       exercise: false,
       reflection: '',
     },
-  });
+  })
 
-  const exercised = watch('exercise');
+  const exercised = watch('exercise')
 
   const onSubmit = (data: ReflectionFormValues) => {
-    console.log(data);
-  };
+    console.log(data)
+  }
 
   return (
     <Card>
@@ -57,9 +57,7 @@ export function ReflectionForm() {
                 {...register('sleepHours', { valueAsNumber: true })}
               />
               {errors.sleepHours && (
-                <p className="text-sm text-destructive">
-                  {errors.sleepHours.message}
-                </p>
+                <p className="text-sm text-destructive">{errors.sleepHours.message}</p>
               )}
             </div>
 
@@ -72,11 +70,7 @@ export function ReflectionForm() {
                 max="10"
                 {...register('energy', { valueAsNumber: true })}
               />
-              {errors.energy && (
-                <p className="text-sm text-destructive">
-                  {errors.energy.message}
-                </p>
-              )}
+              {errors.energy && <p className="text-sm text-destructive">{errors.energy.message}</p>}
             </div>
 
             <div className="space-y-2">
@@ -88,11 +82,7 @@ export function ReflectionForm() {
                 max="10"
                 {...register('mood', { valueAsNumber: true })}
               />
-              {errors.mood && (
-                <p className="text-sm text-destructive">
-                  {errors.mood.message}
-                </p>
-              )}
+              {errors.mood && <p className="text-sm text-destructive">{errors.mood.message}</p>}
             </div>
 
             <div className="space-y-2">
@@ -104,11 +94,7 @@ export function ReflectionForm() {
                 max="10"
                 {...register('stress', { valueAsNumber: true })}
               />
-              {errors.stress && (
-                <p className="text-sm text-destructive">
-                  {errors.stress.message}
-                </p>
-              )}
+              {errors.stress && <p className="text-sm text-destructive">{errors.stress.message}</p>}
             </div>
           </div>
 
@@ -135,9 +121,7 @@ export function ReflectionForm() {
               {...register('reflection')}
             />
             {errors.reflection && (
-              <p className="text-sm text-destructive">
-                {errors.reflection.message}
-              </p>
+              <p className="text-sm text-destructive">{errors.reflection.message}</p>
             )}
           </div>
 
@@ -147,5 +131,5 @@ export function ReflectionForm() {
         </form>
       </CardContent>
     </Card>
-  );
+  )
 }

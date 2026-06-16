@@ -1,7 +1,7 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+@import '@fontsource-variable/geist';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -22,156 +22,156 @@
 */
 
 @theme inline {
-    --font-heading: var(--font-sans);
-    --font-sans: 'Geist Variable', sans-serif;
-    --color-sidebar-ring: var(--sidebar-ring);
-    --color-sidebar-border: var(--sidebar-border);
-    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-    --color-sidebar-accent: var(--sidebar-accent);
-    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-    --color-sidebar-primary: var(--sidebar-primary);
-    --color-sidebar-foreground: var(--sidebar-foreground);
-    --color-sidebar: var(--sidebar);
-    --color-chart-5: var(--chart-5);
-    --color-chart-4: var(--chart-4);
-    --color-chart-3: var(--chart-3);
-    --color-chart-2: var(--chart-2);
-    --color-chart-1: var(--chart-1);
-    --color-ring: var(--ring);
-    --color-input: var(--input);
-    --color-border: var(--border);
-    --color-destructive: var(--destructive);
-    --color-accent-foreground: var(--accent-foreground);
-    --color-accent: var(--accent);
-    --color-muted-foreground: var(--muted-foreground);
-    --color-muted: var(--muted);
-    --color-secondary-foreground: var(--secondary-foreground);
-    --color-secondary: var(--secondary);
-    --color-primary-foreground: var(--primary-foreground);
-    --color-primary: var(--primary);
-    --color-popover-foreground: var(--popover-foreground);
-    --color-popover: var(--popover);
-    --color-card-foreground: var(--card-foreground);
-    --color-card: var(--card);
-    --color-foreground: var(--foreground);
-    --color-background: var(--background);
-    --radius-sm: calc(var(--radius) * 0.6);
-    --radius-md: calc(var(--radius) * 0.8);
-    --radius-lg: var(--radius);
-    --radius-xl: calc(var(--radius) * 1.4);
-    --radius-2xl: calc(var(--radius) * 1.8);
-    --radius-3xl: calc(var(--radius) * 2.2);
-    --radius-4xl: calc(var(--radius) * 2.6);
+  --font-heading: var(--font-sans);
+  --font-sans: 'Geist Variable', sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
 :root {
-    color-scheme: dark;
+  color-scheme: dark;
 
-    --background: #06111C;
-    --foreground: #F3F6F7;
+  --background: #06111c;
+  --foreground: #f3f6f7;
 
-    --card: #111C2A;
-    --card-foreground: #F3F6F7;
+  --card: #111c2a;
+  --card-foreground: #f3f6f7;
 
-    --popover: #111C2A;
-    --popover-foreground: #F3F6F7;
+  --popover: #111c2a;
+  --popover-foreground: #f3f6f7;
 
-    --primary: #18B7B0;
-    --primary-foreground: #06111C;
+  --primary: #18b7b0;
+  --primary-foreground: #06111c;
 
-    --secondary: #0B1622;
-    --secondary-foreground: #F3F6F7;
+  --secondary: #0b1622;
+  --secondary-foreground: #f3f6f7;
 
-    --muted: #172231;
-    --muted-foreground: #A7B3C2;
+  --muted: #172231;
+  --muted-foreground: #a7b3c2;
 
-    --accent: #18B7B0;
-    --accent-foreground: #06111C;
+  --accent: #18b7b0;
+  --accent-foreground: #06111c;
 
-    --destructive: #D97A73;
-    --destructive-foreground: #F3F6F7;
+  --destructive: #d97a73;
+  --destructive-foreground: #f3f6f7;
 
-    --border: #263544;
-    --input: #263544;
-    --ring: #18B7B0;
+  --border: #263544;
+  --input: #263544;
+  --ring: #18b7b0;
 
-    --chart-1: #18B7B0;
-    --chart-2: #7CBFA3;
-    --chart-3: #D8A25E;
-    --chart-4: #A7B3C2;
-    --chart-5: #7E8B99;
+  --chart-1: #18b7b0;
+  --chart-2: #7cbfa3;
+  --chart-3: #d8a25e;
+  --chart-4: #a7b3c2;
+  --chart-5: #7e8b99;
 
-    --radius: 0.75rem;
+  --radius: 0.75rem;
 
-    --sidebar: #0B1622;
-    --sidebar-foreground: #F3F6F7;
-    --sidebar-primary: #18B7B0;
-    --sidebar-primary-foreground: #06111C;
-    --sidebar-accent: #111C2A;
-    --sidebar-accent-foreground: #F3F6F7;
-    --sidebar-border: #263544;
-    --sidebar-ring: #18B7B0;
+  --sidebar: #0b1622;
+  --sidebar-foreground: #f3f6f7;
+  --sidebar-primary: #18b7b0;
+  --sidebar-primary-foreground: #06111c;
+  --sidebar-accent: #111c2a;
+  --sidebar-accent-foreground: #f3f6f7;
+  --sidebar-border: #263544;
+  --sidebar-ring: #18b7b0;
 }
 
 .dark {
-    --background: #06111C;
-    --foreground: #F3F6F7;
+  --background: #06111c;
+  --foreground: #f3f6f7;
 
-    --card: #111C2A;
-    --card-foreground: #F3F6F7;
+  --card: #111c2a;
+  --card-foreground: #f3f6f7;
 
-    --popover: #111C2A;
-    --popover-foreground: #F3F6F7;
+  --popover: #111c2a;
+  --popover-foreground: #f3f6f7;
 
-    --primary: #18B7B0;
-    --primary-foreground: #06111C;
+  --primary: #18b7b0;
+  --primary-foreground: #06111c;
 
-    --secondary: #0B1622;
-    --secondary-foreground: #F3F6F7;
+  --secondary: #0b1622;
+  --secondary-foreground: #f3f6f7;
 
-    --muted: #172231;
-    --muted-foreground: #A7B3C2;
+  --muted: #172231;
+  --muted-foreground: #a7b3c2;
 
-    --accent: #18B7B0;
-    --accent-foreground: #06111C;
+  --accent: #18b7b0;
+  --accent-foreground: #06111c;
 
-    --destructive: #D97A73;
-    --destructive-foreground: #F3F6F7;
+  --destructive: #d97a73;
+  --destructive-foreground: #f3f6f7;
 
-    --border: #263544;
-    --input: #263544;
-    --ring: #18B7B0;
+  --border: #263544;
+  --input: #263544;
+  --ring: #18b7b0;
 
-    --chart-1: #18B7B0;
-    --chart-2: #7CBFA3;
-    --chart-3: #D8A25E;
-    --chart-4: #A7B3C2;
-    --chart-5: #7E8B99;
+  --chart-1: #18b7b0;
+  --chart-2: #7cbfa3;
+  --chart-3: #d8a25e;
+  --chart-4: #a7b3c2;
+  --chart-5: #7e8b99;
 
-    --sidebar: #0B1622;
-    --sidebar-foreground: #F3F6F7;
-    --sidebar-primary: #18B7B0;
-    --sidebar-primary-foreground: #06111C;
-    --sidebar-accent: #111C2A;
-    --sidebar-accent-foreground: #F3F6F7;
-    --sidebar-border: #263544;
-    --sidebar-ring: #18B7B0;
+  --sidebar: #0b1622;
+  --sidebar-foreground: #f3f6f7;
+  --sidebar-primary: #18b7b0;
+  --sidebar-primary-foreground: #06111c;
+  --sidebar-accent: #111c2a;
+  --sidebar-accent-foreground: #f3f6f7;
+  --sidebar-border: #263544;
+  --sidebar-ring: #18b7b0;
 }
 
 @layer base {
-    * {
-        @apply border-border outline-ring/50;
-    }
+  * {
+    @apply border-border outline-ring/50;
+  }
 
-    html {
-        @apply min-h-screen font-sans bg-background;
-    }
+  html {
+    @apply min-h-screen font-sans bg-background;
+  }
 
-    body {
-        @apply min-h-screen bg-background text-foreground antialiased;
-    }
+  body {
+    @apply min-h-screen bg-background text-foreground antialiased;
+  }
 
-    #root {
-        @apply min-h-screen bg-background;
-    }
+  #root {
+    @apply min-h-screen bg-background;
+  }
 }

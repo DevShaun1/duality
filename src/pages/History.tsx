@@ -1,67 +1,61 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase'
 
 type Reflection = {
-  id: string;
-  created_at: string;
-  reflection: string;
-  sleep_hours: number | null;
-  energy: number | null;
-  mood: number | null;
-  stress: number | null;
-  exercise: boolean | null;
-};
+  id: string
+  created_at: string
+  reflection: string
+  sleep_hours: number | null
+  energy: number | null
+  mood: number | null
+  stress: number | null
+  exercise: boolean | null
+}
 
 export default function HistoryPage() {
-  const [reflections, setReflections] = useState<Reflection[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [reflections, setReflections] = useState<Reflection[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     async function fetchReflections() {
       const { data, error } = await supabase
         .from('reflections')
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
 
       if (error) {
-        setError(error.message);
-        setLoading(false);
-        return;
+        setError(error.message)
+        setLoading(false)
+        return
       }
 
-      setReflections(data ?? []);
-      setLoading(false);
+      setReflections(data ?? [])
+      setLoading(false)
     }
 
-    fetchReflections();
-  }, []);
+    fetchReflections()
+  }, [])
 
   if (loading) {
-    return <p className="p-6">Loading reflections...</p>;
+    return <p className="p-6">Loading reflections...</p>
   }
 
   if (error) {
-    return <p className="p-6 text-destructive">Could not load reflections: {error}</p>;
+    return <p className="p-6 text-destructive">Could not load reflections: {error}</p>
   }
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
       <div className="mb-8 space-y-2">
-        <h1 className="text-3xl font-semibold tracking-tight">
-          Reflection History
-        </h1>
+        <h1 className="text-3xl font-semibold tracking-tight">Reflection History</h1>
 
-        <p className="text-muted-foreground">
-          A record of your previous reflections.
-        </p>
+        <p className="text-muted-foreground">A record of your previous reflections.</p>
       </div>
 
       {reflections.length === 0 ? (
-        <p className="text-muted-foreground">
-          No reflections yet.
-        </p>
+        <p className="text-muted-foreground">No reflections yet.</p>
       ) : (
         <div className="space-y-4">
           {reflections.map((reflection) => (
@@ -77,23 +71,19 @@ export default function HistoryPage() {
                 })}
               </p>
 
-              <p className="leading-7">
-                {reflection.reflection}
-              </p>
+              <p className="leading-7">{reflection.reflection}</p>
 
               <div className="mt-4 flex flex-wrap gap-2 text-sm text-muted-foreground">
                 <span>Sleep: {reflection.sleep_hours ?? '—'}</span>
                 <span>Energy: {reflection.energy ?? '—'}</span>
                 <span>Mood: {reflection.mood ?? '—'}</span>
                 <span>Stress: {reflection.stress ?? '—'}</span>
-                <span>
-                  Exercise: {reflection.exercise ? 'Yes' : 'No'}
-                </span>
+                <span>Exercise: {reflection.exercise ? 'Yes' : 'No'}</span>
               </div>
             </article>
           ))}
         </div>
       )}
     </main>
-  );
+  )
 }

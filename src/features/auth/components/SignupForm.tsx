@@ -1,19 +1,14 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase'
 
-import { Button } from '@/components/ui/button';
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button'
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field'
+import { Input } from '@/components/ui/input'
 
 const signupSchema = z
   .object({
@@ -24,13 +19,13 @@ const signupSchema = z
   .refine((values) => values.password === values.confirmPassword, {
     message: 'Passwords do not match.',
     path: ['confirmPassword'],
-  });
+  })
 
-type SignupFormValues = z.infer<typeof signupSchema>;
+type SignupFormValues = z.infer<typeof signupSchema>
 
 export function SignupForm() {
-  const [authError, setAuthError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [authError, setAuthError] = useState<string | null>(null)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
   const {
     register,
@@ -43,30 +38,32 @@ export function SignupForm() {
       password: '',
       confirmPassword: '',
     },
-  });
+  })
 
   const onSubmit = async (values: SignupFormValues) => {
-    setAuthError(null);
-    setSuccessMessage(null);
+    setAuthError(null)
+    setSuccessMessage(null)
 
     const { error } = await supabase.auth.signUp({
       email: values.email,
       password: values.password,
-    });
+    })
 
     if (error) {
-      setAuthError(error.message);
-      return;
+      setAuthError(error.message)
+      return
     }
 
-    setSuccessMessage('Account created. Check your email to confirm your account.');
-  };
+    setSuccessMessage('Account created. Check your email to confirm your account.')
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FieldGroup>
         <Field>
-          <FieldLabel htmlFor="email" className="text-slate-100">Email</FieldLabel>
+          <FieldLabel htmlFor="email" className="text-slate-100">
+            Email
+          </FieldLabel>
           <Input
             id="email"
             type="email"
@@ -80,7 +77,9 @@ export function SignupForm() {
         </Field>
 
         <Field>
-          <FieldLabel htmlFor="password" className="text-slate-100">Password</FieldLabel>
+          <FieldLabel htmlFor="password" className="text-slate-100">
+            Password
+          </FieldLabel>
           <Input
             id="password"
             type="password"
@@ -94,7 +93,9 @@ export function SignupForm() {
         </Field>
 
         <Field>
-          <FieldLabel htmlFor="confirmPassword" className="text-slate-100">Confirm password</FieldLabel>
+          <FieldLabel htmlFor="confirmPassword" className="text-slate-100">
+            Confirm password
+          </FieldLabel>
           <Input
             id="confirmPassword"
             type="password"
@@ -104,9 +105,7 @@ export function SignupForm() {
             className="border-slate-700 bg-slate-950 text-slate-100 placeholder:text-slate-500 focus-visible:ring-teal-500"
             {...register('confirmPassword')}
           />
-          {errors.confirmPassword && (
-            <FieldError>{errors.confirmPassword.message}</FieldError>
-          )}
+          {errors.confirmPassword && <FieldError>{errors.confirmPassword.message}</FieldError>}
         </Field>
 
         {authError && (
@@ -137,5 +136,5 @@ export function SignupForm() {
         </p>
       </FieldGroup>
     </form>
-  );
+  )
 }

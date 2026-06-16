@@ -1,14 +1,14 @@
-import { Outlet } from 'react-router';
-import TopNavigation from './TopNavigation';
+import { Outlet } from 'react-router'
+import TopNavigation from './TopNavigation'
 
 export default function AppLayout() {
-    return (
-        <>
-          <TopNavigation />
+  return (
+    <>
+      <TopNavigation />
 
-          <main>
-            <Outlet />
-          </main>
-        </>
-      );
+      <main>
+        <Outlet />
+      </main>
+    </>
+  )
 }

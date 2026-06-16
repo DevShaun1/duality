@@ -8,7 +8,7 @@ Instead of telling users what is true, Duality helps them explore alternative pe
 
 The goal is simple:
 
-> Move from *"This is what happened"* to *"This is one way of seeing what happened."*
+> Move from _"This is what happened"_ to _"This is one way of seeing what happened."_
 
 ---
 

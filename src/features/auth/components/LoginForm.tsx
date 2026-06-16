@@ -1,22 +1,22 @@
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { supabase } from '@/lib/supabase';
-import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { supabase } from '@/lib/supabase'
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Link } from 'react-router-dom'
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email address.'),
   password: z.string().min(6, 'Password must be at least 6 characters.'),
-});
+})
 
-type LoginFormValues = z.infer<typeof loginSchema>;
+type LoginFormValues = z.infer<typeof loginSchema>
 
 export default function LoginForm() {
-  const [authError, setAuthError] = useState<string | null>(null);
+  const [authError, setAuthError] = useState<string | null>(null)
 
   const {
     register,
@@ -28,27 +28,29 @@ export default function LoginForm() {
       email: '',
       password: '',
     },
-  });
+  })
 
   const onSubmit = async (values: LoginFormValues) => {
-    setAuthError(null);
+    setAuthError(null)
 
     const { error } = await supabase.auth.signInWithPassword({
       email: values.email,
       password: values.password,
-    });
+    })
 
     if (error) {
-      setAuthError(error.message);
-      return;
+      setAuthError(error.message)
+      return
     }
-  };
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FieldGroup>
         <Field>
-          <FieldLabel htmlFor="email" className="text-slate-100">Email</FieldLabel>
+          <FieldLabel htmlFor="email" className="text-slate-100">
+            Email
+          </FieldLabel>
           <Input
             id="email"
             type="email"
@@ -62,7 +64,9 @@ export default function LoginForm() {
         </Field>
 
         <Field>
-          <FieldLabel htmlFor="password" className="text-slate-100">Password</FieldLabel>
+          <FieldLabel htmlFor="password" className="text-slate-100">
+            Password
+          </FieldLabel>
           <Input
             id="password"
             type="password"
@@ -72,9 +76,7 @@ export default function LoginForm() {
             className="border-slate-700 bg-slate-950 text-slate-100 placeholder:text-slate-500 focus-visible:ring-teal-500"
             {...register('password')}
           />
-          {errors.password && (
-            <FieldError>{errors.password.message}</FieldError>
-          )}
+          {errors.password && <FieldError>{errors.password.message}</FieldError>}
         </Field>
 
         {authError && (
@@ -99,5 +101,5 @@ export default function LoginForm() {
         </p>
       </FieldGroup>
     </form>
-  );
+  )
 }

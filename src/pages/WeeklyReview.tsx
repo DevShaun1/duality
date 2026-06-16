@@ -3,5 +3,5 @@ export default function WeeklyReview() {
     <div>
       <h1>Weekly Review</h1>
     </div>
-  );
+  )
 }
