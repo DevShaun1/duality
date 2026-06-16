@@ -5,7 +5,8 @@ export default function Login() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-slate-950 px-4 text-slate-100">
       <div className="w-full max-w-md">
-        <div className="mb-8 text-center">
+        <div className="mb-8 text-center flex flex-col items-center">
+          <img src="/logo.png" alt="Duality Logo" className='flex justify-center ml-5 mb-5' width={200}/>
           <p className="text-sm uppercase tracking-[0.3em] text-teal-400">
             Duality
           </p>
