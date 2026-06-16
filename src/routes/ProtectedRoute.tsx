@@ -1,12 +1,18 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '@/features/auth/AuthProvider';
 
-export default function ProtectedRoute() {
-    const { isLoggedIn, isLoading } = useAuth();
+type ProtectedRouteProps = {
+    redirectTo: string;
+    requireAuth?: boolean;
+};
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
+export default function ProtectedRoute({
+    redirectTo,
+    requireAuth = true,
+}: ProtectedRouteProps) {
+    const { isLoggedIn } = useAuth();
 
-    return isLoggedIn ? <Outlet /> : <Navigate to="/login" replace />;
+    const canAccessRoute = requireAuth ? isLoggedIn : !isLoggedIn;
+
+    return canAccessRoute ? <Outlet /> : <Navigate to={redirectTo} replace />;
 }
