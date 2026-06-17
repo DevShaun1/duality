@@ -1,4 +1,4 @@
-import z from 'zod'
+import z from 'zod';
 
 export const reflectionFormSchema = z.object({
   sleepHours: z
@@ -24,4 +24,6 @@ export const reflectionFormSchema = z.object({
   exercise: z.boolean(),
 
   reflection: z.string().trim().min(20, 'Write at least 20 characters for your reflection.'),
-})
+});
+
+export type ReflectionFormValues = z.infer<typeof reflectionFormSchema>;
