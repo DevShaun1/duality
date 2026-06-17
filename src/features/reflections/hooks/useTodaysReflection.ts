@@ -3,7 +3,7 @@ import { getTodaysReflection } from '../api/getTodaysReflection';
 
 export function useTodaysReflection() {
   return useQuery({
-    queryKey: ['reflections'],
+    queryKey: ['reflections', 'today'],
     queryFn: getTodaysReflection,
   });
 }

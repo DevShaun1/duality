@@ -9,8 +9,15 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { reflectionFormSchema, type ReflectionFormValues } from '../schemas/reflectionSchema';
 import { useCreateReflection } from '../hooks/useCreateReflection';
+import { useUpdateReflection } from '../hooks/useUpdateReflection';
+import type { Reflection } from '../types/reflection';
 
-export function ReflectionForm() {
+type ReflectionFormProps = {
+  todaysReflection?: Reflection | null;
+  onSaved: () => void;
+};
+
+export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProps) {
   const {
     register,
     handleSubmit,
@@ -20,28 +27,31 @@ export function ReflectionForm() {
   } = useForm<ReflectionFormValues>({
     resolver: zodResolver(reflectionFormSchema),
     defaultValues: {
-      sleepHours: 7,
-      energy: 5,
-      mood: 5,
-      stress: 5,
-      exercise: false,
-      reflection: '',
+      sleepHours: todaysReflection?.sleep_hours ?? 7,
+      energy: todaysReflection?.energy ?? 5,
+      mood: todaysReflection?.mood ?? 5,
+      stress: todaysReflection?.stress ?? 5,
+      exercise: todaysReflection?.exercised ?? false,
+      journalText: todaysReflection?.journal_text ?? '',
     },
   });
 
+  const isEditing = Boolean(todaysReflection);
+
   const createReflectionMutation = useCreateReflection();
+  const updateReflectionMutation = useUpdateReflection();
 
   const exercised = watch('exercise');
 
   const onSubmit = async (data: ReflectionFormValues) => {
-    await createReflectionMutation.mutateAsync({
-      sleep_hours: data.sleepHours,
-      energy: data.energy,
-      mood: data.mood,
-      stress: data.stress,
-      exercised: data.exercise,
-      journal_text: data.reflection,
-    });
+    const result = todaysReflection
+      ? await updateReflectionMutation.mutateAsync({
+          reflectionId: todaysReflection.id,
+          values: data,
+        })
+      : await createReflectionMutation.mutateAsync(data);
+
+    if (result) onSaved();
   };
 
   return (
@@ -125,15 +135,15 @@ export function ReflectionForm() {
               id="reflection"
               rows={8}
               placeholder="How has your day been?"
-              {...register('reflection')}
+              {...register('journalText')}
             />
-            {errors.reflection && (
-              <p className="text-sm text-destructive">{errors.reflection.message}</p>
+            {errors.journalText && (
+              <p className="text-sm text-destructive">{errors.journalText.message}</p>
             )}
           </div>
 
           <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
-            {isSubmitting ? 'Reflecting...' : 'Reflect on Today'}
+            {isSubmitting ? 'Saving...' : isEditing ? 'Update Reflection' : 'Reflect on Today'}
           </Button>
         </form>
       </CardContent>
