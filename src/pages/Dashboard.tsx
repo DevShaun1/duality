@@ -1,7 +1,10 @@
+import { PageContainer } from '@/components/layout/PageContainer';
+import { PageHeader } from '@/components/layout/PageHeader';
+
 export default function Dashboard() {
   return (
-    <div>
-      <h1>Dashboard</h1>
-    </div>
-  )
+    <PageContainer>
+      <PageHeader title="Dashboard" />
+    </PageContainer>
+  );
 }

@@ -3,6 +3,8 @@ import CompletedReflectionCard from '@/features/reflections/components/Completed
 import { ReflectionForm } from '@/features/reflections/components/ReflectionForm';
 import FullScreenLoader from '@/components/common/FullScreenLoader';
 import { useTodaysReflection } from '@/features/reflections/hooks/useTodaysReflection';
+import { PageContainer } from '@/components/layout/PageContainer';
+import { PageHeader } from '@/components/layout/PageHeader';
 
 export default function Reflection() {
   const [isEditingTodaysReflection, setIsEditingTodaysReflection] = useState(false);
@@ -13,29 +15,24 @@ export default function Reflection() {
   if (isLoading) return <FullScreenLoader />;
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10">
-      <div className="mb-8 space-y-2">
-        {shouldShowReflectionForm ? (
-          <div>
-            <h1 className="mb-2 text-3xl font-semibold tracking-tight">
-              {hasCompletedTodaysReflection ? 'Refine today’s reflection' : 'Today’s Reflection'}
-            </h1>
+    <PageContainer>
+      <PageHeader
+        title={hasCompletedTodaysReflection ? 'Refine today’s reflection' : 'Today’s Reflection'}
+        description={
+          hasCompletedTodaysReflection
+            ? 'Your day may have shifted since you first reflected. Update anything that feels clearer now.'
+            : 'Take a few moments to reflect on your day. Every story has another side.'
+        }
+      />
 
-            <p className="mb-6 text-muted-foreground">
-              {hasCompletedTodaysReflection
-                ? 'Your day may have shifted since you first reflected. Update anything that feels clearer now.'
-                : 'Take a few moments to reflect on your day. Every story has another side.'}
-            </p>
-
-            <ReflectionForm
-              todaysReflection={todaysReflection}
-              onSaved={() => setIsEditingTodaysReflection(false)}
-            />
-          </div>
-        ) : (
-          <CompletedReflectionCard onEditReflection={() => setIsEditingTodaysReflection(true)} />
-        )}
-      </div>
-    </main>
+      {shouldShowReflectionForm ? (
+        <ReflectionForm
+          todaysReflection={todaysReflection}
+          onSaved={() => setIsEditingTodaysReflection(false)}
+        />
+      ) : (
+        <CompletedReflectionCard onEditReflection={() => setIsEditingTodaysReflection(true)} />
+      )}
+    </PageContainer>
   );
 }

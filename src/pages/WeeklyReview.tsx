@@ -1,7 +1,10 @@
+import { PageContainer } from "@/components/layout/PageContainer";
+import { PageHeader } from "@/components/layout/PageHeader";
+
 export default function WeeklyReview() {
   return (
-    <div>
-      <h1>Weekly Review</h1>
-    </div>
+    <PageContainer>
+      <PageHeader title="Weekly review"/>
+    </PageContainer>
   )
 }

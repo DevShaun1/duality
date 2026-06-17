@@ -1,3 +1,5 @@
+import { PageContainer } from '@/components/layout/PageContainer';
+import { PageHeader } from '@/components/layout/PageHeader';
 import { useReflections } from '@/features/reflections/hooks/useReflections';
 
 export default function HistoryPage() {
@@ -12,11 +14,8 @@ export default function HistoryPage() {
   }
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10">
-      <div className="mb-8 space-y-2">
-        <h1 className="text-3xl font-semibold tracking-tight">Reflection History</h1>
-        <p className="text-muted-foreground">A record of your previous reflections.</p>
-      </div>
+    <PageContainer>
+      <PageHeader title="Reflection History" description="A record of your previous reflections." />
 
       {reflections.length === 0 ? (
         <p className="text-muted-foreground">No reflections yet.</p>
@@ -48,6 +47,6 @@ export default function HistoryPage() {
           ))}
         </div>
       )}
-    </main>
+    </PageContainer>
   );
 }

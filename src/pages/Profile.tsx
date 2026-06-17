@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import FullScreenLoader from '@/components/common/FullScreenLoader';
 import ProfileForm from '@/features/profile/components/ProfileForm';
 import { useGetProfile } from '@/features/profile/hooks/useGetProfile';
+import { PageContainer } from '@/components/layout/PageContainer';
+import { PageHeader } from '@/components/layout/PageHeader';
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -24,18 +26,16 @@ export default function Profile() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
-      <div className="space-y-2">
-        <h1 className="text-2xl font-semibold">Your profile</h1>
-        <p className="text-muted-foreground">
-          Choose the name Duality should use when reflecting with you.
-        </p>
-      </div>
+    <PageContainer>
+      <PageHeader
+        title="Your profile"
+        description="Choose the name Duality should use when reflecting with you."
+      />
 
       <ProfileForm
         defaultDisplayName={profile?.display_name}
         onSaved={() => navigate('/reflection')}
       />
-    </div>
+    </PageContainer>
   );
 }
