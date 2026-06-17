@@ -1,11 +1,7 @@
 import { supabase } from '@/lib/supabase';
-import type { Reflection } from '../types/reflection';
-import { getCurrentUser } from './getCurrentUser';
 import type { ReflectionFormValues } from '../schemas/reflectionSchema';
 
-export async function createReflection(values: ReflectionFormValues): Promise<Reflection> {
-  const user = await getCurrentUser();
-
+export async function updateReflection(reflectionId: string, values: ReflectionFormValues) {
   const payload = {
     sleep_hours: values.sleepHours,
     energy: values.energy,
@@ -17,8 +13,9 @@ export async function createReflection(values: ReflectionFormValues): Promise<Re
 
   const { data, error } = await supabase
     .from('reflections')
-    .insert({ ...payload, user_id: user.id })
-    .select('*')
+    .update(payload)
+    .eq('id', reflectionId)
+    .select()
     .single();
 
   if (error) throw error;
