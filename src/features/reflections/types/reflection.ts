@@ -1,7 +1,10 @@
+// Data type representation from Supabase
+
 export type Reflection = {
   id: string;
   user_id: string;
   created_at: string;
+  reflection_date: string;
   sleep_hours: number;
   mood: number;
   energy: number;
@@ -25,8 +28,3 @@ export type ReflectionInsight = {
 export type ReflectionWithInsight = Reflection & {
   insight?: ReflectionInsight | null;
 };
-
-export type CreateReflectionInput = Pick<
-  Reflection,
-  'sleep_hours' | 'mood' | 'energy' | 'stress' | 'exercised' | 'journal_text'
->;
