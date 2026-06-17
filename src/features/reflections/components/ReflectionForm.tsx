@@ -1,16 +1,14 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
-import { reflectionFormSchema } from '../schemas/reflectionSchema'
-
-type ReflectionFormValues = z.infer<typeof reflectionFormSchema>
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { reflectionFormSchema, type ReflectionFormValues } from '../schemas/reflectionSchema';
+import { useCreateReflection } from '../hooks/useCreateReflection';
 
 export function ReflectionForm() {
   const {
@@ -29,13 +27,22 @@ export function ReflectionForm() {
       exercise: false,
       reflection: '',
     },
-  })
+  });
 
-  const exercised = watch('exercise')
+  const createReflectionMutation = useCreateReflection();
 
-  const onSubmit = (data: ReflectionFormValues) => {
-    console.log(data)
-  }
+  const exercised = watch('exercise');
+
+  const onSubmit = async (data: ReflectionFormValues) => {
+    await createReflectionMutation.mutateAsync({
+      sleep_hours: data.sleepHours,
+      energy: data.energy,
+      mood: data.mood,
+      stress: data.stress,
+      exercised: data.exercise,
+      journal_text: data.reflection,
+    });
+  };
 
   return (
     <Card>
@@ -131,5 +138,5 @@ export function ReflectionForm() {
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }
