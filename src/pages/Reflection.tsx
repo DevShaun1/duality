@@ -1,15 +1,36 @@
-import { ReflectionForm } from '@/features/reflections/components/ReflectionForm'
+import CompletedReflectionCard from '@/features/reflections/components/CompletedReflectionCard';
+import { ReflectionForm } from '@/features/reflections/components/ReflectionForm';
+import FullScreenLoader from '@/components/common/FullScreenLoader';
+import { useTodaysReflection } from '@/features/reflections/hooks/useTodaysReflection';
+import { useAuth } from '@/features/auth/AuthProvider';
+import { getDisplayName } from '@/features/auth/utils/getDisplayName';
 
 export default function Reflection() {
+  const { data: todaysReflection, isLoading } = useTodaysReflection();
+  const { user } = useAuth();
+  const displayName = getDisplayName(user);
+
+  if (isLoading) return <FullScreenLoader />;
+
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
       <div className="mb-8 space-y-2">
-        <h1 className="text-3xl font-semibold tracking-tight">Welcome back, Shaun.</h1>
+        {todaysReflection ? (
+          <CompletedReflectionCard />
+        ) : (
+          <div>
+            <h1 className="mb-2 text-3xl font-semibold tracking-tight">
+              Welcome back, {displayName}.
+            </h1>
 
-        <p className="text-muted-foreground">Every story has another side.</p>
+            <p className="mb-6 text-muted-foreground">
+              Take a few moments to reflect on your day. Every story has another side.
+            </p>
+
+            <ReflectionForm />
+          </div>
+        )}
       </div>
-
-      <ReflectionForm />
     </main>
-  )
+  );
 }
