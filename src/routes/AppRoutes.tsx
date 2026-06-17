@@ -10,6 +10,7 @@ import AppLayout from '@/components/layout/AppLayout'
 import ProtectedRoute from './ProtectedRoute'
 import { useAuth } from '@/features/auth/AuthProvider'
 import FullScreenLoader from '@/components/common/FullScreenLoader'
+import Profile from '@/pages/Profile'
 
 export function AppRoutes() {
   const { isLoggedIn, isLoading } = useAuth()
@@ -29,6 +30,7 @@ export function AppRoutes() {
           <Route path="/reflection" element={<Reflection />} />
           <Route path="/weekly-review" element={<WeeklyReview />} />
           <Route path="/history" element={<History />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
       </Route>
 

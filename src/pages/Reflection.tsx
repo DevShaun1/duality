@@ -3,14 +3,10 @@ import CompletedReflectionCard from '@/features/reflections/components/Completed
 import { ReflectionForm } from '@/features/reflections/components/ReflectionForm';
 import FullScreenLoader from '@/components/common/FullScreenLoader';
 import { useTodaysReflection } from '@/features/reflections/hooks/useTodaysReflection';
-import { useAuth } from '@/features/auth/AuthProvider';
-import { getDisplayName } from '@/features/auth/utils/getDisplayName';
 
 export default function Reflection() {
   const [isEditingTodaysReflection, setIsEditingTodaysReflection] = useState(false);
   const { data: todaysReflection, isLoading } = useTodaysReflection();
-  const { user } = useAuth();
-  const displayName = getDisplayName(user);
   const hasCompletedTodaysReflection = Boolean(todaysReflection);
   const shouldShowReflectionForm = !hasCompletedTodaysReflection || isEditingTodaysReflection;
 
@@ -22,9 +18,7 @@ export default function Reflection() {
         {shouldShowReflectionForm ? (
           <div>
             <h1 className="mb-2 text-3xl font-semibold tracking-tight">
-              {hasCompletedTodaysReflection
-                ? 'Refine today’s reflection.'
-                : `Welcome back, ${displayName}.`}
+              {hasCompletedTodaysReflection ? 'Refine today’s reflection' : 'Today’s Reflection'}
             </h1>
 
             <p className="mb-6 text-muted-foreground">
@@ -39,9 +33,7 @@ export default function Reflection() {
             />
           </div>
         ) : (
-          <CompletedReflectionCard
-            onEditReflection={() => setIsEditingTodaysReflection(true)}
-          />
+          <CompletedReflectionCard onEditReflection={() => setIsEditingTodaysReflection(true)} />
         )}
       </div>
     </main>

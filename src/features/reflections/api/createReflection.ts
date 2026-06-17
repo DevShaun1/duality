@@ -1,6 +1,6 @@
 import { supabase } from '@/lib/supabase';
 import type { Reflection } from '../types/reflection';
-import { getCurrentUser } from './getCurrentUser';
+import { getCurrentUser } from '../../auth/api/getCurrentUser';
 import type { ReflectionFormValues } from '../schemas/reflectionSchema';
 
 export async function createReflection(values: ReflectionFormValues): Promise<Reflection> {
