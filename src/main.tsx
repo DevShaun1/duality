@@ -1,13 +1,18 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
-import { AuthProvider } from './features/auth/AuthProvider.tsx'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import './index.css';
+import App from './App.tsx';
+import AuthProvider from './features/auth/AuthProvider.tsx';
+import QueryProvider from './providers/QueryProvider.tsx';
+import DevtoolProvider from './providers/DevtoolProvider.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AuthProvider>
-      <App />
-    </AuthProvider>
+    <QueryProvider>
+      <AuthProvider>
+        <App />
+        <DevtoolProvider />
+      </AuthProvider>
+    </QueryProvider>
   </StrictMode>
-)
+);
