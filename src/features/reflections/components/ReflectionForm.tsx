@@ -6,10 +6,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { reflectionFormSchema, type ReflectionFormValues } from '../schemas/reflectionSchema';
 import { useCreateReflection } from '../hooks/useCreateReflection';
 import { useUpdateReflection } from '../hooks/useUpdateReflection';
+import { SpeechToText } from '@/features/speech/SpeechToText';
 import type { Reflection } from '../types/reflection';
 
 type ReflectionFormProps = {
@@ -42,6 +42,7 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
   const updateReflectionMutation = useUpdateReflection();
 
   const exercised = watch('exercise');
+  const journalText = watch('journalText');
 
   const onSubmit = async (data: ReflectionFormValues) => {
     const result = todaysReflection
@@ -131,11 +132,18 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
 
           <div className="space-y-2">
             <Label htmlFor="reflection">Reflection</Label>
-            <Textarea
-              id="reflection"
-              rows={8}
+            <SpeechToText
+              textareaId="reflection"
+              textareaName="journalText"
+              value={journalText}
+              onChange={(value) =>
+                setValue('journalText', value, {
+                  shouldDirty: true,
+                  shouldTouch: true,
+                  shouldValidate: true,
+                })
+              }
               placeholder="How has your day been?"
-              {...register('journalText')}
             />
             {errors.journalText && (
               <p className="text-sm text-destructive">{errors.journalText.message}</p>
