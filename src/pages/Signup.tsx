@@ -1,13 +1,14 @@
 import { AuthLayout } from '@/components/layout/AuthLayout';
 import { AuthCard } from '@/features/auth/components/AuthCard';
 import { SignupForm } from '@/features/auth/components/SignupForm';
+import logo from '@/assets/logo.png';
 
 export default function Signup() {
   return (
     <AuthLayout>
       <div className="mb-8 flex flex-col items-center text-center">
         <img
-          src="/logo.png"
+          src={logo}
           alt="Duality Logo"
           className="mb-5 ml-5 flex justify-center"
           width={200}

@@ -11,6 +11,7 @@ import {
 import { useAuth } from '@/features/auth/AuthProvider';
 import { useGetProfile } from '@/features/profile/hooks/useGetProfile';
 import { supabase } from '@/lib/supabase';
+import logo from '@/assets/logo.png';
 
 export default function TopNavigation() {
   const { isLoggedIn } = useAuth();
@@ -45,15 +46,13 @@ export default function TopNavigation() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <NavLink
           to="/reflection"
-          className="text-lg font-semibold tracking-tight text-primary transition-colors hover:text-primary/90"
+          className="flex items-center gap-2 text-lg font-semibold tracking-tight text-primary transition-colors hover:text-primary/90"
         >
-          Duality
+          <img src={logo} alt="Duality" className="h-8 w-8" />
+          <span>Duality</span>
         </NavLink>
 
         <nav className="flex items-center gap-6 text-sm">
-          <NavLink to="/dashboard" className={navLinkClass}>
-            Dashboard
-          </NavLink>
           <NavLink to="/reflection" className={navLinkClass}>
             Reflect
           </NavLink>

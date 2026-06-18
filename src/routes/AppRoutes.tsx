@@ -1,5 +1,4 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
-import Dashboard from '@/pages/Dashboard'
 import Signup from '@/pages/Signup'
 import Login from '@/pages/Login'
 import Reflection from '@/pages/Reflection'
@@ -26,7 +25,6 @@ export function AppRoutes() {
 
       <Route element={<ProtectedRoute redirectTo="/login" />}>
         <Route element={<AppLayout />}>
-          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/reflection" element={<Reflection />} />
           <Route path="/weekly-review" element={<WeeklyReview />} />
           <Route path="/history" element={<History />} />

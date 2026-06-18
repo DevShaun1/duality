@@ -34,7 +34,9 @@ export default function HistoryPage() {
                 })}
               </p>
 
-              <p className="leading-7">{reflection.reflection}</p>
+              <p className="whitespace-pre-wrap leading-7">
+                {reflection.journal_text || 'No reflection text saved.'}
+              </p>
 
               <div className="mt-4 flex flex-wrap gap-2 text-sm text-muted-foreground">
                 <span>Sleep: {reflection.sleep_hours ?? '—'}</span>
