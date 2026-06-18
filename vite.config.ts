@@ -5,8 +5,12 @@ import { devtools } from '@tanstack/devtools-vite';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [devtools(), react(), tailwindcss() ],
+  plugins: [devtools(), react(), tailwindcss()],
   resolve: {
     tsconfigPaths: true,
+  },
+  server: {
+    port: 5173,
+    strictPort: true,
   },
 });
