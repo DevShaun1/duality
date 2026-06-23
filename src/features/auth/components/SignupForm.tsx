@@ -1,14 +1,15 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
-import { supabase } from '@/lib/supabase'
+import { supabase } from '@/lib/supabase';
 
-import { Button } from '@/components/ui/button'
-import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
+import { FcGoogle } from 'react-icons/fc';
 
 const signupSchema = z
   .object({
@@ -19,13 +20,13 @@ const signupSchema = z
   .refine((values) => values.password === values.confirmPassword, {
     message: 'Passwords do not match.',
     path: ['confirmPassword'],
-  })
+  });
 
-type SignupFormValues = z.infer<typeof signupSchema>
+type SignupFormValues = z.infer<typeof signupSchema>;
 
 export function SignupForm() {
-  const [authError, setAuthError] = useState<string | null>(null)
-  const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const {
     register,
@@ -38,28 +39,61 @@ export function SignupForm() {
       password: '',
       confirmPassword: '',
     },
-  })
+  });
 
   const onSubmit = async (values: SignupFormValues) => {
-    setAuthError(null)
-    setSuccessMessage(null)
+    setAuthError(null);
+    setSuccessMessage(null);
 
     const { error } = await supabase.auth.signUp({
       email: values.email,
       password: values.password,
-    })
+    });
 
     if (error) {
-      setAuthError(error.message)
-      return
+      setAuthError(error.message);
+      return;
     }
 
-    setSuccessMessage('Account created. Check your email to confirm your account.')
-  }
+    setSuccessMessage('Account created. Check your email to confirm your account.');
+  };
+
+  const handleGoogleSignUp = async () => {
+    setAuthError(null);
+    setSuccessMessage(null);
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+
+    if (error) {
+      setAuthError(error.message);
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FieldGroup>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={handleGoogleSignUp}
+          disabled={isSubmitting}
+          className="w-full border-slate-700 bg-slate-950 text-slate-100 hover:bg-slate-900 hover:text-slate-100"
+        >
+          <FcGoogle className="h-4 w-4" />
+          Continue with Google
+        </Button>
+
+        <div className="flex items-center gap-3">
+          <div className="h-px flex-1 bg-slate-800" />
+          <span className="text-xs text-slate-500">or create account with email</span>
+          <div className="h-px flex-1 bg-slate-800" />
+        </div>
+
         <Field>
           <FieldLabel htmlFor="email" className="text-slate-100">
             Email
@@ -125,7 +159,7 @@ export function SignupForm() {
           disabled={isSubmitting}
           className="w-full bg-teal-600 text-white hover:bg-teal-500"
         >
-          {isSubmitting ? 'Creating account...' : 'Create account'}
+          {isSubmitting ? 'Creating account...' : 'Create account with email'}
         </Button>
 
         <p className="text-center text-sm text-slate-400">
@@ -136,5 +170,5 @@ export function SignupForm() {
         </p>
       </FieldGroup>
     </form>
-  )
+  );
 }

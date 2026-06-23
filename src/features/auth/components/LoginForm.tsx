@@ -1,22 +1,23 @@
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { supabase } from '@/lib/supabase'
-import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Link } from 'react-router-dom'
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { supabase } from '@/lib/supabase';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
+import { FcGoogle } from 'react-icons/fc';
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email address.'),
   password: z.string().min(6, 'Password must be at least 6 characters.'),
-})
+});
 
-type LoginFormValues = z.infer<typeof loginSchema>
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
-  const [authError, setAuthError] = useState<string | null>(null)
+  const [authError, setAuthError] = useState<string | null>(null);
 
   const {
     register,
@@ -28,25 +29,57 @@ export default function LoginForm() {
       email: '',
       password: '',
     },
-  })
+  });
 
   const onSubmit = async (values: LoginFormValues) => {
-    setAuthError(null)
+    setAuthError(null);
 
     const { error } = await supabase.auth.signInWithPassword({
       email: values.email,
       password: values.password,
-    })
+    });
 
     if (error) {
-      setAuthError(error.message)
-      return
+      setAuthError(error.message);
+      return;
     }
-  }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setAuthError(null);
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+
+    if (error) {
+      setAuthError(error.message);
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FieldGroup>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={handleGoogleSignIn}
+          disabled={isSubmitting}
+          className="w-full border-slate-700 bg-slate-950 text-slate-100 hover:bg-slate-900 hover:text-slate-100"
+        >
+          <FcGoogle className="h-4 w-4" />
+          Continue with Google
+        </Button>
+
+        <div className="flex items-center gap-3">
+          <div className="h-px flex-1 bg-slate-800" />
+          <span className="text-xs text-slate-500">or sign in with email</span>
+          <div className="h-px flex-1 bg-slate-800" />
+        </div>
+
         <Field>
           <FieldLabel htmlFor="email" className="text-slate-100">
             Email
@@ -64,9 +97,14 @@ export default function LoginForm() {
         </Field>
 
         <Field>
-          <FieldLabel htmlFor="password" className="text-slate-100">
-            Password
-          </FieldLabel>
+          <div className="flex items-center justify-between">
+            <FieldLabel htmlFor="password" className="text-slate-100">
+              Password
+            </FieldLabel>
+            <Link to="/forgot-password" className="text-sm text-teal-400 hover:text-teal-300">
+              Forgot password?
+            </Link>
+          </div>
           <Input
             id="password"
             type="password"
@@ -101,5 +139,5 @@ export default function LoginForm() {
         </p>
       </FieldGroup>
     </form>
-  )
+  );
 }
