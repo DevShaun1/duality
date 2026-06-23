@@ -25,3 +25,8 @@ dist-ssr
 
 .env
 .env.*
+
+# Supabase local state (do not commit)
+supabase/.temp/
+supabase/.branches/
+supabase/.vscode/
