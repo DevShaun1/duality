@@ -13,6 +13,7 @@ import Profile from '@/pages/Profile';
 import AuthCallback from '@/pages/AuthCallback';
 import ForgotPassword from '@/pages/ForgotPassword';
 import ResetPassword from '@/pages/ResetPassword';
+import ReflectionInsight from '@/pages/ReflectionInsight';
 
 export function AppRoutes() {
   const { isLoggedIn, isLoading } = useAuth();
@@ -33,8 +34,9 @@ export function AppRoutes() {
       <Route element={<ProtectedRoute redirectTo="/login" />}>
         <Route element={<AppLayout />}>
           <Route path="/reflection" element={<Reflection />} />
-          <Route path="/weekly-review" element={<WeeklyReview />} />
+          <Route path="/reflection-insight" element={<ReflectionInsight />} />
           <Route path="/history" element={<History />} />
+          <Route path="/weekly-review" element={<WeeklyReview />} />
           <Route path="/profile" element={<Profile />} />
         </Route>
       </Route>
