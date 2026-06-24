@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { clsx } from 'clsx';
 
 type InsightSectionProps = {
   title: string;
@@ -18,8 +19,8 @@ export default function InsightSection({
   const baseTitleClassName = 'text-sm font-semibold uppercase tracking-wide text-muted-foreground';
 
   return (
-    <section className={className ?? 'space-y-2'}>
-      <h3 className={titleClassName ? `${baseTitleClassName} ${titleClassName}` : baseTitleClassName}>
+    <section className={clsx(className ?? 'space-y-2')}>
+      <h3 className={clsx(baseTitleClassName, titleClassName)}>
         {title}
       </h3>
       <div className={contentClassName}>{children}</div>
