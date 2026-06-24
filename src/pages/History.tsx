@@ -4,6 +4,7 @@ import { useReflections } from '@/features/reflections/hooks/useReflections';
 
 export default function HistoryPage() {
   const { data: reflections, isLoading, error } = useReflections();
+  const reflectionList = reflections ?? [];
 
   if (isLoading) {
     return <p className="p-6">Loading reflections...</p>;
@@ -17,11 +18,11 @@ export default function HistoryPage() {
     <PageContainer>
       <PageHeader title="Reflection History" description="A record of your previous reflections." />
 
-      {reflections.length === 0 ? (
+      {reflectionList.length === 0 ? (
         <p className="text-muted-foreground">No reflections yet.</p>
       ) : (
         <div className="space-y-4">
-          {reflections.map((reflection) => (
+          {reflectionList.map((reflection) => (
             <article
               key={reflection.id}
               className="rounded-lg border bg-card p-5 text-card-foreground shadow-sm"
