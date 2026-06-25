@@ -1,9 +1,11 @@
 import { PageContainer } from '@/components/layout/PageContainer';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { useReflections } from '@/features/reflections/hooks/useReflections';
-import { Link } from 'react-router-dom';
+import { ArrowRight, Compass, Sparkles } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function ReflectionsPage() {
+  const navigate = useNavigate();
   const { data: reflections, isLoading, error } = useReflections();
   const reflectionList = reflections ?? [];
 
@@ -52,25 +54,33 @@ export default function ReflectionsPage() {
               </div>
 
               <div className="mt-4">
-                <Link
-                  to={`/reflections/${reflection.id}`}
-                  className="text-sm font-medium text-primary hover:underline"
-                >
-                   {reflection.hasInsight ? 'View AI insight' : 'Generate AI insight'}
-                </Link>
+                {reflection.hasInsight ? (
+                  <Link
+                    to={`/reflections/${reflection.id}`}
+                    className="group mt-4 inline-flex items-center gap-2 text-primary transition-colors hover:text-primary/80 hover:underline"
+                  >
+                    <Compass className="h-4 w-4 transition-transform group-hover:rotate-6" />
+                    <span className="font-medium">Read Another Perspective</span>
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    className="group mt-4 inline-flex items-center gap-2 text-primary transition-colors hover:text-primary/80 hover:underline"
+                    onClick={() =>
+                      navigate(`/reflections/${reflection.id}`, {
+                        state: {
+                          autoGenerateInsight: true,
+                        },
+                      })
+                    }
+                  >
+                    <Sparkles className="h-4 w-4 transition-transform group-hover:scale-110" />
+                    <span className="font-medium">Generate AI Insight</span>
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </button>
+                )}
               </div>
-
-              {reflection.insight ? (
-                <section className="mt-5 rounded-md border border-border/70 bg-muted/20 p-4">
-                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Insight</p>
-                  {reflection.insight_stale ? (
-                    <p className="mt-2 text-sm text-amber-600">
-                      This reflection was edited after this insight was generated.
-                    </p>
-                  ) : null}
-                  <p className="mt-2 whitespace-pre-wrap leading-7">{reflection.insight.summary}</p>
-                </section>
-              ) : null}
             </article>
           ))}
         </div>

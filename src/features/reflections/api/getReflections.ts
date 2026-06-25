@@ -7,18 +7,7 @@ export async function getReflections(): Promise<ReflectionWithInsight[]> {
     .select(
       `
       *,
-      reflection_insights(
-        id,
-        reflection_id,
-        created_at,
-        updated_at,
-        summary,
-        emotional_tone,
-        themes,
-        assumptions,
-        alternative_perspectives,
-        reflection_question
-      )
+      reflection_insights(id)
     `
     )
     .order('created_at', { ascending: false });
