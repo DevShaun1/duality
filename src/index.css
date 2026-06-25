@@ -175,3 +175,68 @@
     @apply min-h-screen bg-background;
   }
 }
+
+@keyframes insightReveal {
+  from {
+    opacity: 0;
+    transform: translateY(var(--insight-reveal-distance, 12px));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes insightFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.75;
+  }
+
+  50% {
+    transform: translate3d(0, var(--insight-float-y, -8px), 0) scale(var(--insight-float-scale, 1.03));
+    opacity: 1;
+  }
+}
+
+@layer components {
+  .insight-reveal {
+    --insight-reveal-distance: 12px;
+    animation-name: insightReveal;
+    animation-duration: 620ms;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    animation-fill-mode: both;
+  }
+
+  .insight-reveal-soft {
+    animation-duration: 760ms;
+  }
+
+  .insight-ambient {
+    --insight-float-y: -8px;
+    --insight-float-scale: 1.03;
+    animation-name: insightFloat;
+    animation-duration: 6.4s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    will-change: transform, opacity;
+  }
+
+  .insight-ambient-delayed {
+    animation-delay: 1.2s;
+    animation-duration: 8s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .insight-reveal,
+    .insight-reveal-soft,
+    .insight-ambient,
+    .insight-ambient-delayed {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
