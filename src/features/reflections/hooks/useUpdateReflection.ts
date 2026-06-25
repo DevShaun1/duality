@@ -15,6 +15,8 @@ export function useUpdateReflection() {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reflections'] });
+      queryClient.invalidateQueries({ queryKey: ['reflections', 'today'] });
+      queryClient.invalidateQueries({ queryKey: ['reflections', 'insight'] });
     },
   });
 }

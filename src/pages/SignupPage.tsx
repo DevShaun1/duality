@@ -3,7 +3,7 @@ import { AuthCard } from '@/features/auth/components/AuthCard';
 import { SignupForm } from '@/features/auth/components/SignupForm';
 import logo from '@/assets/logo.png';
 
-export default function Signup() {
+export default function SignupPage() {
   return (
     <AuthLayout>
       <div className="mb-8 flex flex-col items-center text-center">

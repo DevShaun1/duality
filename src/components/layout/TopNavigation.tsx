@@ -53,11 +53,8 @@ export default function TopNavigation() {
         </NavLink>
 
         <nav className="flex items-center gap-6 text-sm">
-          <NavLink to="/reflection" className={navLinkClass}>
+          <NavLink to="/reflect" className={navLinkClass}>
             Reflect
-          </NavLink>
-          <NavLink to="/reflection-insight" className={navLinkClass}>
-            Your Insights
           </NavLink>
           <NavLink to="/reflections" className={navLinkClass}>
             Your Reflections

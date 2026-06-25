@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { getReflectionInsight } from '../api/getReflectionInsight';
 
-export function useReflectionInsight() {
+export function useReflectionInsight(reflectionId?: string) {
   return useQuery({
-    queryKey: ['reflections', 'insight'],
-    queryFn: getReflectionInsight,
+    queryKey: ['reflections', 'insight', reflectionId],
+    queryFn: () => getReflectionInsight(reflectionId as string),
+    enabled: Boolean(reflectionId),
   });
 }

@@ -6,7 +6,7 @@ import { useGetProfile } from '@/features/profile/hooks/useGetProfile';
 import { PageContainer } from '@/components/layout/PageContainer';
 import { PageHeader } from '@/components/layout/PageHeader';
 
-export default function Profile() {
+export default function ProfilePage() {
   const navigate = useNavigate();
   const { data: profile, isLoading, isError } = useGetProfile();
 
@@ -34,7 +34,7 @@ export default function Profile() {
 
       <ProfileForm
         defaultDisplayName={profile?.display_name}
-        onSaved={() => navigate('/reflection')}
+        onSaved={() => navigate('/reflect')}
       />
     </PageContainer>
   );

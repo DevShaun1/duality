@@ -1,0 +1,255 @@
+import FullScreenLoader from '@/components/common/FullScreenLoader';
+import { PageContainer } from '@/components/layout/PageContainer';
+import { PageHeader } from '@/components/layout/PageHeader';
+import { Button } from '@/components/ui/button';
+import SourceReflectionSection from '@/features/reflections/components/SourceReflectionSection';
+import InsightSection from '@/features/reflections/components/InsightSection';
+import InsightList from '@/features/reflections/components/InsightsList';
+import InsightBulletList from '@/features/reflections/components/InsightBulletList';
+import { useGenerateReflectionInsight } from '@/features/reflections/hooks/useGenerateReflectionInsight';
+import { useReflectionById } from '@/features/reflections/hooks/useReflectionById';
+import { useReflectionInsight } from '@/features/reflections/hooks/useReflectionInsight';
+import { useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import {
+	CircleHelp,
+	Compass,
+	Heart,
+	Layers3,
+	Lightbulb,
+	Sparkles,
+} from 'lucide-react';
+
+export default function ReflectionInsightPage() {
+	const { reflectionId } = useParams<{ reflectionId: string }>();
+	const { data: reflection, isLoading: isReflectionLoading, error: reflectionError } =
+		useReflectionById(reflectionId);
+	const { data: insight, isLoading: isInsightLoading, error: insightError } =
+		useReflectionInsight(reflectionId);
+	const generateInsightMutation = useGenerateReflectionInsight();
+	const [generationError, setGenerationError] = useState<string | null>(null);
+
+	const isLoading = isReflectionLoading || isInsightLoading;
+
+	const handleGenerateInsight = async () => {
+		if (!reflection) {
+			return;
+		}
+
+		setGenerationError(null);
+
+		try {
+			await generateInsightMutation.mutateAsync({
+				reflectionId: reflection.id,
+				reflectionText: reflection.journal_text,
+				sleepHours: reflection.sleep_hours,
+				energy: reflection.energy,
+				mood: reflection.mood,
+				stress: reflection.stress,
+				exercised: reflection.exercised,
+			});
+		} catch (error) {
+			setGenerationError(
+				error instanceof Error ? error.message : 'Could not generate insight right now.'
+			);
+		}
+	};
+
+	if (!reflectionId) {
+		return (
+			<PageContainer>
+				<p className="text-destructive">Missing reflection id.</p>
+			</PageContainer>
+		);
+	}
+
+	if (isLoading) {
+		return <FullScreenLoader />;
+	}
+
+	return (
+		<PageContainer>
+			<PageHeader
+				title="Another Perspective"
+				description="A gentle read of this reflection, helping you notice patterns with more clarity and self-compassion."
+			/>
+
+			{reflectionError ? (
+				<p className="text-destructive">Could not load reflection: {reflectionError.message}</p>
+			) : !reflection ? (
+				<section className="rounded-lg border bg-card p-5 text-card-foreground shadow-sm">
+					<h2 className="text-lg font-semibold">Reflection not found</h2>
+					<p className="mt-2 text-sm text-muted-foreground">
+						This reflection may not exist or you may not have access to it.
+					</p>
+					<Button className="mt-4" asChild>
+						<Link to="/reflections">Go to your reflections</Link>
+					</Button>
+				</section>
+			) : insightError ? (
+				<p className="text-destructive">Could not load insight: {insightError.message}</p>
+			) : !insight ? (
+				<section className="rounded-lg border bg-card p-5 text-card-foreground shadow-sm">
+					<h2 className="text-lg font-semibold">Generate an insight</h2>
+					<p className="mt-2 text-sm text-muted-foreground">
+						This reflection is saved. Generate an insight when you&apos;re ready.
+					</p>
+					<Button
+						className="mt-4"
+						onClick={handleGenerateInsight}
+						disabled={generateInsightMutation.isPending}
+					>
+						{generateInsightMutation.isPending ? 'Generating...' : 'Generate Insight'}
+					</Button>
+					{generationError ? (
+						<p className="mt-3 text-sm text-destructive">{generationError}</p>
+					) : null}
+				</section>
+			) : (
+				<article className="relative overflow-hidden rounded-2xl border border-border/70 bg-card/95 p-6 text-card-foreground shadow-[0_20px_70px_rgba(0,0,0,0.35)] md:p-8">
+					<div className="pointer-events-none absolute inset-0" aria-hidden="true">
+						<div className="insight-ambient absolute -top-20 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full bg-primary/15 blur-3xl" />
+						<div className="insight-ambient insight-ambient-delayed absolute bottom-0 right-0 h-48 w-48 rounded-full bg-primary/10 blur-3xl" />
+					</div>
+
+					<div className="relative space-y-6">
+						<header className="insight-reveal insight-reveal-soft">
+							<div className="rounded-xl border border-dashed border-border/30 bg-background/20 p-5">
+								<div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+									<div className="flex items-center gap-2">
+										<Sparkles className="h-5 w-5 text-primary" />
+
+										<h2 className="text-xl font-semibold tracking-tight">Read this with curiosity</h2>
+									</div>
+
+									<span className="shrink-0 text-sm text-muted-foreground">
+										{new Date(insight.created_at).toLocaleDateString('en-ZA', {
+											day: 'numeric',
+											month: 'long',
+											year: 'numeric',
+										})}
+									</span>
+								</div>
+
+								<p className="mt-5 text-base leading-8 text-foreground/95">
+									Take your time with this. These insights are invitations to reflect, not
+									conclusions about who you are.
+								</p>
+							</div>
+						</header>
+
+						{reflection.insight_stale ? (
+							<section
+								className="insight-reveal rounded-xl border border-amber-500/40 bg-amber-500/10 p-5"
+								style={{ animationDelay: '50ms' }}
+							>
+								<h3 className="text-base font-semibold text-amber-700">
+									This reflection has changed since your insight was generated.
+								</h3>
+								<p className="mt-2 text-sm text-amber-700/90">
+									Regenerate to align this insight with your latest reflection.
+								</p>
+								<Button
+									className="mt-4"
+									onClick={handleGenerateInsight}
+									disabled={generateInsightMutation.isPending}
+								>
+									{generateInsightMutation.isPending ? 'Regenerating...' : 'Regenerate Insight'}
+								</Button>
+								{generationError ? (
+									<p className="mt-3 text-sm text-destructive">{generationError}</p>
+								) : null}
+							</section>
+						) : null}
+
+						<div className="insight-reveal" style={{ animationDelay: '80ms' }}>
+							<InsightSection
+								title="Summary"
+								icon={<Sparkles className="h-4 w-4" />}
+								className="rounded-xl border border-border/70 bg-background/35 p-5"
+								contentClassName="mt-2 whitespace-pre-wrap text-base leading-8 text-foreground/95"
+							>
+								{insight.summary}
+								<div className="mt-4 inline-flex max-w-full flex-wrap items-center gap-2 rounded-full border border-border/70 bg-background/70 px-3 py-1.5 text-sm text-foreground/90">
+									<span className="inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-[0.08em] text-muted-foreground">
+										<Heart className="h-3.5 w-3.5" />
+										Emotional tone
+									</span>
+									<span>{insight.emotional_tone}</span>
+								</div>
+							</InsightSection>
+						</div>
+
+						<div className="insight-reveal" style={{ animationDelay: '140ms' }}>
+							<InsightSection
+								title="Another Side to Consider"
+								icon={<Compass className="h-4 w-4" />}
+								className="rounded-xl border border-border/70 border-l-2 border-l-primary/45 bg-primary/8 p-5"
+								contentClassName="mt-3"
+							>
+								{(insight.alternative_perspectives ?? []).length > 0 ? (
+									<InsightBulletList
+										items={insight.alternative_perspectives ?? []}
+										className="space-y-2.5"
+										itemClassName="gap-2.5"
+									/>
+								) : (
+									<p className="text-sm text-muted-foreground">
+										No alternative perspectives available yet.
+									</p>
+								)}
+							</InsightSection>
+						</div>
+
+						<div className="insight-reveal grid gap-6 md:grid-cols-2" style={{ animationDelay: '200ms' }}>
+							<section className="rounded-xl border border-border/70 bg-background/35 p-5">
+								<h3 className="flex items-center gap-2 text-base font-semibold text-foreground">
+									<span className="text-primary">
+										<Layers3 className="h-4 w-4" />
+									</span>
+									Main Themes
+								</h3>
+								{(insight.themes ?? []).length > 0 ? (
+									<ul className="mt-3 flex flex-wrap gap-2">
+										{(insight.themes ?? []).map((theme) => (
+											<li
+												key={theme}
+												className="rounded-full border border-border/70 bg-background/70 px-3 py-1 text-xs font-medium text-foreground/90"
+											>
+												{theme}
+											</li>
+										))}
+									</ul>
+								) : (
+									<p className="mt-3 text-sm text-muted-foreground">No insights available yet.</p>
+								)}
+							</section>
+
+							<InsightList
+								title="Possible Assumptions"
+								icon={<Lightbulb className="h-4 w-4" />}
+								items={insight.assumptions ?? []}
+								className="rounded-xl border border-border/70 bg-background/35 p-5"
+							/>
+						</div>
+
+						<div className="insight-reveal" style={{ animationDelay: '260ms' }}>
+							<SourceReflectionSection reflectionId={reflection.id} />
+						</div>
+
+						<div className="insight-reveal" style={{ animationDelay: '320ms' }}>
+							<InsightSection
+								title="A Question to Reflect On"
+								icon={<CircleHelp className="h-4 w-4" />}
+								className="rounded-xl border border-primary/30 bg-primary/10 p-6 text-center"
+								contentClassName="mt-3 text-base leading-8"
+							>
+								{insight.reflection_question}
+							</InsightSection>
+						</div>
+					</div>
+				</article>
+			)}
+		</PageContainer>
+	);
+}

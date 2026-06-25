@@ -17,7 +17,7 @@ const forgotPasswordSchema = z.object({
 
 type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
 
-export default function ForgotPassword() {
+export default function ForgotPasswordPage() {
   const [authError, setAuthError] = useState<string | null>(null);
   const [isEmailSent, setIsEmailSent] = useState(false);
 

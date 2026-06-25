@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CompletedReflectionCard from '@/features/reflections/components/CompletedReflectionCard';
 import { ReflectionForm } from '@/features/reflections/components/ReflectionForm';
 import FullScreenLoader from '@/components/common/FullScreenLoader';
@@ -6,7 +7,8 @@ import { useTodaysReflection } from '@/features/reflections/hooks/useTodaysRefle
 import { PageContainer } from '@/components/layout/PageContainer';
 import { PageHeader } from '@/components/layout/PageHeader';
 
-export default function Reflection() {
+export default function ReflectionPage() {
+  const navigate = useNavigate();
   const [isEditingTodaysReflection, setIsEditingTodaysReflection] = useState(false);
   const { data: todaysReflection, isLoading } = useTodaysReflection();
   const hasCompletedTodaysReflection = Boolean(todaysReflection);
@@ -28,10 +30,16 @@ export default function Reflection() {
       {shouldShowReflectionForm ? (
         <ReflectionForm
           todaysReflection={todaysReflection}
-          onSaved={() => setIsEditingTodaysReflection(false)}
+          onSaved={(savedReflectionId) => {
+            setIsEditingTodaysReflection(false);
+            navigate(`/reflections/${savedReflectionId}`);
+          }}
         />
       ) : (
-        <CompletedReflectionCard onEditReflection={() => setIsEditingTodaysReflection(true)} />
+        <CompletedReflectionCard
+          onEditReflection={() => setIsEditingTodaysReflection(true)}
+          reflectionId={todaysReflection?.id}
+        />
       )}
     </PageContainer>
   );

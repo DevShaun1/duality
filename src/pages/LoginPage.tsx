@@ -3,7 +3,7 @@ import { AuthCard } from '@/features/auth/components/AuthCard';
 import LoginForm from '@/features/auth/components/LoginForm';
 import logo from '@/assets/logo.png';
 
-export default function Login() {
+export default function LoginPage() {
   return (
     <AuthLayout>
       <div className="mb-8 flex flex-col items-center text-center">

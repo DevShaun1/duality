@@ -28,13 +28,13 @@ export async function getReflections(): Promise<ReflectionWithInsight[]> {
   }
 
   return (data ?? []).map((reflection) => {
-    const insight = Array.isArray(reflection.reflection_insights)
-      ? reflection.reflection_insights[0] ?? null
-      : null;
+    const rawInsight = reflection.reflection_insights;
+    const insight = Array.isArray(rawInsight) ? rawInsight[0] ?? null : rawInsight ?? null;
 
     return {
       ...reflection,
       insight,
+      hasInsight: Boolean(insight),
     };
   });
 }

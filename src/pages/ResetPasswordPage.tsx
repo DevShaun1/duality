@@ -23,7 +23,7 @@ const resetPasswordSchema = z
 
 type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
 
-export default function ResetPassword() {
+export default function ResetPasswordPage() {
   const navigate = useNavigate();
   const [authError, setAuthError] = useState<string | null>(null);
   const [isPasswordUpdated, setIsPasswordUpdated] = useState(false);
@@ -68,7 +68,7 @@ export default function ResetPassword() {
     setIsPasswordUpdated(true);
 
     setTimeout(() => {
-      navigate('/reflection', { replace: true });
+      navigate('/reflect', { replace: true });
     }, 1500);
   };
 

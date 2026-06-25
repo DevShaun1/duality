@@ -11,6 +11,7 @@ export type Reflection = {
   stress: number;
   exercised: boolean;
   journal_text: string;
+  insight_stale: boolean;
 };
 
 export type ReflectionInsight = {
@@ -27,4 +28,5 @@ export type ReflectionInsight = {
 
 export type ReflectionWithInsight = Reflection & {
   insight?: ReflectionInsight | null;
+  hasInsight: boolean;
 };
