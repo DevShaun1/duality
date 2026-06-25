@@ -181,6 +181,20 @@ The MVP focuses on validating whether users find AI-guided reflection valuable.
 
 ---
 
+## Product terminology
+
+- Reflect – the action of creating a new daily reflection.
+- Reflection – a user's saved daily reflection.
+- Your Reflections – the page listing previous reflections.
+- Reflection Insight – the AI-generated analysis for a reflection.
+- Weekly Review – AI-generated summary across a week's reflections.
+
+Naming rule:
+- Use action verbs for navigation actions (Reflect).
+- Use nouns for destinations and stored data (Your Reflections, Weekly Review).
+
+---
+
 ## Project Goals
 
 This project is being built publicly as part of the:
