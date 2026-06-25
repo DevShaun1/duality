@@ -4,7 +4,7 @@ import Login from '@/pages/Login';
 import Reflection from '@/pages/Reflection';
 import WeeklyReview from '@/pages/WeeklyReview';
 import NotFound from '@/pages/NotFound';
-import History from '@/pages/History';
+import Reflections from '@/pages/History';
 import AppLayout from '@/components/layout/AppLayout';
 import ProtectedRoute from './ProtectedRoute';
 import { useAuth } from '@/features/auth/AuthProvider';
@@ -35,7 +35,8 @@ export function AppRoutes() {
         <Route element={<AppLayout />}>
           <Route path="/reflection" element={<Reflection />} />
           <Route path="/reflection-insight" element={<ReflectionInsight />} />
-          <Route path="/history" element={<History />} />
+          <Route path="/reflections" element={<Reflections />} />
+          <Route path="/history" element={<Navigate to="/reflections" replace />} />
           <Route path="/weekly-review" element={<WeeklyReview />} />
           <Route path="/profile" element={<Profile />} />
         </Route>

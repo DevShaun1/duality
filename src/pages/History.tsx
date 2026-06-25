@@ -16,7 +16,10 @@ export default function HistoryPage() {
 
   return (
     <PageContainer>
-      <PageHeader title="Reflection History" description="A record of your previous reflections." />
+      <PageHeader
+        title="Your Reflections"
+        description="A gentle record of what you've noticed over time."
+      />
 
       {reflectionList.length === 0 ? (
         <p className="text-muted-foreground">No reflections yet.</p>

@@ -25,7 +25,7 @@ export default function CompletedReflectionCard({
           </Button>
 
           <Button variant="outline" asChild>
-            <Link to="/history">View reflection history</Link>
+            <Link to="/reflections">View your reflections</Link>
           </Button>
         </div>
       </CardContent>

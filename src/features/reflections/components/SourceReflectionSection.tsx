@@ -28,10 +28,10 @@ export default function SourceReflectionSection({ reflectionId }: { reflectionId
                             </p>
 
                             <Link
-                                to="/history"
+                                to="/reflections"
                                 className="inline-flex h-7 items-center justify-center rounded-[min(var(--radius-md),12px)] border border-border bg-background px-2.5 text-[0.8rem] font-medium transition-colors hover:bg-muted hover:text-foreground"
                             >
-                                Open history
+                                Open your reflections
                             </Link>
                         </div>
 

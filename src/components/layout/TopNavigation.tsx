@@ -57,10 +57,10 @@ export default function TopNavigation() {
             Reflect
           </NavLink>
           <NavLink to="/reflection-insight" className={navLinkClass}>
-            Insight
+            Your Insights
           </NavLink>
-          <NavLink to="/history" className={navLinkClass}>
-            History
+          <NavLink to="/reflections" className={navLinkClass}>
+            Your Reflections
           </NavLink>
           <NavLink to="/weekly-review" className={navLinkClass}>
             Weekly Review

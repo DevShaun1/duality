@@ -147,7 +147,7 @@ What evidence supports the idea that your contribution was ignored, and what evi
 ### Additional Features
 
 - Speech-to-text
-- Reflection history
+- Your reflections
 - Weekly insight generation
 
 ---
@@ -166,7 +166,7 @@ The MVP focuses on validating whether users find AI-guided reflection valuable.
 - Stress tracking
 - Exercise tracking
 - AI-generated reflections
-- Reflection history
+- Your reflections
 - Weekly reviews
 
 ### Explicitly Out of Scope
