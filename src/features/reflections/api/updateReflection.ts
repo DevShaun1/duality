@@ -20,5 +20,12 @@ export async function updateReflection(reflectionId: string, values: ReflectionF
 
   if (error) throw error;
 
+  const { error: insightUpdateError } = await supabase
+    .from('reflections')
+    .update({ insight_stale: true })
+    .eq('id', reflectionId);
+
+  if (insightUpdateError) throw insightUpdateError;
+
   return data;
 }

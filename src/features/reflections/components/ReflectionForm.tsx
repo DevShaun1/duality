@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,10 +15,12 @@ import type { Reflection } from '../types/reflection';
 
 type ReflectionFormProps = {
   todaysReflection?: Reflection | null;
-  onSaved: () => void;
+  onSaved: (savedReflectionId: string) => void;
 };
 
 export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProps) {
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -45,14 +48,24 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
   const journalText = watch('journalText');
 
   const onSubmit = async (data: ReflectionFormValues) => {
-    const result = todaysReflection
-      ? await updateReflectionMutation.mutateAsync({
-          reflectionId: todaysReflection.id,
-          values: data,
-        })
-      : await createReflectionMutation.mutateAsync(data);
+    setSubmitError(null);
 
-    if (result) onSaved();
+    try {
+      const savedReflection = todaysReflection
+        ? await updateReflectionMutation.mutateAsync({
+            reflectionId: todaysReflection.id,
+            values: data,
+          })
+        : await createReflectionMutation.mutateAsync(data);
+
+      if (!savedReflection) {
+        throw new Error('Could not save reflection');
+      }
+
+      onSaved(savedReflection.id);
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'Could not save reflection');
+    }
   };
 
   return (
@@ -153,6 +166,10 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
           <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
             {isSubmitting ? 'Saving...' : isEditing ? 'Update Reflection' : 'Reflect on Today'}
           </Button>
+
+          {submitError ? (
+            <p className="text-sm text-destructive">{submitError}</p>
+          ) : null}
         </form>
       </CardContent>
     </Card>

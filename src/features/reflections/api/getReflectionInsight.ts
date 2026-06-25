@@ -8,7 +8,7 @@ type ReflectionInsightRow = ReflectionInsight & {
   };
 };
 
-export async function getReflectionInsight(): Promise<ReflectionInsight | null> {
+export async function getReflectionInsight(reflectionId: string): Promise<ReflectionInsight | null> {
   const user = await getCurrentUser();
 
   const { data, error } = await supabase
@@ -27,9 +27,8 @@ export async function getReflectionInsight(): Promise<ReflectionInsight | null> 
       reflections!inner(user_id)
     `
     )
+    .eq('reflection_id', reflectionId)
     .eq('reflections.user_id', user.id)
-    .order('created_at', { ascending: false })
-    .limit(1)
     .maybeSingle<ReflectionInsightRow>();
 
   if (error) {

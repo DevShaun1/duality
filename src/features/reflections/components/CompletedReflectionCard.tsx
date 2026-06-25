@@ -4,11 +4,15 @@ import { Link } from 'react-router-dom';
 
 type CompletedReflectionCardProps = {
   onEditReflection: () => void;
+  reflectionId?: string;
 };
 
 export default function CompletedReflectionCard({
   onEditReflection,
+  reflectionId,
 }: CompletedReflectionCardProps) {
+  const insightDestination = reflectionId ? `/reflections/${reflectionId}` : '/reflections';
+
   return (
     <Card>
       <CardHeader>
@@ -22,6 +26,10 @@ export default function CompletedReflectionCard({
         <div className="flex flex-col gap-3 sm:flex-row">
           <Button onClick={onEditReflection}>
             Update today’s reflection
+          </Button>
+
+          <Button variant="secondary" asChild>
+            <Link to={insightDestination}>Read your latest insight</Link>
           </Button>
 
           <Button variant="outline" asChild>
