@@ -2,7 +2,6 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import SignupPage from '@/pages/SignupPage';
 import LoginPage from '@/pages/LoginPage';
 import ReflectionPage from '@/pages/ReflectionPage';
-import WeeklyReviewPage from '@/pages/WeeklyReviewPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import ReflectionsPage from '@/pages/ReflectionsPage';
 import AppLayout from '@/components/layout/AppLayout';
@@ -14,6 +13,7 @@ import AuthCallbackPage from '@/pages/AuthCallbackPage';
 import ForgotPasswordPage from '@/pages/ForgotPasswordPage';
 import ResetPasswordPage from '@/pages/ResetPasswordPage';
 import ReflectionInsightPage from '@/pages/ReflectionInsightPage';
+import DiscoverPatternsPage from '@/pages/DiscoverPatternsPage';
 
 export function AppRoutes() {
   const { isLoggedIn, isLoading } = useAuth();
@@ -36,8 +36,7 @@ export function AppRoutes() {
           <Route path="/reflect" element={<ReflectionPage />} />
           <Route path="/reflections" element={<ReflectionsPage />} />
           <Route path="/reflections/:reflectionId" element={<ReflectionInsightPage />} />
-          <Route path="/history" element={<Navigate to="/reflections" replace />} />
-          <Route path="/weekly-review" element={<WeeklyReviewPage />} />
+          <Route path="/discover-patterns" element={<DiscoverPatternsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
         </Route>
       </Route>

@@ -59,8 +59,8 @@ export default function TopNavigation() {
           <NavLink to="/reflections" className={navLinkClass}>
             Your Reflections
           </NavLink>
-          <NavLink to="/weekly-review" className={navLinkClass}>
-            Weekly Review
+          <NavLink to="/discover-patterns" className={navLinkClass}>
+            Discover Patterns
           </NavLink>
 
           <DropdownMenu>
