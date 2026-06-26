@@ -39,7 +39,15 @@ export async function getReflectionInsight(reflectionId: string): Promise<Reflec
     return null;
   }
 
-  const { reflections: _reflection, ...insight } = data;
-
-  return insight;
+  return {
+    id: data.id,
+    reflection_id: data.reflection_id,
+    created_at: data.created_at,
+    summary: data.summary,
+    emotional_tone: data.emotional_tone,
+    themes: data.themes,
+    assumptions: data.assumptions,
+    alternative_perspectives: data.alternative_perspectives,
+    reflection_question: data.reflection_question,
+  };
 }
