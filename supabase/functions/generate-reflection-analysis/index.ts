@@ -1,5 +1,3 @@
-/// <reference path="./globals.d.ts" />
-
 import OpenAI from 'openai';
 import { createClient } from '@supabase/supabase-js';
 
@@ -197,6 +195,11 @@ Exercise: ${exercised ? 'yes' : 'no'}
 User reflection:
 ${reflectionText}
 
+Do not wrap the JSON in markdown.
+Do not include code fences.
+Do not include backticks.
+Do not include any explanation before or after the JSON.
+The first character must be { and the last character must be }.
 Return only valid JSON in this exact shape:
 {
   "summary": "string",
@@ -209,7 +212,18 @@ Return only valid JSON in this exact shape:
       `,
     });
 
-    const parsedResponse = JSON.parse(response.output_text) as unknown;
+    function parseModelJson(outputText: string): unknown {
+      const cleanedOutput = outputText
+        .trim()
+        .replace(/^```json\s*/i, '')
+        .replace(/^```\s*/i, '')
+        .replace(/```$/i, '')
+        .trim();
+
+      return JSON.parse(cleanedOutput);
+    }
+
+    const parsedResponse = parseModelJson(response.output_text);
 
     if (!isAnalysisPayload(parsedResponse)) {
       return jsonResponse({ error: 'Model response did not match expected format' }, 502);
