@@ -5,6 +5,7 @@ import App from './App.tsx';
 import AuthProvider from './features/auth/AuthProvider.tsx';
 import QueryProvider from './providers/QueryProvider.tsx';
 import DevtoolProvider from './providers/DevtoolProvider.tsx';
+import { Analytics } from '@vercel/analytics/react';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -12,6 +13,7 @@ createRoot(document.getElementById('root')!).render(
       <AuthProvider>
         <App />
         <DevtoolProvider />
+        <Analytics />
       </AuthProvider>
     </QueryProvider>
   </StrictMode>
