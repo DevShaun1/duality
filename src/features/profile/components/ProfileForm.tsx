@@ -8,13 +8,19 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useUpdateProfile } from '../hooks/useUpdateProfile';
 import { profileSchema, type ProfileFormValues } from '../schemas/profileSchema';
+import { Lock } from 'lucide-react';
 
 type ProfileFormProps = {
   defaultDisplayName?: string | null;
+  signedInEmail?: string;
   onSaved?: () => void;
 };
 
-export default function ProfileForm({ defaultDisplayName = '', onSaved }: ProfileFormProps) {
+export default function ProfileForm({
+  defaultDisplayName = '',
+  signedInEmail = '',
+  onSaved,
+}: ProfileFormProps) {
   const updateProfileMutation = useUpdateProfile();
 
   const {
@@ -45,13 +51,35 @@ export default function ProfileForm({ defaultDisplayName = '', onSaved }: Profil
 
         <Input
           id="displayName"
-          placeholder="Enter your display name"
+          placeholder="Enter the name Duality should use"
           {...register('displayName')}
         />
+
+        <p className="text-xs text-muted-foreground">
+          This is how Duality will address you in reflections.
+        </p>
 
         {errors.displayName && (
           <p className="text-sm text-destructive">{errors.displayName.message}</p>
         )}
+      </div>
+
+      <div className="mt-6 space-y-2">
+        <Label htmlFor="email" className="flex items-center gap-2">
+          <Lock className="h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
+          Sign-in email
+        </Label>
+
+        <Input
+          id="email"
+          readOnly
+          aria-readonly="true"
+          value={signedInEmail}
+        />
+
+        <p className="text-xs text-muted-foreground">
+          This is your registered email and can&apos;t be changed here.
+        </p>
       </div>
 
       {updateProfileMutation.isError && (
@@ -60,8 +88,8 @@ export default function ProfileForm({ defaultDisplayName = '', onSaved }: Profil
         </p>
       )}
 
-      <Button type="submit" disabled={isSaving}>
-        {isSaving ? 'Saving...' : 'Save profile'}
+      <Button type="submit" disabled={isSaving} className="mt-4">
+        {isSaving ? 'Saving...' : 'Save name'}
       </Button>
     </form>
   );

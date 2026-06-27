@@ -5,10 +5,12 @@ import ProfileForm from '@/features/profile/components/ProfileForm';
 import { useGetProfile } from '@/features/profile/hooks/useGetProfile';
 import { PageContainer } from '@/components/layout/PageContainer';
 import { PageHeader } from '@/components/layout/PageHeader';
+import { useAuth } from '@/features/auth/AuthProvider';
 
 export default function ProfilePage() {
   const navigate = useNavigate();
   const { data: profile, isLoading, isError } = useGetProfile();
+  const { user } = useAuth();
 
   if (isLoading) return <FullScreenLoader />;
 
@@ -34,6 +36,7 @@ export default function ProfilePage() {
 
       <ProfileForm
         defaultDisplayName={profile?.display_name}
+        signedInEmail={user?.email ?? ''}
         onSaved={() => navigate('/reflect')}
       />
     </PageContainer>
