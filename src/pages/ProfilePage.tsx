@@ -5,7 +5,7 @@ import ProfileForm from '@/features/profile/components/ProfileForm';
 import { useGetProfile } from '@/features/profile/hooks/useGetProfile';
 import { PageContainer } from '@/components/layout/PageContainer';
 import { PageHeader } from '@/components/layout/PageHeader';
-import { useAuth } from '@/features/auth/AuthProvider';
+import { useAuth } from '@/features/auth/hooks/useAuth';
 
 export default function ProfilePage() {
   const navigate = useNavigate();

@@ -6,7 +6,7 @@ import NotFoundPage from '@/pages/NotFoundPage';
 import ReflectionsPage from '@/pages/ReflectionsPage';
 import AppLayout from '@/components/layout/AppLayout';
 import ProtectedRoute from './ProtectedRoute';
-import { useAuth } from '@/features/auth/AuthProvider';
+import { useAuth } from '@/features/auth/hooks/useAuth';
 import FullScreenLoader from '@/components/common/FullScreenLoader';
 import ProfilePage from '@/pages/ProfilePage';
 import AuthCallbackPage from '@/pages/AuthCallbackPage';

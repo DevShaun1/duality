@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useAuth } from '@/features/auth/AuthProvider';
+import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useGetProfile } from '@/features/profile/hooks/useGetProfile';
 import { supabase } from '@/lib/supabase';
 import logo from '@/assets/logo.png';

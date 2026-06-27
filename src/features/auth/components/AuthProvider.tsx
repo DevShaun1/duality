@@ -1,15 +1,9 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import type { Session, User } from '@supabase/supabase-js';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import PrivacyTransparencyDialog from '@/features/auth/components/PrivacyTransparencyDialog';
+import { usePrivacyNotice } from '@/features/auth/hooks/usePrivacyNotice';
+import type { Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
-
-interface AuthContextValue {
-  session: Session | null;
-  user: User | null;
-  isLoggedIn: boolean;
-  isLoading: boolean;
-}
-
-const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+import { AuthContext } from '../context/authContext';
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -18,6 +12,10 @@ interface AuthProviderProps {
 export default function AuthProvider({ children }: AuthProviderProps) {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const user = session?.user ?? null;
+  const { showPrivacyNotice, acceptPrivacyNotice } = usePrivacyNotice({
+    isAuthenticated: Boolean(user),
+  });
 
   useEffect(() => {
     const initialiseAuth = async () => {
@@ -50,15 +48,10 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     [session, isLoading]
   );
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
-
-export function useAuth() {
-  const context = useContext(AuthContext);
-
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-
-  return context;
+  return (
+    <>
+      <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+      <PrivacyTransparencyDialog open={showPrivacyNotice} onAccept={acceptPrivacyNotice} />
+    </>
+  );
 }
