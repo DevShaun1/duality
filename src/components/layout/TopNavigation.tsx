@@ -80,7 +80,7 @@ export default function TopNavigation() {
 
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => navigate('/profile')}>Profile</DropdownMenuItem>
-
+              <DropdownMenuItem onClick={() => navigate('/privacy')}>Privacy</DropdownMenuItem>
               <DropdownMenuItem onClick={handleSignOut}>Sign out</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

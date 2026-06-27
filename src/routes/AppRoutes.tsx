@@ -14,6 +14,7 @@ import ForgotPasswordPage from '@/pages/ForgotPasswordPage';
 import ResetPasswordPage from '@/pages/ResetPasswordPage';
 import ReflectionInsightPage from '@/pages/ReflectionInsightPage';
 import DiscoverPatternsPage from '@/pages/DiscoverPatternsPage';
+import PrivacyPage from '@/pages/PrivacyPage';
 
 export function AppRoutes() {
   const { isLoggedIn, isLoading } = useAuth();
@@ -38,6 +39,7 @@ export function AppRoutes() {
           <Route path="/reflections/:reflectionId" element={<ReflectionInsightPage />} />
           <Route path="/discover-patterns" element={<DiscoverPatternsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
         </Route>
       </Route>
 
