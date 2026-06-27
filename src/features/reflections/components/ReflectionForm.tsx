@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useWatch } from 'react-hook-form';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -21,7 +21,7 @@ type ReflectionFormProps = {
 export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProps) {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isListening, setIsListening] = useState(false);
-  const [stopRecording, setStopRecording] = useState<(() => void) | null>(null);
+  const stopRecordingRef = useRef<(() => void) | null>(null);
 
   const {
     register,
@@ -49,12 +49,33 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
   const exercised = useWatch({ control, name: 'exercise' });
   const journalText = useWatch({ control, name: 'journalText' });
 
+  const handleRecordingControlChange = useCallback(
+    ({ isListening, stopRecording }: { isListening: boolean; stopRecording: () => void }) => {
+      setIsListening((currentIsListening) =>
+        currentIsListening === isListening ? currentIsListening : isListening
+      );
+      stopRecordingRef.current = stopRecording;
+    },
+    []
+  );
+
+  const handleJournalTextChange = useCallback(
+    (value: string) => {
+      setValue('journalText', value, {
+        shouldDirty: true,
+        shouldTouch: true,
+        shouldValidate: true,
+      });
+    },
+    [setValue]
+  );
+
   const onSubmit = async (data: ReflectionFormValues) => {
     setSubmitError(null);
 
     // Stop recording if the user submits the form while recording is in progress
     if (isListening) {
-      stopRecording?.();
+      stopRecordingRef.current?.();
     }
 
     try {
@@ -79,10 +100,15 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
   useEffect(() => {
     return () => {
       if (isListening) {
-        stopRecording?.();
+        stopRecordingRef.current?.();
       }
     };
-  }, [isListening, stopRecording]);
+  }, [isListening]);
+
+  // React Hook Form returns an event handler here. It does not call `onSubmit` during render,
+  // but the refs lint rule cannot infer that and flags the `stopRecordingRef` access inside `onSubmit`.
+  // eslint-disable-next-line react-hooks/refs
+  const handleReflectionSubmit = handleSubmit(onSubmit);
 
   return (
     <Card>
@@ -91,7 +117,7 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
       </CardHeader>
 
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleReflectionSubmit} className="space-y-6">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="sleepHours">Sleep hours</Label>
@@ -164,18 +190,9 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
             <SpeechToText
               textareaId="reflection"
               textareaName="journalText"
-              onRecordingControlChange={({ isListening, stopRecording }) => {
-                setIsListening(isListening);
-                setStopRecording(() => stopRecording);
-              }}
+              onRecordingControlChange={handleRecordingControlChange}
               value={journalText}
-              onChange={(value) =>
-                setValue('journalText', value, {
-                  shouldDirty: true,
-                  shouldTouch: true,
-                  shouldValidate: true,
-                })
-              }
+              onChange={handleJournalTextChange}
               placeholder="How has your day been?"
             />
             {errors.journalText && (
@@ -187,9 +204,7 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
             {isSubmitting ? 'Saving...' : isEditing ? 'Update Reflection' : 'Reflect on Today'}
           </Button>
 
-          {submitError ? (
-            <p className="text-sm text-destructive">{submitError}</p>
-          ) : null}
+          {submitError ? <p className="text-sm text-destructive">{submitError}</p> : null}
         </form>
       </CardContent>
     </Card>
