@@ -52,7 +52,7 @@ export default function TopNavigation() {
           <span>Duality</span>
         </NavLink>
 
-        <nav className="flex items-center gap-6 text-sm">
+        <nav aria-label="Primary navigation" className="hidden items-center gap-6 text-sm md:flex">
           <NavLink to="/reflect" className={navLinkClass}>
             Reflect
           </NavLink>
@@ -62,16 +62,19 @@ export default function TopNavigation() {
           <NavLink to="/discover-patterns" className={navLinkClass}>
             Discover Patterns
           </NavLink>
+        </nav>
 
+        <div className="hidden md:flex">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
+                aria-label="Open account menu"
                 variant="ghost"
                 className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
               >
-                <UserCircle className="h-5 w-5" />
+                <UserCircle className="h-5 w-5" aria-hidden="true" />
                 <span className="max-w-28 truncate">{displayName}</span>
-                <ChevronDown className="h-4 w-4" />
+                <ChevronDown className="h-4 w-4" aria-hidden="true" />
               </Button>
             </DropdownMenuTrigger>
 
@@ -81,7 +84,7 @@ export default function TopNavigation() {
               <DropdownMenuItem onClick={handleSignOut}>Sign out</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        </nav>
+        </div>
       </div>
     </header>
   );
