@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useSpeechToTextController } from './hooks/useSpeechToTextController';
@@ -9,6 +9,10 @@ type SpeechToTextProps = {
   textareaId?: string;
   textareaName?: string;
   placeholder?: string;
+  onRecordingControlChange?: (control: {
+    isListening: boolean;
+    stopRecording: () => void;
+  }) => void;
 };
 
 /**
@@ -37,6 +41,7 @@ export function SpeechToText({
   textareaId = 'reflection',
   textareaName = 'journalText',
   placeholder = 'Start speaking about your day...',
+  onRecordingControlChange,
 }: SpeechToTextProps) {
   const handleFinalTranscript = useCallback(
     (transcript: string) => {
@@ -58,6 +63,13 @@ export function SpeechToText({
   } = useSpeechToTextController({ onFinalTranscript: handleFinalTranscript });
 
   const liveDisplayText = interimTranscript ? `${value} ${interimTranscript}`.trim() : value;
+
+  useEffect(() => {
+    onRecordingControlChange?.({
+      isListening,
+      stopRecording: handleStopListening,
+    });
+  }, [isListening, handleStopListening, onRecordingControlChange]);
 
   const handleClearTranscript = () => {
     handleClear();

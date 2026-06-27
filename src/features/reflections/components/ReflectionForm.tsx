@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,6 +20,8 @@ type ReflectionFormProps = {
 
 export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProps) {
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const stopRecordingRef = useRef<(() => void) | null>(null);
+  const isListeningRef = useRef(false);
 
   const {
     register,
@@ -50,6 +52,11 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
   const onSubmit = async (data: ReflectionFormValues) => {
     setSubmitError(null);
 
+    // Stop recording if the user submits the form while recording is in progress
+    if (isListeningRef.current) {
+      stopRecordingRef.current?.();
+    }
+
     try {
       const savedReflection = todaysReflection
         ? await updateReflectionMutation.mutateAsync({
@@ -67,6 +74,15 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
       setSubmitError(error instanceof Error ? error.message : 'Could not save reflection');
     }
   };
+
+  // Stop recording if the component unmounts while recording is in progress
+  useEffect(() => {
+    return () => {
+      if (isListeningRef.current) {
+        stopRecordingRef.current?.();
+      }
+    };
+  }, []);
 
   return (
     <Card>
@@ -148,6 +164,10 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
             <SpeechToText
               textareaId="reflection"
               textareaName="journalText"
+              onRecordingControlChange={({ isListening, stopRecording }) => {
+                isListeningRef.current = isListening;
+                stopRecordingRef.current = stopRecording;
+              }}
               value={journalText}
               onChange={(value) =>
                 setValue('journalText', value, {
