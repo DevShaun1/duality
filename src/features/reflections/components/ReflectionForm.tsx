@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { useEffect, useRef, useState } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
+import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,14 +20,14 @@ type ReflectionFormProps = {
 
 export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProps) {
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const stopRecordingRef = useRef<(() => void) | null>(null);
-  const isListeningRef = useRef(false);
+  const [isListening, setIsListening] = useState(false);
+  const [stopRecording, setStopRecording] = useState<(() => void) | null>(null);
 
   const {
     register,
     handleSubmit,
     setValue,
-    watch,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<ReflectionFormValues>({
     resolver: zodResolver(reflectionFormSchema),
@@ -46,15 +46,15 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
   const createReflectionMutation = useCreateReflection();
   const updateReflectionMutation = useUpdateReflection();
 
-  const exercised = watch('exercise');
-  const journalText = watch('journalText');
+  const exercised = useWatch({ control, name: 'exercise' });
+  const journalText = useWatch({ control, name: 'journalText' });
 
   const onSubmit = async (data: ReflectionFormValues) => {
     setSubmitError(null);
 
     // Stop recording if the user submits the form while recording is in progress
-    if (isListeningRef.current) {
-      stopRecordingRef.current?.();
+    if (isListening) {
+      stopRecording?.();
     }
 
     try {
@@ -78,11 +78,11 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
   // Stop recording if the component unmounts while recording is in progress
   useEffect(() => {
     return () => {
-      if (isListeningRef.current) {
-        stopRecordingRef.current?.();
+      if (isListening) {
+        stopRecording?.();
       }
     };
-  }, []);
+  }, [isListening, stopRecording]);
 
   return (
     <Card>
@@ -165,8 +165,8 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
               textareaId="reflection"
               textareaName="journalText"
               onRecordingControlChange={({ isListening, stopRecording }) => {
-                isListeningRef.current = isListening;
-                stopRecordingRef.current = stopRecording;
+                setIsListening(isListening);
+                setStopRecording(() => stopRecording);
               }}
               value={journalText}
               onChange={(value) =>
