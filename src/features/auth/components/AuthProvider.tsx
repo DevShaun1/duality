@@ -13,8 +13,11 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const user = session?.user ?? null;
+  const pathname = window.location.pathname;
+
   const { showPrivacyNotice, acceptPrivacyNotice } = usePrivacyNotice({
     isAuthenticated: Boolean(user),
+    pathname,
   });
 
   useEffect(() => {
