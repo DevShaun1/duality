@@ -8,18 +8,55 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Badge } from '@/components/ui/badge';
 import { reflectionFormSchema, type ReflectionFormValues } from '../schemas/reflectionSchema';
 import { useCreateReflection } from '../hooks/useCreateReflection';
 import { useUpdateReflection } from '../hooks/useUpdateReflection';
 import { SpeechToText } from '@/features/speech/SpeechToText';
+import { CircleHelp } from 'lucide-react';
 import type { Reflection } from '../types/reflection';
 import { getEnergyTone, getMoodTone, getSleepTone, getStressTone } from '../lib/ratingTones';
-import ReflectionMetricFeedback from './ReflectionMetricFeedback';
 
 type ReflectionFormProps = {
   todaysReflection?: Reflection | null;
   onSaved: (savedReflectionId: string) => void;
 };
+
+type MetricHelpProps = {
+  label: string;
+  description: string;
+  anchors: string[];
+};
+
+function MetricHelp({ label, description, anchors }: MetricHelpProps) {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="h-5 w-5 rounded-full text-muted-foreground hover:text-foreground"
+          aria-label={`How to rate ${label}`}
+        >
+          <CircleHelp className="h-3.5 w-3.5" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent align="start" className="w-72 space-y-3 text-sm">
+        <div className="space-y-1">
+          <p className="font-medium text-foreground">{label}</p>
+          <p className="text-muted-foreground">{description}</p>
+        </div>
+        <ul className="space-y-1 text-muted-foreground">
+          {anchors.map((anchor) => (
+            <li key={anchor}>{anchor}</li>
+          ))}
+        </ul>
+      </PopoverContent>
+    </Popover>
+  );
+}
 
 export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProps) {
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -131,9 +168,29 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
 
       <CardContent>
         <form onSubmit={handleReflectionSubmit} className="space-y-6">
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="sleepHours">Sleep duration</Label>
+          <div className="grid gap-6 lg:grid-cols-2">
+            <div className="space-y-3 rounded-xl border border-border/40 bg-background/20 p-4">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-1.5">
+                  <Label htmlFor="sleepHours">Sleep duration</Label>
+                  <MetricHelp
+                    label="Sleep duration"
+                    description="Enter roughly how many hours you slept last night. It does not need to be exact."
+                    anchors={[
+                      '< 6 hrs = Very short',
+                      '6–6.9 hrs = A little short',
+                      '7–9 hrs = Recommended range',
+                      '> 9 hrs = Long sleep',
+                    ]}
+                  />
+                </div>
+                <Badge
+                  variant="outline"
+                  className="rounded-full border-primary/30 bg-primary/10 text-xs font-medium text-primary"
+                >
+                  {sleepTone.label}
+                </Badge>
+              </div>
               <InputGroup>
                 <InputGroupInput
                   id="sleepHours"
@@ -146,18 +203,35 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
                 />
                 <InputGroupAddon align="inline-end">hours</InputGroupAddon>
               </InputGroup>
-              <ReflectionMetricFeedback
-                label={sleepTone.label}
-                value={`${sleepHours ?? 7} hrs`}
-                description={sleepTone.description}
-              />
               {errors.sleepHours && (
                 <p className="text-sm text-destructive">{errors.sleepHours.message}</p>
               )}
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="energy">Energy level</Label>
+            <div className="space-y-3 rounded-xl border border-border/40 bg-background/20 p-4">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-1.5">
+                  <Label htmlFor="energy">Energy level</Label>
+                  <MetricHelp
+                    label="Energy level"
+                    description="Think about your overall physical and mental energy throughout today."
+                    anchors={[
+                      '1 = Completely drained',
+                      '5 = Fairly balanced',
+                      '10 = Full of energy',
+                    ]}
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <Badge
+                    variant="outline"
+                    className="rounded-full border-primary/30 bg-primary/10 text-xs font-medium text-primary"
+                  >
+                    {energyTone.label}
+                  </Badge>
+                  <span className="text-sm text-muted-foreground">{energy ?? 5}/10</span>
+                </div>
+              </div>
               <Slider
                 id="energy"
                 min={1}
@@ -174,19 +248,32 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
                 aria-label="Energy level rating"
               />
               <div className="flex justify-between text-xs text-muted-foreground">
-                <span>1</span>
-                <span>10</span>
+                <span>Low</span>
+                <span>High</span>
               </div>
-              <ReflectionMetricFeedback
-                label={energyTone.label}
-                value={`${energy ?? 5}/10`}
-                description={energyTone.description}
-              />
               {errors.energy && <p className="text-sm text-destructive">{errors.energy.message}</p>}
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="mood">Overall mood</Label>
+            <div className="space-y-3 rounded-xl border border-border/40 bg-background/20 p-4">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-1.5">
+                  <Label htmlFor="mood">Overall mood</Label>
+                  <MetricHelp
+                    label="Overall mood"
+                    description="Consider how positive, neutral, or low your mood felt across most of the day."
+                    anchors={['1 = Very low', '5 = Neutral or mixed', '10 = Very positive']}
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <Badge
+                    variant="outline"
+                    className="rounded-full border-primary/30 bg-primary/10 text-xs font-medium text-primary"
+                  >
+                    {moodTone.label}
+                  </Badge>
+                  <span className="text-sm text-muted-foreground">{mood ?? 5}/10</span>
+                </div>
+              </div>
               <Slider
                 id="mood"
                 min={1}
@@ -203,19 +290,32 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
                 aria-label="Overall mood rating"
               />
               <div className="flex justify-between text-xs text-muted-foreground">
-                <span>1</span>
-                <span>10</span>
+                <span>Low</span>
+                <span>Positive</span>
               </div>
-              <ReflectionMetricFeedback
-                label={moodTone.label}
-                value={`${mood ?? 5}/10`}
-                description={moodTone.description}
-              />
               {errors.mood && <p className="text-sm text-destructive">{errors.mood.message}</p>}
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="stress">Stress level</Label>
+            <div className="space-y-3 rounded-xl border border-border/40 bg-background/20 p-4">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-1.5">
+                  <Label htmlFor="stress">Stress level</Label>
+                  <MetricHelp
+                    label="Stress level"
+                    description="Consider how much pressure, tension, or overwhelm you felt during most of the day."
+                    anchors={['1 = Very relaxed', '5 = Moderate pressure', '10 = Highly stressed']}
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <Badge
+                    variant="outline"
+                    className="rounded-full border-primary/30 bg-primary/10 text-xs font-medium text-primary"
+                  >
+                    {stressTone.label}
+                  </Badge>
+                  <span className="text-sm text-muted-foreground">{stress ?? 5}/10</span>
+                </div>
+              </div>
               <Slider
                 id="stress"
                 min={1}
@@ -232,14 +332,9 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
                 aria-label="Stress level rating"
               />
               <div className="flex justify-between text-xs text-muted-foreground">
-                <span>1</span>
-                <span>10</span>
+                <span>Relaxed</span>
+                <span>Stressed</span>
               </div>
-              <ReflectionMetricFeedback
-                label={stressTone.label}
-                value={`${stress ?? 5}/10`}
-                description={stressTone.description}
-              />
               {errors.stress && <p className="text-sm text-destructive">{errors.stress.message}</p>}
             </div>
           </div>
