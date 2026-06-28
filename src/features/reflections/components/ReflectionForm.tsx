@@ -157,7 +157,7 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="energy">Energy</Label>
+              <Label htmlFor="energy">Energy level</Label>
               <Slider
                 id="energy"
                 min={1}
@@ -171,7 +171,7 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
                     shouldValidate: true,
                   });
                 }}
-                aria-label="Energy rating"
+                aria-label="Energy level rating"
               />
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>1</span>
@@ -186,7 +186,7 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="mood">Mood</Label>
+              <Label htmlFor="mood">Overall mood</Label>
               <Slider
                 id="mood"
                 min={1}
@@ -200,7 +200,7 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
                     shouldValidate: true,
                   });
                 }}
-                aria-label="Mood rating"
+                aria-label="Overall mood rating"
               />
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>1</span>
@@ -215,7 +215,7 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="stress">Stress</Label>
+              <Label htmlFor="stress">Stress level</Label>
               <Slider
                 id="stress"
                 min={1}
@@ -229,7 +229,7 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
                     shouldValidate: true,
                   });
                 }}
-                aria-label="Stress rating"
+                aria-label="Stress level rating"
               />
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>1</span>
