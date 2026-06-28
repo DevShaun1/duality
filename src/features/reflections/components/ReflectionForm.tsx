@@ -5,8 +5,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
 import { Label } from '@/components/ui/label';
+import { Slider } from '@/components/ui/slider';
 import { reflectionFormSchema, type ReflectionFormValues } from '../schemas/reflectionSchema';
 import { useCreateReflection } from '../hooks/useCreateReflection';
 import { useUpdateReflection } from '../hooks/useUpdateReflection';
@@ -133,17 +134,21 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="sleepHours">Sleep duration</Label>
-              <Input
-                id="sleepHours"
-                type="number"
-                step="0.5"
-                min="0"
-                max="24"
-                {...register('sleepHours', { valueAsNumber: true })}
-              />
+              <InputGroup>
+                <InputGroupInput
+                  id="sleepHours"
+                  type="number"
+                  step="0.5"
+                  min="0"
+                  max="12"
+                  inputMode="decimal"
+                  {...register('sleepHours', { valueAsNumber: true })}
+                />
+                <InputGroupAddon align="inline-end">hours</InputGroupAddon>
+              </InputGroup>
               <ReflectionMetricFeedback
                 label={sleepTone.label}
-                value={`${sleepHours ?? 7} hours`}
+                value={`${sleepHours ?? 7} hrs`}
                 description={sleepTone.description}
               />
               {errors.sleepHours && (
@@ -153,13 +158,25 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
 
             <div className="space-y-2">
               <Label htmlFor="energy">Energy</Label>
-              <Input
+              <Slider
                 id="energy"
-                type="number"
-                min="1"
-                max="10"
-                {...register('energy', { valueAsNumber: true })}
+                min={1}
+                max={10}
+                step={1}
+                value={[energy ?? 5]}
+                onValueChange={([value]) => {
+                  setValue('energy', value, {
+                    shouldDirty: true,
+                    shouldTouch: true,
+                    shouldValidate: true,
+                  });
+                }}
+                aria-label="Energy rating"
               />
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>1</span>
+                <span>10</span>
+              </div>
               <ReflectionMetricFeedback
                 label={energyTone.label}
                 value={`${energy ?? 5}/10`}
@@ -170,13 +187,25 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
 
             <div className="space-y-2">
               <Label htmlFor="mood">Mood</Label>
-              <Input
+              <Slider
                 id="mood"
-                type="number"
-                min="1"
-                max="10"
-                {...register('mood', { valueAsNumber: true })}
+                min={1}
+                max={10}
+                step={1}
+                value={[mood ?? 5]}
+                onValueChange={([value]) => {
+                  setValue('mood', value, {
+                    shouldDirty: true,
+                    shouldTouch: true,
+                    shouldValidate: true,
+                  });
+                }}
+                aria-label="Mood rating"
               />
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>1</span>
+                <span>10</span>
+              </div>
               <ReflectionMetricFeedback
                 label={moodTone.label}
                 value={`${mood ?? 5}/10`}
@@ -187,13 +216,25 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
 
             <div className="space-y-2">
               <Label htmlFor="stress">Stress</Label>
-              <Input
+              <Slider
                 id="stress"
-                type="number"
-                min="1"
-                max="10"
-                {...register('stress', { valueAsNumber: true })}
+                min={1}
+                max={10}
+                step={1}
+                value={[stress ?? 5]}
+                onValueChange={([value]) => {
+                  setValue('stress', value, {
+                    shouldDirty: true,
+                    shouldTouch: true,
+                    shouldValidate: true,
+                  });
+                }}
+                aria-label="Stress rating"
               />
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>1</span>
+                <span>10</span>
+              </div>
               <ReflectionMetricFeedback
                 label={stressTone.label}
                 value={`${stress ?? 5}/10`}
