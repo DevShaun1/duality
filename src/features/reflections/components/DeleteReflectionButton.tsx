@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { ComponentProps, ReactNode } from 'react';
+import type { ComponentProps, ReactElement, ReactNode } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import {
@@ -21,19 +21,25 @@ type ButtonSize = ComponentProps<typeof Button>['size'];
 type DeleteReflectionButtonProps = {
   reflectionId: string;
   onDeleted?: () => void;
+  onCancel?: () => void;
   buttonVariant?: ButtonVariant;
   buttonSize?: ButtonSize;
   buttonClassName?: string;
   children?: ReactNode;
+  triggerAsChild?: boolean;
+  hideErrorText?: boolean;
 };
 
 export function DeleteReflectionButton({
   reflectionId,
   onDeleted,
+  onCancel,
   buttonVariant = 'outline',
   buttonSize = 'default',
   buttonClassName,
   children,
+  triggerAsChild = false,
+  hideErrorText = false,
 }: DeleteReflectionButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
@@ -52,14 +58,27 @@ export function DeleteReflectionButton({
     }
   };
 
+  const triggerContent = triggerAsChild ? (
+    (children as ReactElement)
+  ) : (
+    <Button variant={buttonVariant} size={buttonSize} className={buttonClassName}>
+      {children ?? 'Delete reflection'}
+    </Button>
+  );
+
   return (
-    <div className="space-y-2">
-      <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
-        <AlertDialogTrigger asChild>
-          <Button variant={buttonVariant} size={buttonSize} className={buttonClassName}>
-            {children ?? 'Delete reflection'}
-          </Button>
-        </AlertDialogTrigger>
+    <>
+      <AlertDialog
+        open={isOpen}
+        onOpenChange={(open) => {
+          setIsOpen(open);
+
+          if (!open) {
+            onCancel?.();
+          }
+        }}
+      >
+        <AlertDialogTrigger asChild>{triggerContent}</AlertDialogTrigger>
 
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -71,7 +90,12 @@ export function DeleteReflectionButton({
           </AlertDialogHeader>
 
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={deleteReflectionMutation.isPending}>
+            <AlertDialogCancel
+              disabled={deleteReflectionMutation.isPending}
+              onClick={() => {
+                onCancel?.();
+              }}
+            >
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction asChild>
@@ -90,7 +114,9 @@ export function DeleteReflectionButton({
         </AlertDialogContent>
       </AlertDialog>
 
-      {deleteError ? <p className="text-sm text-destructive">{deleteError}</p> : null}
-    </div>
+      {!hideErrorText && deleteError ? (
+        <p className="text-sm text-destructive">{deleteError}</p>
+      ) : null}
+    </>
   );
 }

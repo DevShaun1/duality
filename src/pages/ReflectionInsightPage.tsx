@@ -2,6 +2,12 @@ import FullScreenLoader from '@/components/common/FullScreenLoader';
 import { PageContainer } from '@/components/layout/PageContainer';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { DeleteReflectionButton } from '@/features/reflections/components/DeleteReflectionButton';
 import SourceReflectionSection from '@/features/reflections/components/SourceReflectionSection';
 import { useGenerateReflectionInsight } from '@/features/reflections/hooks/useGenerateReflectionInsight';
@@ -9,7 +15,16 @@ import { useReflectionById } from '@/features/reflections/hooks/useReflectionByI
 import { useReflectionInsight } from '@/features/reflections/hooks/useReflectionInsight';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
-import { CircleHelp, Compass, Heart, Layers3, Lightbulb, Sparkles } from 'lucide-react';
+import {
+  CircleHelp,
+  Compass,
+  Heart,
+  Layers3,
+  Lightbulb,
+  MoreHorizontal,
+  Sparkles,
+  Trash2,
+} from 'lucide-react';
 import InsightSection from '@/components/insights/InsightSection';
 import InsightBulletList from '@/components/insights/InsightBulletList';
 import InsightList from '@/components/insights/InsightList';
@@ -40,6 +55,7 @@ export default function ReflectionInsightPage() {
   const generateInsightMutation = useGenerateReflectionInsight();
   const [generationError, setGenerationError] = useState<string | null>(null);
   const [isAwaitingGeneratedInsight, setIsAwaitingGeneratedInsight] = useState(false);
+  const [isActionsMenuOpen, setIsActionsMenuOpen] = useState(false);
 
   const isLoading = isReflectionLoading || isInsightLoading;
 
@@ -68,6 +84,11 @@ export default function ReflectionInsightPage() {
       );
     }
   }, [generateInsightMutation, reflection]);
+
+  const handleOnCancelDelete = useCallback(() => {
+    // Close the dropdown menu when the delete action is canceled
+    setIsActionsMenuOpen(false);
+  }, []);
 
   useEffect(() => {
     if (
@@ -107,23 +128,43 @@ export default function ReflectionInsightPage() {
 
   return (
     <PageContainer>
-      <PageHeader
-        title="Another Perspective"
-        description="A gentle read of this reflection, helping you notice patterns with more clarity and self-compassion."
-      />
+      <div className="mb-8 flex items-start justify-between gap-4">
+        <PageHeader
+          title="Another Perspective"
+          description="A gentle read of this reflection, helping you notice patterns with more clarity and self-compassion."
+        />
 
-      {reflection ? (
-        <div className="mb-6">
-          <DeleteReflectionButton
-            reflectionId={reflection.id}
-            buttonVariant="destructive"
-            buttonSize="sm"
-            onDeleted={() => navigate('/reflections')}
-          >
-            Delete reflection
-          </DeleteReflectionButton>
-        </div>
-      ) : null}
+        {reflection ? (
+          <DropdownMenu open={isActionsMenuOpen} onOpenChange={setIsActionsMenuOpen}>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="mt-1 shrink-0">
+                <MoreHorizontal className="h-4 w-4" />
+                <span className="sr-only">Open reflection actions</span>
+              </Button>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent align="end" className="w-56">
+              <DeleteReflectionButton
+                reflectionId={reflection.id}
+                hideErrorText
+                triggerAsChild
+                onDeleted={() => navigate('/reflections')}
+                onCancel={handleOnCancelDelete}
+              >
+                <DropdownMenuItem
+                  variant="destructive"
+                  onSelect={(event) => {
+                    event.preventDefault();
+                  }}
+                >
+                  <Trash2 className="h-4 w-4" />
+                  Delete reflection
+                </DropdownMenuItem>
+              </DeleteReflectionButton>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : null}
+      </div>
 
       {reflectionError ? (
         <p className="text-destructive">Could not load reflection: {reflectionError.message}</p>

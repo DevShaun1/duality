@@ -3,62 +3,26 @@ import { useForm, useWatch } from 'react-hook-form';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Badge } from '@/components/ui/badge';
 import { reflectionFormSchema, type ReflectionFormValues } from '../schemas/reflectionSchema';
 import { useCreateReflection } from '../hooks/useCreateReflection';
 import { useUpdateReflection } from '../hooks/useUpdateReflection';
 import { SpeechToText } from '@/features/speech/SpeechToText';
-import { CircleHelp } from 'lucide-react';
 import type { Reflection } from '../types/reflection';
 import { getEnergyTone, getMoodTone, getSleepTone, getStressTone } from '../lib/ratingTones';
 import { DeleteReflectionButton } from './DeleteReflectionButton';
+import { MetricHelpPopover } from './MetricHelpPopover';
 
 type ReflectionFormProps = {
   todaysReflection?: Reflection | null;
   onSaved: (savedReflectionId: string) => void;
   onDeleted?: () => void;
 };
-
-type MetricHelpProps = {
-  label: string;
-  description: string;
-  anchors: string[];
-};
-
-function MetricHelp({ label, description, anchors }: MetricHelpProps) {
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          className="h-5 w-5 rounded-full text-muted-foreground hover:text-foreground"
-          aria-label={`How to rate ${label}`}
-        >
-          <CircleHelp className="h-3.5 w-3.5" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent align="start" className="w-72 space-y-3 text-sm">
-        <div className="space-y-1">
-          <p className="font-medium text-foreground">{label}</p>
-          <p className="text-muted-foreground">{description}</p>
-        </div>
-        <ul className="space-y-1 text-muted-foreground">
-          {anchors.map((anchor) => (
-            <li key={anchor}>{anchor}</li>
-          ))}
-        </ul>
-      </PopoverContent>
-    </Popover>
-  );
-}
 
 export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: ReflectionFormProps) {
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -165,7 +129,7 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Today&apos;s Reflection</CardTitle>
+        
       </CardHeader>
 
       <CardContent>
@@ -175,7 +139,7 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-1.5">
                   <Label htmlFor="sleepHours">Sleep duration</Label>
-                  <MetricHelp
+                  <MetricHelpPopover
                     label="Sleep duration"
                     description="Enter roughly how many hours you slept last night. It does not need to be exact."
                     anchors={[
@@ -214,7 +178,7 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-1.5">
                   <Label htmlFor="energy">Energy level</Label>
-                  <MetricHelp
+                  <MetricHelpPopover
                     label="Energy level"
                     description="Think about your overall physical and mental energy throughout today."
                     anchors={[
@@ -260,7 +224,7 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-1.5">
                   <Label htmlFor="mood">Overall mood</Label>
-                  <MetricHelp
+                  <MetricHelpPopover
                     label="Overall mood"
                     description="Consider how positive, neutral, or low your mood felt across most of the day."
                     anchors={['1 = Very low', '5 = Neutral or mixed', '10 = Very positive']}
@@ -302,7 +266,7 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-1.5">
                   <Label htmlFor="stress">Stress level</Label>
-                  <MetricHelp
+                  <MetricHelpPopover
                     label="Stress level"
                     description="Consider how much pressure, tension, or overwhelm you felt during most of the day."
                     anchors={['1 = Very relaxed', '5 = Moderate pressure', '10 = Highly stressed']}
