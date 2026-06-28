@@ -17,10 +17,12 @@ import { SpeechToText } from '@/features/speech/SpeechToText';
 import { CircleHelp } from 'lucide-react';
 import type { Reflection } from '../types/reflection';
 import { getEnergyTone, getMoodTone, getSleepTone, getStressTone } from '../lib/ratingTones';
+import { DeleteReflectionButton } from './DeleteReflectionButton';
 
 type ReflectionFormProps = {
   todaysReflection?: Reflection | null;
   onSaved: (savedReflectionId: string) => void;
+  onDeleted?: () => void;
 };
 
 type MetricHelpProps = {
@@ -58,7 +60,7 @@ function MetricHelp({ label, description, anchors }: MetricHelpProps) {
   );
 }
 
-export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProps) {
+export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: ReflectionFormProps) {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isListening, setIsListening] = useState(false);
   const stopRecordingRef = useRef<(() => void) | null>(null);
@@ -368,9 +370,20 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
             )}
           </div>
 
-          <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
-            {isSubmitting ? 'Saving...' : isEditing ? 'Update Reflection' : 'Reflect on Today'}
-          </Button>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
+            <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
+              {isSubmitting ? 'Saving...' : isEditing ? 'Update Reflection' : 'Reflect on Today'}
+            </Button>
+
+            {isEditing && todaysReflection ? (
+              <DeleteReflectionButton
+                reflectionId={todaysReflection.id}
+                buttonVariant="destructive"
+                buttonClassName="w-full sm:w-auto"
+                onDeleted={onDeleted}
+              />
+            ) : null}
+          </div>
 
           {submitError ? <p className="text-sm text-destructive">{submitError}</p> : null}
         </form>

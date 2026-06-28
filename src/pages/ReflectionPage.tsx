@@ -34,6 +34,9 @@ export default function ReflectionPage() {
             setIsEditingTodaysReflection(false);
             navigate(`/reflections/${savedReflectionId}`);
           }}
+          onDeleted={() => {
+            setIsEditingTodaysReflection(false);
+          }}
         />
       ) : (
         <CompletedReflectionCard

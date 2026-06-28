@@ -1,5 +1,6 @@
 import { PageContainer } from '@/components/layout/PageContainer';
 import { PageHeader } from '@/components/layout/PageHeader';
+import { DeleteReflectionButton } from '@/features/reflections/components/DeleteReflectionButton';
 import { useReflections } from '@/features/reflections/hooks/useReflections';
 import { ArrowRight, Compass, Sparkles } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -53,11 +54,11 @@ export default function ReflectionsPage() {
                 <span>Exercise: {reflection.exercised ? 'Yes' : 'No'}</span>
               </div>
 
-              <div className="mt-4">
+              <div className="mt-4 flex flex-wrap items-center gap-3">
                 {reflection.hasInsight ? (
                   <Link
                     to={`/reflections/${reflection.id}`}
-                    className="group mt-4 inline-flex items-center gap-2 text-primary transition-colors hover:text-primary/80 hover:underline"
+                    className="group inline-flex items-center gap-2 text-primary transition-colors hover:text-primary/80 hover:underline"
                   >
                     <Compass className="h-4 w-4 transition-transform group-hover:rotate-6" />
                     <span className="font-medium">Read Another Perspective</span>
@@ -66,7 +67,7 @@ export default function ReflectionsPage() {
                 ) : (
                   <button
                     type="button"
-                    className="group mt-4 inline-flex items-center gap-2 text-primary transition-colors hover:text-primary/80 hover:underline"
+                    className="group inline-flex items-center gap-2 text-primary transition-colors hover:text-primary/80 hover:underline"
                     onClick={() =>
                       navigate(`/reflections/${reflection.id}`, {
                         state: {
@@ -80,6 +81,14 @@ export default function ReflectionsPage() {
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </button>
                 )}
+
+                <DeleteReflectionButton
+                  reflectionId={reflection.id}
+                  buttonVariant="destructive"
+                  buttonSize="sm"
+                >
+                  Delete
+                </DeleteReflectionButton>
               </div>
             </article>
           ))}

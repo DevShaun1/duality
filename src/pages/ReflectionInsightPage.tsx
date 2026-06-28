@@ -2,12 +2,13 @@ import FullScreenLoader from '@/components/common/FullScreenLoader';
 import { PageContainer } from '@/components/layout/PageContainer';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Button } from '@/components/ui/button';
+import { DeleteReflectionButton } from '@/features/reflections/components/DeleteReflectionButton';
 import SourceReflectionSection from '@/features/reflections/components/SourceReflectionSection';
 import { useGenerateReflectionInsight } from '@/features/reflections/hooks/useGenerateReflectionInsight';
 import { useReflectionById } from '@/features/reflections/hooks/useReflectionById';
 import { useReflectionInsight } from '@/features/reflections/hooks/useReflectionInsight';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { CircleHelp, Compass, Heart, Layers3, Lightbulb, Sparkles } from 'lucide-react';
 import InsightSection from '@/components/insights/InsightSection';
 import InsightBulletList from '@/components/insights/InsightBulletList';
@@ -21,6 +22,7 @@ type ReflectionInsightLocationState = {
 
 export default function ReflectionInsightPage() {
   const { reflectionId } = useParams<{ reflectionId: string }>();
+  const navigate = useNavigate();
   const location = useLocation();
   const autoGenerateInsight =
     (location.state as ReflectionInsightLocationState | null)?.autoGenerateInsight === true;
@@ -109,6 +111,19 @@ export default function ReflectionInsightPage() {
         title="Another Perspective"
         description="A gentle read of this reflection, helping you notice patterns with more clarity and self-compassion."
       />
+
+      {reflection ? (
+        <div className="mb-6">
+          <DeleteReflectionButton
+            reflectionId={reflection.id}
+            buttonVariant="destructive"
+            buttonSize="sm"
+            onDeleted={() => navigate('/reflections')}
+          >
+            Delete reflection
+          </DeleteReflectionButton>
+        </div>
+      ) : null}
 
       {reflectionError ? (
         <p className="text-destructive">Could not load reflection: {reflectionError.message}</p>
