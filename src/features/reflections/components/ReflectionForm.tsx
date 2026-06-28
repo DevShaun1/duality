@@ -12,6 +12,7 @@ import { useCreateReflection } from '../hooks/useCreateReflection';
 import { useUpdateReflection } from '../hooks/useUpdateReflection';
 import { SpeechToText } from '@/features/speech/SpeechToText';
 import type { Reflection } from '../types/reflection';
+import { getEnergyTone, getMoodTone, getSleepTone, getStressTone } from '../lib/ratingTones';
 
 type ReflectionFormProps = {
   todaysReflection?: Reflection | null;
@@ -48,6 +49,16 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
 
   const exercised = useWatch({ control, name: 'exercise' });
   const journalText = useWatch({ control, name: 'journalText' });
+
+  const sleepHours = useWatch({ control, name: 'sleepHours' });
+  const energy = useWatch({ control, name: 'energy' });
+  const mood = useWatch({ control, name: 'mood' });
+  const stress = useWatch({ control, name: 'stress' });
+
+  const sleepTone = getSleepTone(sleepHours ?? 7);
+  const energyTone = getEnergyTone(energy ?? 5);
+  const moodTone = getMoodTone(mood ?? 5);
+  const stressTone = getStressTone(stress ?? 5);
 
   const handleRecordingControlChange = useCallback(
     ({ isListening, stopRecording }: { isListening: boolean; stopRecording: () => void }) => {
@@ -120,7 +131,7 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
         <form onSubmit={handleReflectionSubmit} className="space-y-6">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="sleepHours">Sleep hours</Label>
+              <Label htmlFor="sleepHours">Sleep duration</Label>
               <Input
                 id="sleepHours"
                 type="number"
@@ -129,6 +140,13 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
                 max="24"
                 {...register('sleepHours', { valueAsNumber: true })}
               />
+              <div className="flex items-center justify-between gap-3 text-sm">
+                <span className="font-medium text-primary">{sleepTone.label}</span>
+
+                <span className="text-muted-foreground">{sleepHours ?? 7} hours</span>
+              </div>
+
+              <p className="text-sm text-muted-foreground">{sleepTone.description}</p>
               {errors.sleepHours && (
                 <p className="text-sm text-destructive">{errors.sleepHours.message}</p>
               )}
@@ -143,6 +161,11 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
                 max="10"
                 {...register('energy', { valueAsNumber: true })}
               />
+              <div className="flex items-center justify-between gap-3 text-sm">
+                <span className="font-medium text-primary">{energyTone.label}</span>
+                <span className="text-muted-foreground">{energy ?? 5}/10</span>
+              </div>
+              <p className="text-sm text-muted-foreground">{energyTone.description}</p>
               {errors.energy && <p className="text-sm text-destructive">{errors.energy.message}</p>}
             </div>
 
@@ -155,6 +178,11 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
                 max="10"
                 {...register('mood', { valueAsNumber: true })}
               />
+              <div className="flex items-center justify-between gap-3 text-sm">
+                <span className="font-medium text-primary">{moodTone.label}</span>
+                <span className="text-muted-foreground">{mood ?? 5}/10</span>
+              </div>
+              <p className="text-sm text-muted-foreground">{moodTone.description}</p>
               {errors.mood && <p className="text-sm text-destructive">{errors.mood.message}</p>}
             </div>
 
@@ -167,6 +195,11 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
                 max="10"
                 {...register('stress', { valueAsNumber: true })}
               />
+              <div className="flex items-center justify-between gap-3 text-sm">
+                <span className="font-medium text-primary">{stressTone.label}</span>
+                <span className="text-muted-foreground">{stress ?? 5}/10</span>
+              </div>
+              <p className="text-sm text-muted-foreground">{stressTone.description}</p>
               {errors.stress && <p className="text-sm text-destructive">{errors.stress.message}</p>}
             </div>
           </div>
