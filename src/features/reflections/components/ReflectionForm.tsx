@@ -13,6 +13,7 @@ import { useUpdateReflection } from '../hooks/useUpdateReflection';
 import { SpeechToText } from '@/features/speech/SpeechToText';
 import type { Reflection } from '../types/reflection';
 import { getEnergyTone, getMoodTone, getSleepTone, getStressTone } from '../lib/ratingTones';
+import ReflectionMetricFeedback from './ReflectionMetricFeedback';
 
 type ReflectionFormProps = {
   todaysReflection?: Reflection | null;
@@ -140,13 +141,11 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
                 max="24"
                 {...register('sleepHours', { valueAsNumber: true })}
               />
-              <div className="flex items-center justify-between gap-3 text-sm">
-                <span className="font-medium text-primary">{sleepTone.label}</span>
-
-                <span className="text-muted-foreground">{sleepHours ?? 7} hours</span>
-              </div>
-
-              <p className="text-sm text-muted-foreground">{sleepTone.description}</p>
+              <ReflectionMetricFeedback
+                label={sleepTone.label}
+                value={`${sleepHours ?? 7} hours`}
+                description={sleepTone.description}
+              />
               {errors.sleepHours && (
                 <p className="text-sm text-destructive">{errors.sleepHours.message}</p>
               )}
@@ -161,11 +160,11 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
                 max="10"
                 {...register('energy', { valueAsNumber: true })}
               />
-              <div className="flex items-center justify-between gap-3 text-sm">
-                <span className="font-medium text-primary">{energyTone.label}</span>
-                <span className="text-muted-foreground">{energy ?? 5}/10</span>
-              </div>
-              <p className="text-sm text-muted-foreground">{energyTone.description}</p>
+              <ReflectionMetricFeedback
+                label={energyTone.label}
+                value={`${energy ?? 5}/10`}
+                description={energyTone.description}
+              />
               {errors.energy && <p className="text-sm text-destructive">{errors.energy.message}</p>}
             </div>
 
@@ -178,11 +177,11 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
                 max="10"
                 {...register('mood', { valueAsNumber: true })}
               />
-              <div className="flex items-center justify-between gap-3 text-sm">
-                <span className="font-medium text-primary">{moodTone.label}</span>
-                <span className="text-muted-foreground">{mood ?? 5}/10</span>
-              </div>
-              <p className="text-sm text-muted-foreground">{moodTone.description}</p>
+              <ReflectionMetricFeedback
+                label={moodTone.label}
+                value={`${mood ?? 5}/10`}
+                description={moodTone.description}
+              />
               {errors.mood && <p className="text-sm text-destructive">{errors.mood.message}</p>}
             </div>
 
@@ -195,11 +194,11 @@ export function ReflectionForm({ todaysReflection, onSaved }: ReflectionFormProp
                 max="10"
                 {...register('stress', { valueAsNumber: true })}
               />
-              <div className="flex items-center justify-between gap-3 text-sm">
-                <span className="font-medium text-primary">{stressTone.label}</span>
-                <span className="text-muted-foreground">{stress ?? 5}/10</span>
-              </div>
-              <p className="text-sm text-muted-foreground">{stressTone.description}</p>
+              <ReflectionMetricFeedback
+                label={stressTone.label}
+                value={`${stress ?? 5}/10`}
+                description={stressTone.description}
+              />
               {errors.stress && <p className="text-sm text-destructive">{errors.stress.message}</p>}
             </div>
           </div>
