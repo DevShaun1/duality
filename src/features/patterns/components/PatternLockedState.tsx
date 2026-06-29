@@ -13,12 +13,11 @@ export function PatternLockedState({ completedCount }: PatternLockedStateProps) 
     <section className="rounded-lg border bg-card p-5 text-card-foreground shadow-sm">
       <h2 className="text-lg font-semibold">Discover Patterns</h2>
       <p className="mt-2 text-sm text-muted-foreground">
-        Duality needs at least three reflections with insights before it can look for recurring
-        patterns.
+        You&apos;ll unlock pattern discovery once you&apos;ve completed three reflections with insights.
       </p>
       <p className="mt-3 text-sm text-foreground">You&apos;ve completed {completedCount} of 3.</p>
       <p className="mt-1 text-sm text-muted-foreground">
-        Complete {remaining} more reflection(s) to unlock your first pattern review.
+        When you&apos;ve reflected {remaining} more {remaining === 1 ? 'time' : 'times'}, Duality will be able to look for patterns across your entries.
       </p>
       <Button className="mt-4" asChild>
         <Link to="/reflect">Create today&apos;s reflection</Link>
