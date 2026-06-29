@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 
 import FullScreenLoader from '@/components/common/FullScreenLoader';
+import { StatusState } from '@/components/common/StatusState';
 import ProfileForm from '@/features/profile/components/ProfileForm';
 import { useGetProfile } from '@/features/profile/hooks/useGetProfile';
 import { PageContainer } from '@/components/layout/PageContainer';
@@ -17,14 +18,14 @@ export default function ProfilePage() {
 
   if (isError) {
     return (
-      <div className="mx-auto max-w-2xl space-y-4">
-        <div>
-          <h1 className="text-2xl font-semibold">Your profile</h1>
-          <p className="text-muted-foreground">
-            Something went wrong while loading your profile. Please refresh and try again.
-          </p>
+      <PageContainer>
+        <div className="mx-auto max-w-2xl">
+          <StatusState
+            title="We couldn’t load your profile"
+            description="Please refresh and try again in a moment."
+          />
         </div>
-      </div>
+      </PageContainer>
     );
   }
 

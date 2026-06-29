@@ -45,6 +45,7 @@ import {
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { StatusState } from '@/components/common/StatusState';
 
 type SortOption = 'newest' | 'oldest';
 type DateFilterOption = 'all' | '7d' | '30d' | '90d' | 'year';
@@ -175,11 +176,26 @@ export default function ReflectionsPage() {
   );
 
   if (isLoading) {
-    return <p className="p-6">Loading reflections...</p>;
+    return (
+      <PageContainer>
+        <div className="mx-auto max-w-lg">
+          <StatusState
+            title="Gathering your reflections"
+            description="We’re bringing your reflection history into view."
+          />
+        </div>
+      </PageContainer>
+    );
   }
 
   if (error) {
-    return <p className="p-6 text-destructive">Could not load reflections: {error.message}</p>;
+    return (
+      <PageContainer>
+        <div className="mx-auto max-w-lg">
+          <StatusState title="We couldn’t load your reflections" description={error.message} />
+        </div>
+      </PageContainer>
+    );
   }
 
   return (

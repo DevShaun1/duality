@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PageContainer } from '@/components/layout/PageContainer';
 import { PageHeader } from '@/components/layout/PageHeader';
+import { StatusState } from '@/components/common/StatusState';
 import { supabase } from '@/lib/supabase';
 
 const resetPasswordSchema = z
@@ -73,7 +74,16 @@ export default function ResetPasswordPage() {
   };
 
   if (!isReady) {
-    return <p className="p-6">Preparing password reset...</p>;
+    return (
+      <PageContainer>
+        <div className="mx-auto max-w-md">
+          <StatusState
+            title="Preparing your reset link"
+            description="We’re checking that this reset link is still active."
+          />
+        </div>
+      </PageContainer>
+    );
   }
 
   return (
