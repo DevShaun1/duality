@@ -6,6 +6,7 @@ import { useGetProfile } from '@/features/profile/hooks/useGetProfile';
 import { PageContainer } from '@/components/layout/PageContainer';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { useAuth } from '@/features/auth/hooks/useAuth';
+import DeleteAccountCard from '@/features/profile/components/DeleteAccountCard';
 
 export default function ProfilePage() {
   const navigate = useNavigate();
@@ -39,6 +40,8 @@ export default function ProfilePage() {
         signedInEmail={user?.email ?? ''}
         onSaved={() => navigate('/reflect')}
       />
+
+      <DeleteAccountCard className="mt-10" />
     </PageContainer>
   );
 }
