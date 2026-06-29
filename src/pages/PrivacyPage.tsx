@@ -39,9 +39,9 @@ export default function PrivacyPage() {
             reflection questions.
           </p>
           <p>
-            To generate insights, your reflection content is securely sent to OpenAI for processing.
-            OpenAI returns the generated insight to Duality, and that insight is then stored in your
-            account.
+            To generate AI-powered insights, your reflection content is securely sent to OpenAI for
+            processing. The generated insight is returned to Duality and stored alongside your
+            reflection so you can revisit it later.
           </p>
         </section>
 
@@ -51,16 +51,28 @@ export default function PrivacyPage() {
             <li>We do not sell your personal data.</li>
             <li>We do not use your reflections for advertising.</li>
             <li>We do not share your reflections with other users.</li>
-            <li>We do not use Duality as therapy, diagnosis, or medical treatment.</li>
+            <li>
+              Duality is not intended to provide therapy, medical advice, diagnosis, or treatment.
+            </li>
           </ul>
+        </section>
+
+        <section className="space-y-3">
+          <h2 className="text-lg font-semibold text-foreground">Protecting your information</h2>
+          <p>
+            Your reflections are stored securely and are only accessible through your account. We
+            take reasonable measures to protect your personal information and limit access to the
+            systems required to provide the Duality service.
+          </p>
         </section>
 
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">Your rights and choices</h2>
           <p>
-            You can ask to access, correct, or delete your personal information. During the MVP
-            testing period, if a self-service deletion option is not yet available, contact the
-            Duality team and your data will be removed manually.
+            You can access, update, or delete your reflections at any time. You can also permanently
+            delete your account from your profile, which will remove your account and associated
+            data. If you need additional assistance with your data, you can contact the Duality
+            team.
           </p>
         </section>
 
@@ -77,16 +89,12 @@ export default function PrivacyPage() {
         <section className="space-y-3">
           <h2 className="text-lg font-semibold text-foreground">A note for testers</h2>
           <p>
-            Duality is currently an MVP. Please avoid entering information you would not be
-            comfortable storing digitally. Your feedback helps improve the product and the privacy
+            Duality is currently an MVP. While we take privacy seriously, the product is still
+            evolving. Please avoid sharing highly sensitive personal or confidential information
+            during the testing period. Your feedback helps improve both the product and its privacy
             experience.
           </p>
         </section>
-
-        <p className="text-xs text-muted-foreground/80">
-          This privacy notice is intended for MVP transparency and should be reviewed before public
-          launch.
-        </p>
 
         <Link to="/reflect" className="text-primary hover:text-primary/90">
           Return to reflection
