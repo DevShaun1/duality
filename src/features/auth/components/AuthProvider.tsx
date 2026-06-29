@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import PrivacyTransparencyDialog from '@/features/auth/components/PrivacyTransparencyDialog';
 import { usePrivacyNotice } from '@/features/auth/hooks/usePrivacyNotice';
+import { useGetProfile } from '@/features/profile/hooks/useGetProfile';
 import type { Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import { AuthContext } from '../context/authContext';
@@ -14,15 +15,41 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const user = session?.user ?? null;
   const pathname = window.location.pathname;
+  const { data: profile } = useGetProfile({ enabled: Boolean(user) });
 
-  const { showPrivacyNotice, acceptPrivacyNotice } = usePrivacyNotice({
+  const {
+    showPrivacyNotice,
+    acceptPrivacyNotice,
+    isAcceptingPrivacyNotice,
+    acceptPrivacyNoticeError,
+  } = usePrivacyNotice({
     isAuthenticated: Boolean(user),
+    privacyNoticeAcceptedAt: profile?.privacy_notice_accepted_at,
     pathname,
   });
 
   useEffect(() => {
     const initialiseAuth = async () => {
       const { data } = await supabase.auth.getSession();
+
+      if (!data.session) {
+        setSession(null);
+        setIsLoading(false);
+        return;
+      }
+
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+
+      if (error || !user) {
+        await supabase.auth.signOut({ scope: 'local' });
+        setSession(null);
+        setIsLoading(false);
+        return;
+      }
+
       setSession(data.session);
       setIsLoading(false);
     };
@@ -31,7 +58,13 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT') {
+        setSession(null);
+        setIsLoading(false);
+        return;
+      }
+
       setSession(session);
       setIsLoading(false);
     });
@@ -54,7 +87,12 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   return (
     <>
       <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-      <PrivacyTransparencyDialog open={showPrivacyNotice} onAccept={acceptPrivacyNotice} />
+      <PrivacyTransparencyDialog
+        open={showPrivacyNotice}
+        onAccept={acceptPrivacyNotice}
+        isAccepting={isAcceptingPrivacyNotice}
+        hasError={Boolean(acceptPrivacyNoticeError)}
+      />
     </>
   );
 }

@@ -14,7 +14,7 @@ export async function updateProfile(input: UpdateProfileInput) {
       display_name: input.displayName,
     })
     .eq('id', user.id)
-    .select('*')
+    .select('id, created_at, display_name, privacy_notice_accepted_at')
     .single();
 
   if (error) throw error;

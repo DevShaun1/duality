@@ -10,12 +10,16 @@ import {
 
 type PrivacyTransparencyDialogProps = {
   open: boolean;
-  onAccept: () => void;
+  onAccept: () => Promise<void>;
+  isAccepting?: boolean;
+  hasError?: boolean;
 };
 
 export default function PrivacyTransparencyDialog({
   open,
   onAccept,
+  isAccepting = false,
+  hasError = false,
 }: PrivacyTransparencyDialogProps) {
   return (
     <Dialog open={open}>
@@ -43,8 +47,16 @@ export default function PrivacyTransparencyDialog({
           </p>
         </div>
 
+        {hasError && (
+          <p className="text-sm text-destructive">
+            We could not save your privacy notice acceptance. Please try again.
+          </p>
+        )}
+
         <DialogFooter>
-          <Button onClick={onAccept}>I understand</Button>
+          <Button onClick={() => void onAccept()} disabled={isAccepting}>
+            {isAccepting ? 'Saving...' : 'I understand'}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
