@@ -146,7 +146,7 @@ export function SpeechToText({
 
       {isListening && (
         <p className="text-sm text-muted-foreground">
-          Editing is locked while transcribing. Stop recording to edit your reflection.
+          While recording, you can listen but not edit. Stop when you're done to make any changes.
         </p>
       )}
 
