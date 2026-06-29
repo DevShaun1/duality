@@ -7,7 +7,7 @@ export default function PrivacyPage() {
   return (
     <PageContainer>
       <PageHeader
-        title="Privacy"
+        title="Privacy Notice"
         description="How Duality stores, protects, and processes your reflections."
       />
 
