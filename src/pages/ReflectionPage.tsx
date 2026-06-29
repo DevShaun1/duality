@@ -32,7 +32,11 @@ export default function ReflectionPage() {
           todaysReflection={todaysReflection}
           onSaved={(savedReflectionId) => {
             setIsEditingTodaysReflection(false);
-            navigate(`/reflections/${savedReflectionId}`);
+            navigate(`/reflections/${savedReflectionId}`, {
+              state: {
+                autoGenerateInsight: true,
+              },
+            });
           }}
           onDeleted={() => {
             setIsEditingTodaysReflection(false);

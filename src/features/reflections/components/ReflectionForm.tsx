@@ -128,8 +128,13 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
 
   return (
     <Card>
-      <CardHeader>
-        
+      <CardHeader className="space-y-2">
+        <h2 className="text-lg font-semibold text-foreground">
+          {isEditing ? 'Refine your reflection' : 'Write your reflection'}
+        </h2>
+        <p className="text-sm leading-6 text-muted-foreground">
+          Notice what stood out today, then leave space for another perspective to emerge.
+        </p>
       </CardHeader>
 
       <CardContent>
