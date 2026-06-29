@@ -58,7 +58,7 @@ export default function DiscoverPatternsPage() {
       await generatePatternReviewMutation.mutateAsync({ reflectionIds: latestReflectionIds });
     } catch (error) {
       setGenerationError(
-        error instanceof Error ? error.message : 'Could not generate a pattern review right now.'
+        error instanceof Error ? error.message : 'We\'re having trouble looking across your reflections. Please try again.'
       );
     }
   };
@@ -75,10 +75,10 @@ export default function DiscoverPatternsPage() {
       />
 
       {latestPairsError ? (
-        <p className="text-destructive">Could not load reflections: {latestPairsError.message}</p>
+        <p className="text-destructive">We weren't able to load your reflections: {latestPairsError.message}</p>
       ) : latestReviewError ? (
         <p className="text-destructive">
-          Could not load pattern review: {latestReviewError.message}
+          We weren't able to load your pattern review: {latestReviewError.message}
         </p>
       ) : !hasMinimumReflections ? (
         <PatternLockedState completedCount={latestReflectionIds.length} />

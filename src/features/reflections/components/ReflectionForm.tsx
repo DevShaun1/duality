@@ -103,12 +103,12 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
         : await createReflectionMutation.mutateAsync(data);
 
       if (!savedReflection) {
-        throw new Error('Could not save reflection');
+        throw new Error('We weren\'t able to save your reflection. Please try again.');
       }
 
       onSaved(savedReflection.id);
     } catch (error) {
-      setSubmitError(error instanceof Error ? error.message : 'Could not save reflection');
+      setSubmitError(error instanceof Error ? error.message : 'We weren\'t able to save your reflection. Please try again.');
     }
   };
 

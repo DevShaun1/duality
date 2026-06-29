@@ -80,7 +80,7 @@ export default function ReflectionInsightPage() {
     } catch (error) {
       setIsAwaitingGeneratedInsight(false);
       setGenerationError(
-        error instanceof Error ? error.message : 'Could not generate insight right now.'
+        error instanceof Error ? error.message : 'We\'re having trouble generating your insight. Please try again.'
       );
     }
   }, [generateInsightMutation, reflection]);
@@ -167,7 +167,7 @@ export default function ReflectionInsightPage() {
       </div>
 
       {reflectionError ? (
-        <p className="text-destructive">Could not load reflection: {reflectionError.message}</p>
+        <p className="text-destructive">We weren't able to load that reflection: {reflectionError.message}</p>
       ) : !reflection ? (
         <section className="rounded-lg border bg-card p-5 text-card-foreground shadow-sm">
           <h2 className="text-lg font-semibold">Reflection not found</h2>
@@ -179,7 +179,7 @@ export default function ReflectionInsightPage() {
           </Button>
         </section>
       ) : insightError ? (
-        <p className="text-destructive">Could not load insight: {insightError.message}</p>
+        <p className="text-destructive">We weren't able to load that insight: {insightError.message}</p>
       ) : isGeneratingInsight ? (
         <section className="rounded-lg border bg-card p-5 text-card-foreground shadow-sm">
           <h2 className="text-lg font-semibold">Generating your insight...</h2>
