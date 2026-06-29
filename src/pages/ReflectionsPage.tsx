@@ -96,6 +96,21 @@ function getVisiblePageNumbers(currentPage: number, totalPages: number): number[
   return [1, currentPage - 1, currentPage, currentPage + 1, totalPages];
 }
 
+function isTodayReflection(dateValue: string) {
+  const reflectionDate = new Date(dateValue);
+  if (Number.isNaN(reflectionDate.getTime())) {
+    return false;
+  }
+
+  const today = new Date();
+
+  return (
+    reflectionDate.getFullYear() === today.getFullYear() &&
+    reflectionDate.getMonth() === today.getMonth() &&
+    reflectionDate.getDate() === today.getDate()
+  );
+}
+
 export default function ReflectionsPage() {
   const navigate = useNavigate();
   const { data: reflections, isLoading, error } = useReflections();
@@ -105,6 +120,10 @@ export default function ReflectionsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [openActionsReflectionId, setOpenActionsReflectionId] = useState<string | null>(null);
+  const editableReflectionId = useMemo(
+    () => reflectionList.find((reflection) => isTodayReflection(reflection.created_at))?.id,
+    [reflectionList]
+  );
 
   const filteredAndSortedReflections = useMemo(() => {
     const normalizedQuery = searchQuery.trim().toLowerCase();
@@ -274,14 +293,16 @@ export default function ReflectionsPage() {
                             View insight
                           </DropdownMenuItem>
 
-                          <DropdownMenuItem
-                            onSelect={() => {
-                              navigate('/reflection');
-                            }}
-                          >
-                            <Sparkles className="h-4 w-4" />
-                            Edit reflection
-                          </DropdownMenuItem>
+                          {reflection.id === editableReflectionId ? (
+                            <DropdownMenuItem
+                              onSelect={() => {
+                                navigate('/reflect');
+                              }}
+                            >
+                              <Sparkles className="h-4 w-4" />
+                              Edit reflection
+                            </DropdownMenuItem>
+                          ) : null}
 
                           <DropdownMenuSeparator />
 

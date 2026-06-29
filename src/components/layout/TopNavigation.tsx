@@ -45,7 +45,7 @@ export default function TopNavigation() {
     <header className="sticky top-0 z-50 border-b border-border/70 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/85">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <NavLink
-          to="/reflection"
+          to="/reflect"
           className="flex items-center gap-2 text-lg font-semibold tracking-tight text-primary transition-colors hover:text-primary/90"
         >
           <img src={logo} alt="Duality" className="h-8 w-8" />
