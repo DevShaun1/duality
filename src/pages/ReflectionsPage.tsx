@@ -206,7 +206,17 @@ export default function ReflectionsPage() {
       />
 
       {reflectionList.length === 0 ? (
-        <p className="text-muted-foreground">No reflections yet.</p>
+        <div className="mx-auto max-w-lg">
+          <StatusState
+            title="No reflections yet"
+            description="Your reflections will appear here once you start writing."
+            action={
+              <Button asChild className="w-full sm:w-auto">
+                <Link to="/reflect">Start your first reflection</Link>
+              </Button>
+            }
+          />
+        </div>
       ) : (
         <div className="space-y-5">
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">

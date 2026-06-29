@@ -1,5 +1,3 @@
-
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
@@ -45,7 +43,7 @@ export default function ProfileForm({
   const isSaving = isSubmitting || updateProfileMutation.isPending;
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div className="space-y-2">
         <Label htmlFor="displayName">Display name</Label>
 
@@ -64,18 +62,13 @@ export default function ProfileForm({
         )}
       </div>
 
-      <div className="mt-6 space-y-2">
+      <div className="space-y-2">
         <Label htmlFor="email" className="flex items-center gap-2">
           <Lock className="h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
           Sign-in email
         </Label>
 
-        <Input
-          id="email"
-          readOnly
-          aria-readonly="true"
-          value={signedInEmail}
-        />
+        <Input id="email" readOnly aria-readonly="true" value={signedInEmail} />
 
         <p className="text-xs text-muted-foreground">
           This is your registered email and can&apos;t be changed here.
@@ -88,7 +81,7 @@ export default function ProfileForm({
         </p>
       )}
 
-      <Button type="submit" disabled={isSaving} className="mt-4">
+      <Button type="submit" disabled={isSaving}>
         {isSaving ? 'Saving...' : 'Save name'}
       </Button>
     </form>

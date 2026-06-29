@@ -85,7 +85,7 @@ export default function DeleteAccountCard({ className }: DeleteAccountCardProps)
         </div>
       </CardHeader>
 
-      <CardContent className="ml-10">
+      <CardContent>
         <AlertDialog open={isDialogOpen} onOpenChange={handleOpenChange}>
           <AlertDialogTrigger asChild>
             <Button variant="destructive">Delete account</Button>

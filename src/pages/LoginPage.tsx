@@ -7,17 +7,10 @@ export default function LoginPage() {
   return (
     <AuthLayout>
       <div className="mb-8 flex flex-col items-center text-center">
-        <img
-          src={logo}
-          alt="Duality Logo"
-          className="mb-5 ml-5 flex justify-center"
-          width={200}
-        />
+        <img src={logo} alt="Duality Logo" className="mx-auto mb-5 block" width={200} />
 
         <p className="text-sm uppercase tracking-[0.3em] text-teal-400">Duality</p>
-
         <h1 className="mt-3 text-3xl font-semibold">Discover the other side of your story</h1>
-
         <p className="mt-3 text-sm text-slate-400">Sign in to continue your daily reflection.</p>
       </div>
 

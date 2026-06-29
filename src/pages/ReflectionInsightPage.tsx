@@ -128,7 +128,7 @@ export default function ReflectionInsightPage() {
 
   return (
     <PageContainer>
-      <div className="mb-8 flex items-start justify-between gap-4">
+      <div className="flex items-start justify-between gap-4">
         <PageHeader
           title="Another Perspective"
           description="A gentle read of this reflection, helping you notice patterns with more clarity and self-compassion."
