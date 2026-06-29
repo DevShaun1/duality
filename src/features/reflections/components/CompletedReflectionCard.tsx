@@ -19,9 +19,9 @@ export default function CompletedReflectionCard({
       <CardHeader className="flex flex-row items-start gap-4 space-y-0">
         <CheckCircle2 className="mt-1 h-6 w-6 shrink-0 text-primary" />
         <div>
-          <CardTitle>Today’s reflection is complete</CardTitle>
+          <CardTitle>Today's reflection is complete</CardTitle>
           <CardDescription>
-            You’ve already reflected today. If new insights emerged during the day, you can update
+            You've already reflected today. If new insights emerged during the day, you can update
             your reflection before tomorrow.
           </CardDescription>
         </div>
@@ -31,7 +31,7 @@ export default function CompletedReflectionCard({
         <div className="h-px bg-border" />
 
         <div className="grid gap-4 md:grid-cols-3">
-          <div className="flex min-h-[280px] flex-col rounded-lg border bg-background/40 p-6">
+          <div className="flex min-h-70 flex-col rounded-lg border bg-background/40 p-6">
             <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
               <Pencil className="h-8 w-8 text-primary" />
             </div>
