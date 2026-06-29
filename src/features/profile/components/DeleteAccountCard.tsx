@@ -63,7 +63,9 @@ export default function DeleteAccountCard({ className }: DeleteAccountCardProps)
       navigate('/login', { replace: true });
     } catch (error) {
       setDeleteError(
-        error instanceof Error ? error.message : 'Something went wrong while deleting your account.'
+        error instanceof Error
+          ? error.message
+          : "We weren't able to delete your account. Please try again or contact support if this persists."
       );
     }
   }
@@ -79,7 +81,7 @@ export default function DeleteAccountCard({ className }: DeleteAccountCardProps)
           <div className="space-y-1">
             <CardTitle className="text-destructive">Danger zone</CardTitle>
             <CardDescription>
-              Permanently delete your account and all of your reflections. This cannot be undone.
+              Your account, reflections, and all insights will be permanently removed.
             </CardDescription>
           </div>
         </div>
@@ -95,8 +97,8 @@ export default function DeleteAccountCard({ className }: DeleteAccountCardProps)
             <AlertDialogHeader>
               <AlertDialogTitle>Delete your account?</AlertDialogTitle>
               <AlertDialogDescription>
-                This will permanently delete your account, reflections, and generated insights. This
-                action cannot be undone.
+                Your account, reflections, and insights will be permanently removed. This action is
+                final.
               </AlertDialogDescription>
             </AlertDialogHeader>
 

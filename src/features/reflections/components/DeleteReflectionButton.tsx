@@ -54,7 +54,11 @@ export function DeleteReflectionButton({
       toast.success('Reflection deleted successfully.');
       onDeleted?.();
     } catch (error) {
-      setDeleteError(error instanceof Error ? error.message : 'Could not delete reflection.');
+      setDeleteError(
+        error instanceof Error
+          ? error.message
+          : "We weren't able to remove that reflection. Please try again."
+      );
     }
   };
 
@@ -84,8 +88,7 @@ export function DeleteReflectionButton({
           <AlertDialogHeader>
             <AlertDialogTitle>Delete this reflection?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. Your reflection and its generated insight will be
-              removed permanently.
+              Once removed, this reflection and its insight are gone for good.
             </AlertDialogDescription>
           </AlertDialogHeader>
 
