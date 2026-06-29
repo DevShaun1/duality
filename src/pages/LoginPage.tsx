@@ -11,13 +11,10 @@ export default function LoginPage() {
 
         <p className="text-sm uppercase tracking-[0.3em] text-teal-400">Duality</p>
         <h1 className="mt-3 text-3xl font-semibold">Discover the other side of your story</h1>
-        <p className="mt-3 text-sm text-slate-400">Sign in to continue your daily reflection.</p>
+        <p className="mt-3 text-sm text-slate-400">Return to your reflection space.</p>
       </div>
 
-      <AuthCard
-        title="Welcome back"
-        description="Enter your details to access your reflection space."
-      >
+      <AuthCard title="Welcome back" description="Continue your reflection practice.">
         <LoginForm />
       </AuthCard>
     </AuthLayout>

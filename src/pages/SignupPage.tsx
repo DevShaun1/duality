@@ -10,12 +10,12 @@ export default function SignupPage() {
         <img src={logo} alt="Duality Logo" className="mx-auto mb-5 block" width={200} />
         <p className="text-sm uppercase tracking-[0.3em] text-teal-400">Duality</p>
         <h1 className="mt-3 text-3xl font-semibold">Discover the other side of your story</h1>
-        <p className="mt-3 text-sm text-slate-400">Sign up to start your daily reflection.</p>
+        <p className="mt-3 text-sm text-slate-400">Begin reflecting with Duality.</p>
       </div>
 
       <AuthCard
         title="Create your account"
-        description="Start your reflection journey with Duality."
+        description="Begin your reflection practice with Duality."
       >
         <SignupForm />
       </AuthCard>
