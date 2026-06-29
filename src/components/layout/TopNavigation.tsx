@@ -14,11 +14,11 @@ import { supabase } from '@/lib/supabase';
 import logo from '@/assets/logo.png';
 
 export default function TopNavigation() {
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, user } = useAuth();
   const navigate = useNavigate();
   const { data: profile } = useGetProfile();
 
-  const displayName = profile?.display_name?.trim() || 'Profile';
+  const displayName = profile?.display_name?.trim() || user?.email?.split('@')[0] || 'Profile';
 
   const handleSignOut = async () => {
     const { error } = await supabase.auth.signOut();
