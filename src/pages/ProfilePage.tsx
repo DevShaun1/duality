@@ -8,11 +8,17 @@ import { PageContainer } from '@/components/layout/PageContainer';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import DeleteAccountCard from '@/features/profile/components/DeleteAccountCard';
+import { Button } from '@/components/ui/button';
+import { signOutAndRedirect } from '@/features/auth/utils/signOutAndRedirect';
 
 export default function ProfilePage() {
   const navigate = useNavigate();
   const { data: profile, isLoading, isError } = useGetProfile();
   const { user } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOutAndRedirect(navigate);
+  };
 
   if (isLoading) return <FullScreenLoader />;
 
@@ -43,6 +49,12 @@ export default function ProfilePage() {
       />
 
       <DeleteAccountCard className="mt-10" />
+
+      <div className="mt-6 flex justify-end">
+        <Button type="button" variant="secondary" className="h-11 px-4" onClick={handleSignOut}>
+          Sign out
+        </Button>
+      </div>
     </PageContainer>
   );
 }
