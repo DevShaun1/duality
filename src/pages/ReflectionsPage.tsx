@@ -206,7 +206,7 @@ export default function ReflectionsPage() {
       />
 
       {reflectionList.length === 0 ? (
-        <div className="mx-auto max-w-lg">
+        <div className="w-full">
           <StatusState
             title="No reflections yet"
             description="Your reflections will appear here once you start writing."
