@@ -9,10 +9,7 @@ type SpeechToTextProps = {
   textareaId?: string;
   textareaName?: string;
   placeholder?: string;
-  onRecordingControlChange?: (control: {
-    isListening: boolean;
-    stopRecording: () => void;
-  }) => void;
+  onRecordingControlChange?: (control: { isListening: boolean; stopRecording: () => void }) => void;
 };
 
 /**
@@ -92,7 +89,7 @@ export function SpeechToText({
           onChange={(event) => onChange(event.target.value)}
           placeholder={placeholder}
         />
-        <p className="text-sm text-muted-foreground">
+        <p className="text-xs leading-5 text-muted-foreground">
           Speech recognition is not supported in this browser. You can still type your reflection.
         </p>
       </div>
@@ -102,14 +99,14 @@ export function SpeechToText({
   return (
     <div className="space-y-3">
       {!supportsContinuousListening && (
-        <p className="rounded-md border border-muted bg-muted/40 px-3 py-2 text-sm text-muted-foreground">
+        <p className="rounded-md border border-muted bg-muted/40 px-3 py-2 text-xs leading-5 text-muted-foreground">
           Continuous listening may not be fully supported. You may need to restart recording
           occasionally.
         </p>
       )}
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="flex items-center gap-2 text-sm text-muted-foreground">
+        <p className="flex items-center gap-2 text-xs leading-5 text-muted-foreground">
           <span
             className={`h-2.5 w-2.5 rounded-full ${isListening ? 'bg-primary' : 'bg-muted-foreground'}`}
           />
@@ -145,13 +142,13 @@ export function SpeechToText({
       />
 
       {isListening && (
-        <p className="text-sm text-muted-foreground">
+        <p className="text-xs leading-5 text-muted-foreground">
           While recording, you can listen but not edit. Stop when you're done to make any changes.
         </p>
       )}
 
       {isListening && !interimTranscript && (
-        <p className="text-sm text-muted-foreground">Listening... waiting for speech.</p>
+        <p className="text-xs leading-5 text-muted-foreground">Listening... waiting for speech.</p>
       )}
     </div>
   );
