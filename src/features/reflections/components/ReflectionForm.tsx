@@ -9,6 +9,8 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/in
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Badge } from '@/components/ui/badge';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { ChevronDown } from 'lucide-react';
 import { reflectionFormSchema, type ReflectionFormValues } from '../schemas/reflectionSchema';
 import { useCreateReflection } from '../hooks/useCreateReflection';
 import { useUpdateReflection } from '../hooks/useUpdateReflection';
@@ -20,7 +22,7 @@ import { MetricHelpPopover } from './MetricHelpPopover';
 
 type ReflectionFormProps = {
   todaysReflection?: Reflection | null;
-  onSaved: (savedReflectionId: string) => void;
+  onSaved: (savedReflectionId: string) => void | Promise<void>;
   onDeleted?: () => void;
 };
 
@@ -28,6 +30,7 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isListening, setIsListening] = useState(false);
   const stopRecordingRef = useRef<(() => void) | null>(null);
+  const [isPromptOpen, setIsPromptOpen] = useState(false);
 
   const {
     register,
@@ -103,12 +106,16 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
         : await createReflectionMutation.mutateAsync(data);
 
       if (!savedReflection) {
-        throw new Error('We weren\'t able to save your reflection. Please try again.');
+        throw new Error("We weren't able to save your reflection. Please try again.");
       }
 
-      onSaved(savedReflection.id);
+      await onSaved(savedReflection.id);
     } catch (error) {
-      setSubmitError(error instanceof Error ? error.message : 'We weren\'t able to save your reflection. Please try again.');
+      setSubmitError(
+        error instanceof Error
+          ? error.message
+          : "We weren't able to save your reflection. Please try again."
+      );
     }
   };
 
@@ -132,9 +139,6 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
         <h2 className="text-lg font-semibold text-foreground">
           {isEditing ? 'Refine your reflection' : 'Write your reflection'}
         </h2>
-        <p className="text-sm leading-6 text-muted-foreground">
-          Notice what stood out today, then leave space for another perspective to emerge.
-        </p>
       </CardHeader>
 
       <CardContent>
@@ -332,8 +336,33 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
               onRecordingControlChange={handleRecordingControlChange}
               value={journalText}
               onChange={handleJournalTextChange}
-              placeholder="How has your day been?"
+              placeholder="What happened today, and what stood out to you?"
             />
+            <p className="text-xs leading-5 text-muted-foreground">
+              Write naturally, as though you&apos;re telling a trusted friend about your day. You do
+              not need to write perfectly.
+            </p>
+            <Collapsible
+              open={isPromptOpen}
+              onOpenChange={setIsPromptOpen}
+              className="rounded-lg border border-border/40 bg-background/20"
+            >
+              <CollapsibleTrigger className="flex w-full items-center justify-between gap-3 px-3 py-2 text-left text-xs font-medium text-muted-foreground transition-colors hover:text-foreground">
+                <span>Need a prompt?</span>
+                <ChevronDown
+                  className={`h-4 w-4 shrink-0 transition-transform ${isPromptOpen ? 'rotate-180' : ''}`}
+                  aria-hidden="true"
+                />
+              </CollapsibleTrigger>
+              <CollapsibleContent className="px-3 pb-3">
+                <ul className="list-disc space-y-1 pl-5 text-xs leading-5 text-muted-foreground">
+                  <li>What challenged you today?</li>
+                  <li>What went well?</li>
+                  <li>How did you feel?</li>
+                  <li>What has been on your mind?</li>
+                </ul>
+              </CollapsibleContent>
+            </Collapsible>
             {errors.journalText && (
               <p className="text-sm text-destructive">{errors.journalText.message}</p>
             )}
@@ -341,7 +370,7 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
             <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
-              {isSubmitting ? 'Saving...' : isEditing ? 'Update Reflection' : 'Reflect on Today'}
+              {isSubmitting ? 'Saving...' : isEditing ? 'Update Reflection' : 'Complete today\'s reflection'}
             </Button>
 
             {isEditing && todaysReflection ? (
