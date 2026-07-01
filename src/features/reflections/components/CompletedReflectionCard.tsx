@@ -6,13 +6,47 @@ import { ArrowRight, BookOpen, CheckCircle2, Pencil, Sparkles } from 'lucide-rea
 type CompletedReflectionCardProps = {
   onEditReflection: () => void;
   reflectionId?: string;
+  showPostSaveState?: boolean;
 };
 
 export default function CompletedReflectionCard({
   onEditReflection,
   reflectionId,
+  showPostSaveState = false,
 }: CompletedReflectionCardProps) {
   const insightDestination = reflectionId ? `/reflections/${reflectionId}` : '/reflections';
+
+  if (showPostSaveState) {
+    return (
+      <Card>
+        <CardHeader className="space-y-2">
+          <CardTitle>Your reflection has been saved.</CardTitle>
+          <CardDescription>
+            Now let's leave space for another perspective to emerge.
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent className="flex flex-col gap-3 sm:flex-row sm:items-start">
+          <Button asChild className="w-full sm:w-auto">
+            <Link
+              to={insightDestination}
+              state={{
+                autoGenerateInsight: true,
+              }}
+            >
+              Generate today's insight
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Button>
+
+          <Button variant="outline" onClick={onEditReflection} className="w-full sm:w-auto gap-2">
+            Update reflection
+            <Pencil className="h-4 w-4" />
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>
