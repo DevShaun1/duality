@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 
 import InsightIntro from '@/components/insights/InsightIntro';
 import InsightPills from '@/components/insights/InsightReadingList';
+import SectionTitle from '@/components/common/SectionTitle';
 import type { PatternReview } from '../types/patternReview';
 import { devComponentAttrs } from '@/lib/devtools';
 
@@ -27,10 +28,9 @@ function InsightSection({
 }: InsightSectionProps) {
   return (
     <section className={className} {...devComponentAttrs('InsightSection')}>
-      <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-        <span className="text-primary">{icon}</span>
-        <h2>{title}</h2>
-      </div>
+      <SectionTitle icon={icon} className="text-sm">
+        {title}
+      </SectionTitle>
 
       <div className={contentClassName}>{children}</div>
     </section>

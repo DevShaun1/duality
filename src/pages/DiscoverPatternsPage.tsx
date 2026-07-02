@@ -1,4 +1,5 @@
 import FullScreenLoader from '@/components/common/FullScreenLoader';
+import SectionTitle from '@/components/common/SectionTitle';
 import InsightShell from '@/components/insights/InsightShell';
 import { PageContainer } from '@/components/layout/PageContainer';
 import { PageHeader } from '@/components/layout/PageHeader';
@@ -59,7 +60,9 @@ export default function DiscoverPatternsPage() {
       await generatePatternReviewMutation.mutateAsync({ reflectionIds: latestReflectionIds });
     } catch (error) {
       setGenerationError(
-        error instanceof Error ? error.message : 'We\'re having trouble looking across your reflections. Please try again.'
+        error instanceof Error
+          ? error.message
+          : "We're having trouble looking across your reflections. Please try again."
       );
     }
   };
@@ -76,7 +79,9 @@ export default function DiscoverPatternsPage() {
       />
 
       {latestPairsError ? (
-        <p className="text-destructive">We weren't able to load your reflections: {latestPairsError.message}</p>
+        <p className="text-destructive">
+          We weren't able to load your reflections: {latestPairsError.message}
+        </p>
       ) : latestReviewError ? (
         <p className="text-destructive">
           We weren't able to load your pattern review: {latestReviewError.message}
@@ -88,10 +93,9 @@ export default function DiscoverPatternsPage() {
           <InsightShell>
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div>
-                <div className="flex items-center gap-2">
-                  <Sparkles className="h-4 w-4 text-primary" />
-                  <h2 className="text-lg font-semibold">Look across your latest reflections</h2>
-                </div>
+                <SectionTitle icon={<Sparkles className="h-4 w-4" />} className="text-lg">
+                  Look across your latest reflections
+                </SectionTitle>
 
                 <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
                   Duality has enough reflections to begin looking across your recent entries. These
