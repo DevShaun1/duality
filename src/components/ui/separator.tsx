@@ -1,10 +1,10 @@
 import { devComponentAttrs } from '@/lib/devtools';
-'use client'
+('use client');
 
-import * as React from 'react'
-import { Separator as SeparatorPrimitive } from 'radix-ui'
+import * as React from 'react';
+import { Separator as SeparatorPrimitive } from 'radix-ui';
 
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils';
 
 function Separator({
   className,
@@ -22,8 +22,9 @@ function Separator({
         className
       )}
       {...props}
-    / {...devComponentAttrs('Separator')}>
-  )
+      {...devComponentAttrs()}
+    />
+  );
 }
 
-export { Separator }
+export { Separator };

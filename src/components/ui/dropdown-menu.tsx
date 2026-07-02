@@ -66,7 +66,8 @@ function DropdownMenuItem({
         className
       )}
       {...props}
-    / {...devComponentAttrs('DropdownMenuGroup')}>
+      {...devComponentAttrs()}
+    />
   );
 }
 
@@ -89,7 +90,8 @@ function DropdownMenuCheckboxItem({
       )}
       checked={checked}
       {...props}
-     {...devComponentAttrs('DropdownMenuCheckboxItem')}>
+      {...devComponentAttrs('DropdownMenuCheckboxItem')}
+    >
       <span
         className="pointer-events-none absolute right-2 flex items-center justify-center"
         data-slot="dropdown-menu-checkbox-item-indicator"
@@ -126,7 +128,8 @@ function DropdownMenuRadioItem({
         className
       )}
       {...props}
-     {...devComponentAttrs('DropdownMenuRadioGroup')}>
+      {...devComponentAttrs('DropdownMenuRadioGroup')}
+    >
       <span
         className="pointer-events-none absolute right-2 flex items-center justify-center"
         data-slot="dropdown-menu-radio-item-indicator"
@@ -156,7 +159,8 @@ function DropdownMenuLabel({
         className
       )}
       {...props}
-    / {...devComponentAttrs('DropdownMenuLabel')}>
+      {...devComponentAttrs()}
+    />
   );
 }
 
@@ -169,7 +173,8 @@ function DropdownMenuSeparator({
       data-slot="dropdown-menu-separator"
       className={cn('-mx-1 my-1 h-px bg-border', className)}
       {...props}
-    / {...devComponentAttrs('DropdownMenuSeparator')}>
+      {...devComponentAttrs()}
+    />
   );
 }
 
@@ -182,7 +187,8 @@ function DropdownMenuShortcut({ className, ...props }: React.ComponentProps<'spa
         className
       )}
       {...props}
-    / {...devComponentAttrs('DropdownMenuShortcut')}>
+      {...devComponentAttrs()}
+    />
   );
 }
 
@@ -207,7 +213,8 @@ function DropdownMenuSubTrigger({
         className
       )}
       {...props}
-     {...devComponentAttrs('DropdownMenuSubTrigger')}>
+      {...devComponentAttrs('DropdownMenuSubTrigger')}
+    >
       {children}
       <ChevronRightIcon className="ml-auto" />
     </DropdownMenuPrimitive.SubTrigger>
@@ -226,7 +233,8 @@ function DropdownMenuSubContent({
         className
       )}
       {...props}
-    / {...devComponentAttrs('DropdownMenuSubContent')}>
+      {...devComponentAttrs()}
+    />
   );
 }
 

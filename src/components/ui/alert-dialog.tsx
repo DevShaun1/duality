@@ -31,7 +31,8 @@ function AlertDialogOverlay({
         className
       )}
       {...props}
-    / {...devComponentAttrs('AlertDialogOverlay')}>
+      {...devComponentAttrs()}
+    />
   );
 }
 
@@ -60,7 +61,8 @@ function AlertDialogHeader({ className, ...props }: React.ComponentProps<'div'>)
       data-slot="alert-dialog-header"
       className={cn('flex flex-col gap-2 text-center sm:text-left', className)}
       {...props}
-    / {...devComponentAttrs('AlertDialogHeader')}>
+      {...devComponentAttrs()}
+    />
   );
 }
 
@@ -73,7 +75,8 @@ function AlertDialogFooter({ className, ...props }: React.ComponentProps<'div'>)
         className
       )}
       {...props}
-    / {...devComponentAttrs('AlertDialogFooter')}>
+      {...devComponentAttrs()}
+    />
   );
 }
 
@@ -86,7 +89,8 @@ function AlertDialogTitle({
       data-slot="alert-dialog-title"
       className={cn('font-heading text-base leading-none font-medium', className)}
       {...props}
-    / {...devComponentAttrs('AlertDialogTitle')}>
+      {...devComponentAttrs()}
+    />
   );
 }
 
@@ -99,7 +103,8 @@ function AlertDialogDescription({
       data-slot="alert-dialog-description"
       className={cn('text-sm text-muted-foreground', className)}
       {...props}
-    / {...devComponentAttrs('AlertDialogDescription')}>
+      {...devComponentAttrs()}
+    />
   );
 }
 
@@ -118,7 +123,8 @@ function AlertDialogCancel({
     <AlertDialogPrimitive.Cancel
       className={cn(buttonVariants({ variant: 'outline' }), className)}
       {...props}
-    / {...devComponentAttrs('AlertDialogAction')}>
+      {...devComponentAttrs()}
+    />
   );
 }
 

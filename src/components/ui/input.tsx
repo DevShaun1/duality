@@ -1,7 +1,7 @@
 import { devComponentAttrs } from '@/lib/devtools';
-import * as React from 'react'
+import * as React from 'react';
 
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils';
 
 function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
   return (
@@ -13,8 +13,9 @@ function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
         className
       )}
       {...props}
-    / {...devComponentAttrs('Input')}>
-  )
+      {...devComponentAttrs()}
+    />
+  );
 }
 
-export { Input }
+export { Input };

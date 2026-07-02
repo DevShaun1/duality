@@ -34,7 +34,8 @@ function SheetOverlay({
         className
       )}
       {...props}
-    / {...devComponentAttrs('SheetOverlay')}>
+      {...devComponentAttrs()}
+    />
   );
 }
 
@@ -80,7 +81,8 @@ function SheetHeader({ className, ...props }: React.ComponentProps<'div'>) {
       data-slot="sheet-header"
       className={cn('flex flex-col gap-0.5 p-4', className)}
       {...props}
-    / {...devComponentAttrs('SheetHeader')}>
+      {...devComponentAttrs()}
+    />
   );
 }
 
@@ -90,7 +92,8 @@ function SheetFooter({ className, ...props }: React.ComponentProps<'div'>) {
       data-slot="sheet-footer"
       className={cn('mt-auto flex flex-col gap-2 p-4', className)}
       {...props}
-    / {...devComponentAttrs('SheetFooter')}>
+      {...devComponentAttrs()}
+    />
   );
 }
 
@@ -100,7 +103,8 @@ function SheetTitle({ className, ...props }: React.ComponentProps<typeof SheetPr
       data-slot="sheet-title"
       className={cn('font-heading text-base font-medium text-foreground', className)}
       {...props}
-    / {...devComponentAttrs('SheetTitle')}>
+      {...devComponentAttrs()}
+    />
   );
 }
 
@@ -113,7 +117,8 @@ function SheetDescription({
       data-slot="sheet-description"
       className={cn('text-sm text-muted-foreground', className)}
       {...props}
-    / {...devComponentAttrs('SheetDescription')}>
+      {...devComponentAttrs()}
+    />
   );
 }
 

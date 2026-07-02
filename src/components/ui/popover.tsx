@@ -44,7 +44,8 @@ function PopoverHeader({ className, ...props }: React.ComponentProps<'div'>) {
       data-slot="popover-header"
       className={cn('flex flex-col gap-0.5 text-sm', className)}
       {...props}
-    / {...devComponentAttrs('PopoverHeader')}>
+      {...devComponentAttrs()}
+    />
   );
 }
 
@@ -58,7 +59,8 @@ function PopoverDescription({ className, ...props }: React.ComponentProps<'p'>) 
       data-slot="popover-description"
       className={cn('text-muted-foreground', className)}
       {...props}
-    / {...devComponentAttrs('PopoverDescription')}>
+      {...devComponentAttrs()}
+    />
   );
 }
 
