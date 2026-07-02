@@ -6,7 +6,7 @@ type PageHeaderProps = {
 
 export function PageHeader({ title, description }: PageHeaderProps) {
   return (
-    <header className="mb-8 space-y-2" {...devComponentAttrs('PageHeader')}>
+    <header className="mb-8 space-y-2 px-1 sm:px-0" {...devComponentAttrs('PageHeader')}>
       <h1 className="text-3xl font-semibold tracking-tight">{title}</h1>
 
       {description && <p className="text-muted-foreground">{description}</p>}
