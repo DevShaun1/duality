@@ -1,6 +1,6 @@
 import { getCurrentUser } from '@/features/auth/api/getCurrentUser';
 import { supabase } from '@/lib/supabase';
-import type { ReflectionInsight } from '../types/reflection';
+import type { ReflectionInsight } from '../types/insight';
 
 type ReflectionInsightRow = ReflectionInsight & {
   reflections: {
@@ -8,7 +8,9 @@ type ReflectionInsightRow = ReflectionInsight & {
   };
 };
 
-export async function getReflectionInsight(reflectionId: string): Promise<ReflectionInsight | null> {
+export async function getReflectionInsight(
+  reflectionId: string
+): Promise<ReflectionInsight | null> {
   const user = await getCurrentUser();
 
   const { data, error } = await supabase

@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabase';
-import type { ReflectionInsight } from '../types/reflection';
+import type { ReflectionInsight } from '../types/insight';
 
 type GenerateReflectionInsightParams = {
   reflectionId: string;

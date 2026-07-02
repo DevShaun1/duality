@@ -1,4 +1,5 @@
 // Data type representation from Supabase
+import type { ReflectionInsight } from '@/features/insights/types/insight';
 
 export type Reflection = {
   id: string;
@@ -14,19 +15,9 @@ export type Reflection = {
   insight_stale: boolean;
 };
 
-export type ReflectionInsight = {
-  id: string;
-  reflection_id: string;
-  created_at: string;
-  summary: string;
-  emotional_tone: string;
-  themes: string[];
-  assumptions: string[];
-  alternative_perspectives: string[];
-  reflection_question: string;
-};
-
 export type ReflectionWithInsight = Reflection & {
   insight?: ReflectionInsight | null;
   hasInsight: boolean;
 };
+
+export type { ReflectionInsight };

@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { insightsQueryKeys } from '@/features/insights/lib/queryKeys';
 import { deleteReflection } from '../api/deleteReflection';
 
 export function useDeleteReflection() {
@@ -9,9 +10,9 @@ export function useDeleteReflection() {
     onSuccess: (_, reflectionId) => {
       queryClient.invalidateQueries({ queryKey: ['reflections'] });
       queryClient.invalidateQueries({ queryKey: ['reflections', 'today'] });
-      queryClient.invalidateQueries({ queryKey: ['reflections', 'insight'] });
+      queryClient.invalidateQueries({ queryKey: insightsQueryKeys.all });
       queryClient.removeQueries({ queryKey: ['reflections', reflectionId] });
-      queryClient.removeQueries({ queryKey: ['reflections', 'insight', reflectionId] });
+      queryClient.removeQueries({ queryKey: insightsQueryKeys.reflection(reflectionId) });
     },
   });
 }
