@@ -18,6 +18,7 @@ import SectionTitle from '@/components/common/SectionTitle';
 import { devComponentAttrs } from '@/lib/devtools';
 import ReflectionInsightActionsMenu from '@/features/reflections/components/ReflectionInsightActionMenu';
 import InsightThemeList from '@/features/insights/components/InsightThemeList';
+import InsightStaleNotice from '@/features/insights/components/InsightStaleNotice';
 
 type ReflectionInsightLocationState = {
   autoGenerateInsight?: boolean;
@@ -209,27 +210,11 @@ export default function ReflectionInsightPage() {
             <InsightIntro generatedAt={insight.created_at} />
 
             {reflection.insight_stale ? (
-              <section
-                className="insight-reveal rounded-xl border border-amber-500/40 bg-amber-500/10 p-5"
-                style={{ animationDelay: '50ms' }}
-              >
-                <h3 className="text-base font-semibold text-amber-700">
-                  This reflection has changed since your insight was generated.
-                </h3>
-                <p className="mt-2 text-sm text-amber-700/90">
-                  Regenerate to align this insight with your latest reflection.
-                </p>
-                <Button
-                  className="mt-4"
-                  onClick={handleGenerateInsight}
-                  disabled={generateInsightMutation.isPending}
-                >
-                  {generateInsightMutation.isPending ? 'Regenerating...' : 'Regenerate Insight'}
-                </Button>
-                {generationError ? (
-                  <p className="mt-3 text-sm text-destructive">{generationError}</p>
-                ) : null}
-              </section>
+              <InsightStaleNotice
+                onRegenerate={handleGenerateInsight}
+                isRegenerating={generateInsightMutation.isPending}
+                error={generationError}
+              />
             ) : null}
 
             <div className="insight-reveal" style={{ animationDelay: '80ms' }}>
