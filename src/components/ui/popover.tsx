@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Popover as PopoverPrimitive } from 'radix-ui';
 
 import { cn } from '@/lib/utils';
+import { devComponentAttrs } from '@/lib/devtools';
 
 function Popover({ ...props }: React.ComponentProps<typeof PopoverPrimitive.Root>) {
   return <PopoverPrimitive.Root data-slot="popover" {...props} />;
@@ -18,7 +19,7 @@ function PopoverContent({
   ...props
 }: React.ComponentProps<typeof PopoverPrimitive.Content>) {
   return (
-    <PopoverPrimitive.Portal>
+    <PopoverPrimitive.Portal {...devComponentAttrs('PopoverContent')}>
       <PopoverPrimitive.Content
         data-slot="popover-content"
         align={align}
@@ -43,7 +44,7 @@ function PopoverHeader({ className, ...props }: React.ComponentProps<'div'>) {
       data-slot="popover-header"
       className={cn('flex flex-col gap-0.5 text-sm', className)}
       {...props}
-    />
+    / {...devComponentAttrs('PopoverHeader')}>
   );
 }
 
@@ -57,7 +58,7 @@ function PopoverDescription({ className, ...props }: React.ComponentProps<'p'>) 
       data-slot="popover-description"
       className={cn('text-muted-foreground', className)}
       {...props}
-    />
+    / {...devComponentAttrs('PopoverDescription')}>
   );
 }
 

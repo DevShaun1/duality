@@ -1,6 +1,7 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { useReflectionById } from '@/features/reflections/hooks/useReflectionById';
 import { Link } from 'react-router-dom';
+import { devComponentAttrs } from '@/lib/devtools';
 
 export default function SourceReflectionSection({ reflectionId }: { reflectionId?: string }) {
     const { data: sourceReflection, isLoading, error } = useReflectionById(reflectionId);
@@ -10,7 +11,7 @@ export default function SourceReflectionSection({ reflectionId }: { reflectionId
     }
 
     return (
-        <Accordion type="single" collapsible className="rounded-lg border bg-card text-card-foreground shadow-sm">
+        <Accordion type="single" collapsible className="rounded-lg border bg-card text-card-foreground shadow-sm" {...devComponentAttrs('SourceReflectionSection')}>
             <AccordionItem value="source-reflection" className="border-none px-5">
                 <AccordionTrigger className="py-5 no-underline hover:no-underline">
                     <span className="text-left">

@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils';
+import { devComponentAttrs } from '@/lib/devtools';
 
 type InsightBulletListProps = {
   items: string[];
@@ -14,7 +15,7 @@ export default function InsightBulletList({
   bulletClassName,
 }: InsightBulletListProps) {
   return (
-    <ul className={cn('space-y-2 text-sm leading-7 text-foreground', className)}>
+    <ul className={cn('space-y-2 text-sm leading-7 text-foreground', className)} {...devComponentAttrs('InsightBulletList')}>
       {items.map((item) => (
         <li key={item} className={cn('flex items-start gap-2', itemClassName)}>
           <span

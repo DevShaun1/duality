@@ -19,6 +19,7 @@ import type { Reflection } from '../types/reflection';
 import { getEnergyTone, getMoodTone, getSleepTone, getStressTone } from '../lib/ratingTones';
 import { DeleteReflectionButton } from './DeleteReflectionButton';
 import { MetricHelpPopover } from './MetricHelpPopover';
+import { devComponentAttrs } from '@/lib/devtools';
 
 type ReflectionFormProps = {
   todaysReflection?: Reflection | null;
@@ -134,7 +135,7 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
   const handleReflectionSubmit = handleSubmit(onSubmit);
 
   return (
-    <Card>
+    <Card {...devComponentAttrs('ReflectionForm')}>
       <CardHeader className="space-y-2">
         <h2 className="text-lg font-semibold text-foreground">
           {isEditing ? 'Refine your reflection' : 'Write your reflection'}

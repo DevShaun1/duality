@@ -30,6 +30,7 @@ import InsightBulletList from '@/components/insights/InsightBulletList';
 import InsightList from '@/components/insights/InsightList';
 import InsightShell from '@/components/insights/InsightShell';
 import InsightIntro from '@/components/insights/InsightIntro';
+import { devComponentAttrs } from '@/lib/devtools';
 
 type ReflectionInsightLocationState = {
   autoGenerateInsight?: boolean;
@@ -113,7 +114,7 @@ export default function ReflectionInsightPage() {
 
   if (!reflectionId) {
     return (
-      <PageContainer>
+      <PageContainer {...devComponentAttrs('ReflectionInsightPage')}>
         <p className="text-destructive">Missing reflection id.</p>
       </PageContainer>
     );

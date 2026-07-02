@@ -46,6 +46,7 @@ import {
 import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { StatusState } from '@/components/common/StatusState';
+import { devComponentAttrs } from '@/lib/devtools';
 
 type SortOption = 'newest' | 'oldest';
 type DateFilterOption = 'all' | '7d' | '30d' | '90d' | 'year';
@@ -177,7 +178,7 @@ export default function ReflectionsPage() {
 
   if (isLoading) {
     return (
-      <PageContainer>
+      <PageContainer {...devComponentAttrs('ReflectionsPage')}>
         <div className="mx-auto max-w-lg">
           <StatusState
             title="Gathering your reflections"
@@ -206,7 +207,7 @@ export default function ReflectionsPage() {
       />
 
       {reflectionList.length === 0 ? (
-        <div className="w-full">
+        <div className="w-full" {...devComponentAttrs('ReflectionsPage.EmptyState')}>
           <StatusState
             title="No reflections yet"
             description="Your reflections will appear here once you start writing."
@@ -218,7 +219,7 @@ export default function ReflectionsPage() {
           />
         </div>
       ) : (
-        <div className="space-y-5">
+        <div className="space-y-5" {...devComponentAttrs('ReflectionsPage.List')}>
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex flex-col gap-3 sm:flex-row">
               <Select

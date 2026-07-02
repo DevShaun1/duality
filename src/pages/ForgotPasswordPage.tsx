@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { PageContainer } from '@/components/layout/PageContainer';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { supabase } from '@/lib/supabase';
+import { devComponentAttrs } from '@/lib/devtools';
 
 const forgotPasswordSchema = z.object({
   email: z.string().email('Please enter a valid email address.'),
@@ -49,7 +50,7 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <PageContainer>
+    <PageContainer {...devComponentAttrs('ForgotPasswordPage')}>
       <div className="mx-auto max-w-md">
         <PageHeader
           title="Reset your password"

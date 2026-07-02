@@ -2,10 +2,11 @@ import { AuthLayout } from '@/components/layout/AuthLayout';
 import { AuthCard } from '@/features/auth/components/AuthCard';
 import LoginForm from '@/features/auth/components/LoginForm';
 import logo from '@/assets/logo.png';
+import { devComponentAttrs } from '@/lib/devtools';
 
 export default function LoginPage() {
   return (
-    <AuthLayout>
+    <AuthLayout {...devComponentAttrs('LoginPage')}>
       <div className="mb-8 flex flex-col items-center text-center">
         <img src={logo} alt="Duality Logo" className="mx-auto mb-5 block" width={200} />
 

@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { useGetProfile } from '@/features/profile/hooks/useGetProfile';
 import { useUpdateProfile } from '@/features/profile/hooks/useUpdateProfile';
 import { useReflections } from '@/features/reflections/hooks/useReflections';
+import { devComponentAttrs } from '@/lib/devtools';
 
 export default function ReflectionPage() {
   const [isEditingTodaysReflection, setIsEditingTodaysReflection] = useState(false);
@@ -40,7 +41,7 @@ export default function ReflectionPage() {
   if (isLoading) return <FullScreenLoader />;
 
   return (
-    <PageContainer>
+    <PageContainer {...devComponentAttrs('ReflectionPage')}>
       <PageHeader
         title={hasCompletedTodaysReflection ? 'Refine today’s reflection' : 'Today’s Reflection'}
         description={reflectionHeaderDescription}

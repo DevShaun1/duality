@@ -23,6 +23,7 @@ import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useGetProfile } from '@/features/profile/hooks/useGetProfile';
 import { signOutAndRedirect } from '@/features/auth/utils/signOutAndRedirect';
 import logo from '@/assets/logo.png';
+import { devComponentAttrs } from '@/lib/devtools';
 
 export default function TopNavigation() {
   const { isLoggedIn, user } = useAuth();
@@ -56,7 +57,7 @@ export default function TopNavigation() {
   const mobileSheetSectionClass = 'flex flex-col gap-1';
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/70 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/85">
+    <header className="sticky top-0 z-50 border-b border-border/70 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/85" {...devComponentAttrs('TopNavigation')}>
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <NavLink
           to="/reflect"

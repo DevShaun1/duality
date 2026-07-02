@@ -3,6 +3,7 @@ import { DropdownMenu as DropdownMenuPrimitive } from 'radix-ui';
 
 import { cn } from '@/lib/utils';
 import { CheckIcon, ChevronRightIcon } from 'lucide-react';
+import { devComponentAttrs } from '@/lib/devtools';
 
 function DropdownMenu({ ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.Root>) {
   return <DropdownMenuPrimitive.Root data-slot="dropdown-menu" {...props} />;
@@ -27,7 +28,7 @@ function DropdownMenuContent({
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Content>) {
   return (
-    <DropdownMenuPrimitive.Portal>
+    <DropdownMenuPrimitive.Portal {...devComponentAttrs('DropdownMenuContent')}>
       <DropdownMenuPrimitive.Content
         data-slot="dropdown-menu-content"
         sideOffset={sideOffset}
@@ -65,7 +66,7 @@ function DropdownMenuItem({
         className
       )}
       {...props}
-    />
+    / {...devComponentAttrs('DropdownMenuGroup')}>
   );
 }
 
@@ -88,7 +89,7 @@ function DropdownMenuCheckboxItem({
       )}
       checked={checked}
       {...props}
-    >
+     {...devComponentAttrs('DropdownMenuCheckboxItem')}>
       <span
         className="pointer-events-none absolute right-2 flex items-center justify-center"
         data-slot="dropdown-menu-checkbox-item-indicator"
@@ -125,7 +126,7 @@ function DropdownMenuRadioItem({
         className
       )}
       {...props}
-    >
+     {...devComponentAttrs('DropdownMenuRadioGroup')}>
       <span
         className="pointer-events-none absolute right-2 flex items-center justify-center"
         data-slot="dropdown-menu-radio-item-indicator"
@@ -155,7 +156,7 @@ function DropdownMenuLabel({
         className
       )}
       {...props}
-    />
+    / {...devComponentAttrs('DropdownMenuLabel')}>
   );
 }
 
@@ -168,7 +169,7 @@ function DropdownMenuSeparator({
       data-slot="dropdown-menu-separator"
       className={cn('-mx-1 my-1 h-px bg-border', className)}
       {...props}
-    />
+    / {...devComponentAttrs('DropdownMenuSeparator')}>
   );
 }
 
@@ -181,7 +182,7 @@ function DropdownMenuShortcut({ className, ...props }: React.ComponentProps<'spa
         className
       )}
       {...props}
-    />
+    / {...devComponentAttrs('DropdownMenuShortcut')}>
   );
 }
 
@@ -206,7 +207,7 @@ function DropdownMenuSubTrigger({
         className
       )}
       {...props}
-    >
+     {...devComponentAttrs('DropdownMenuSubTrigger')}>
       {children}
       <ChevronRightIcon className="ml-auto" />
     </DropdownMenuPrimitive.SubTrigger>
@@ -225,7 +226,7 @@ function DropdownMenuSubContent({
         className
       )}
       {...props}
-    />
+    / {...devComponentAttrs('DropdownMenuSubContent')}>
   );
 }
 

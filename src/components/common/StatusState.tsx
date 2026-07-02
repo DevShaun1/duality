@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { devComponentAttrs } from '@/lib/devtools';
 
 type StatusStateProps = {
   title: string;
@@ -10,7 +11,7 @@ type StatusStateProps = {
 
 export function StatusState({ title, description, action }: StatusStateProps) {
   return (
-    <Card className="border-border/60 bg-card/80 shadow-sm">
+    <Card className="border-border/60 bg-card/80 shadow-sm" {...devComponentAttrs('StatusState')}>
       <CardHeader className="space-y-2">
         <CardTitle className="text-lg font-semibold">{title}</CardTitle>
         {description ? (

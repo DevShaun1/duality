@@ -10,6 +10,7 @@ import { useLatestPatternReview } from '@/features/patterns/hooks/useLatestPatte
 import { useLatestReflectionInsightPairs } from '@/features/patterns/hooks/useLatestReflectionInsightPairs';
 import { ArrowRight, Compass, Sparkles } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { devComponentAttrs } from '@/lib/devtools';
 
 function areArraysEqual(left: string[], right: string[]): boolean {
   if (left.length !== right.length) {
@@ -68,7 +69,7 @@ export default function DiscoverPatternsPage() {
   }
 
   return (
-    <PageContainer>
+    <PageContainer {...devComponentAttrs('DiscoverPatternsPage')}>
       <PageHeader
         title="Discover Patterns"
         description="A wider look across your recent reflections, helping you notice recurring themes over time."

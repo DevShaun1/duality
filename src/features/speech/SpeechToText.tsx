@@ -2,6 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useSpeechToTextController } from './hooks/useSpeechToTextController';
+import { devComponentAttrs } from '@/lib/devtools';
 
 type SpeechToTextProps = {
   value: string;
@@ -80,7 +81,7 @@ export function SpeechToText({
 
   if (!isSupported) {
     return (
-      <div className="space-y-2">
+      <div className="space-y-2" {...devComponentAttrs('SpeechToText')}>
         <Textarea
           id={textareaId}
           name={textareaName}

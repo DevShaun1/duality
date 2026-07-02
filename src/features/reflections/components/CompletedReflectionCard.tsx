@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
 import { ArrowRight, BookOpen, CheckCircle2, Pencil, Sparkles } from 'lucide-react';
+import { devComponentAttrs } from '@/lib/devtools';
 
 type CompletedReflectionCardProps = {
   onEditReflection: () => void;
@@ -18,7 +19,7 @@ export default function CompletedReflectionCard({
 
   if (showPostSaveState) {
     return (
-      <Card>
+      <Card {...devComponentAttrs('CompletedReflectionCard')}>
         <CardHeader className="space-y-2">
           <CardTitle>Your reflection has been saved.</CardTitle>
           <CardDescription>

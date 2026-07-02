@@ -10,6 +10,7 @@ import { useAuth } from '@/features/auth/hooks/useAuth';
 import DeleteAccountCard from '@/features/profile/components/DeleteAccountCard';
 import { Button } from '@/components/ui/button';
 import { signOutAndRedirect } from '@/features/auth/utils/signOutAndRedirect';
+import { devComponentAttrs } from '@/lib/devtools';
 
 export default function ProfilePage() {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ export default function ProfilePage() {
 
   if (isError) {
     return (
-      <PageContainer>
+      <PageContainer {...devComponentAttrs('ProfilePage')}>
         <div className="mx-auto max-w-2xl">
           <StatusState
             title="We couldn’t load your profile"

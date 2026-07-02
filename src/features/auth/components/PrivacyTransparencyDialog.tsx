@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { devComponentAttrs } from '@/lib/devtools';
 import {
   Dialog,
   DialogContent,
@@ -22,7 +23,7 @@ export default function PrivacyTransparencyDialog({
   hasError = false,
 }: PrivacyTransparencyDialogProps) {
   return (
-    <Dialog open={open}>
+    <Dialog open={open} {...devComponentAttrs('PrivacyTransparencyDialog')}>
       <DialogContent showCloseButton={false}>
         <DialogHeader>
           <DialogTitle>Your trust matters</DialogTitle>

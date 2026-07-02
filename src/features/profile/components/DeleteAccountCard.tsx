@@ -18,6 +18,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useDeleteAccount } from '@/features/profile/hooks/useDeleteAccount';
 import { supabase } from '@/lib/supabase';
+import { devComponentAttrs } from '@/lib/devtools';
 
 type DeleteAccountCardProps = {
   className?: string;
@@ -71,7 +72,7 @@ export default function DeleteAccountCard({ className }: DeleteAccountCardProps)
   }
 
   return (
-    <Card className={`border-destructive/30 bg-destructive/5 ${className}`}>
+    <Card className={`border-destructive/30 bg-destructive/5 ${className}`} {...devComponentAttrs('DeleteAccountCard')}>
       <CardHeader>
         <div className="flex items-start gap-3">
           <span className="rounded-full bg-destructive/10 p-2 text-destructive">

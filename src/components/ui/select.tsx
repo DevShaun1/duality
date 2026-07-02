@@ -1,3 +1,4 @@
+import { devComponentAttrs } from '@/lib/devtools';
 import * as React from "react"
 import { Select as SelectPrimitive } from "radix-ui"
 
@@ -19,7 +20,7 @@ function SelectGroup({
       data-slot="select-group"
       className={cn("scroll-my-1 p-1", className)}
       {...props}
-    />
+    / {...devComponentAttrs('SelectGroup')}>
   )
 }
 
@@ -46,7 +47,7 @@ function SelectTrigger({
         className
       )}
       {...props}
-    >
+     {...devComponentAttrs('SelectTrigger')}>
       {children}
       <SelectPrimitive.Icon asChild>
         <ChevronDownIcon className="pointer-events-none size-4 text-muted-foreground" />
@@ -63,7 +64,7 @@ function SelectContent({
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Content>) {
   return (
-    <SelectPrimitive.Portal>
+    <SelectPrimitive.Portal {...devComponentAttrs('SelectContent')}>
       <SelectPrimitive.Content
         data-slot="select-content"
         data-align-trigger={position === "item-aligned"}
@@ -97,7 +98,7 @@ function SelectLabel({
       data-slot="select-label"
       className={cn("px-1.5 py-1 text-xs text-muted-foreground", className)}
       {...props}
-    />
+    / {...devComponentAttrs('SelectLabel')}>
   )
 }
 
@@ -114,7 +115,7 @@ function SelectItem({
         className
       )}
       {...props}
-    >
+     {...devComponentAttrs('SelectItem')}>
       <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center">
         <SelectPrimitive.ItemIndicator>
           <CheckIcon className="pointer-events-none" />
@@ -134,7 +135,7 @@ function SelectSeparator({
       data-slot="select-separator"
       className={cn("pointer-events-none -mx-1 my-1 h-px bg-border", className)}
       {...props}
-    />
+    / {...devComponentAttrs('SelectSeparator')}>
   )
 }
 
@@ -150,7 +151,7 @@ function SelectScrollUpButton({
         className
       )}
       {...props}
-    >
+     {...devComponentAttrs('SelectScrollUpButton')}>
       <ChevronUpIcon
       />
     </SelectPrimitive.ScrollUpButton>
@@ -169,7 +170,7 @@ function SelectScrollDownButton({
         className
       )}
       {...props}
-    >
+     {...devComponentAttrs('SelectScrollDownButton')}>
       <ChevronDownIcon
       />
     </SelectPrimitive.ScrollDownButton>

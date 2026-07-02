@@ -1,5 +1,6 @@
 import { useTheme } from 'next-themes';
 import { Toaster as Sonner, type ToasterProps } from 'sonner';
+import { devComponentAttrs } from '@/lib/devtools';
 import {
   CircleCheckIcon,
   InfoIcon,
@@ -16,7 +17,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
       theme={theme as ToasterProps['theme']}
       className="toaster group"
       icons={{
-        success: <CircleCheckIcon className="size-4" />,
+        success: <CircleCheckIcon className="size-4" / {...devComponentAttrs('Toaster')}>,
         info: <InfoIcon className="size-4" />,
         warning: <TriangleAlertIcon className="size-4" />,
         error: <OctagonXIcon className="size-4" />,

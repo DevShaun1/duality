@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { FcGoogle } from 'react-icons/fc';
+import { devComponentAttrs } from '@/lib/devtools';
 
 const signupSchema = z
   .object({
@@ -75,7 +76,7 @@ export function SignupForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} {...devComponentAttrs('SignupForm')}>
       <FieldGroup>
         <Button
           type="button"

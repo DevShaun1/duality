@@ -1,3 +1,4 @@
+import { devComponentAttrs } from '@/lib/devtools';
 import * as React from 'react'
 import { Checkbox as CheckboxPrimitive } from 'radix-ui'
 
@@ -13,7 +14,7 @@ function Checkbox({ className, ...props }: React.ComponentProps<typeof CheckboxP
         className
       )}
       {...props}
-    >
+     {...devComponentAttrs('Checkbox')}>
       <CheckboxPrimitive.Indicator
         data-slot="checkbox-indicator"
         className="grid place-content-center text-current transition-none [&>svg]:size-3.5"

@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { CircleHelp } from 'lucide-react';
+import { devComponentAttrs } from '@/lib/devtools';
 
 type MetricHelpProps = {
   label: string;
@@ -10,7 +11,7 @@ type MetricHelpProps = {
 
 export function MetricHelpPopover({ label, description, anchors }: MetricHelpProps) {
   return (
-    <Popover>
+    <Popover {...devComponentAttrs('MetricHelpPopover')}>
       <PopoverTrigger asChild>
         <Button
           type="button"

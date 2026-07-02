@@ -1,3 +1,4 @@
+import { devComponentAttrs } from '@/lib/devtools';
 import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { Slot } from 'radix-ui'
@@ -60,7 +61,7 @@ function Button({
       data-size={size}
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
-    />
+    / {...devComponentAttrs('Button')}>
   )
 }
 

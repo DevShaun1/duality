@@ -1,3 +1,4 @@
+import { devComponentAttrs } from '@/lib/devtools';
 'use client'
 
 import * as React from 'react'
@@ -21,7 +22,7 @@ function Separator({
         className
       )}
       {...props}
-    />
+    / {...devComponentAttrs('Separator')}>
   )
 }
 

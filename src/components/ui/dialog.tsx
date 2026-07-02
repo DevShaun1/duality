@@ -1,3 +1,4 @@
+import { devComponentAttrs } from '@/lib/devtools';
 import * as React from "react"
 import { Dialog as DialogPrimitive } from "radix-ui"
 
@@ -41,7 +42,7 @@ function DialogOverlay({
         className
       )}
       {...props}
-    />
+    / {...devComponentAttrs('DialogOverlay')}>
   )
 }
 
@@ -54,7 +55,7 @@ function DialogContent({
   showCloseButton?: boolean
 }) {
   return (
-    <DialogPortal>
+    <DialogPortal {...devComponentAttrs('DialogContent')}>
       <DialogOverlay />
       <DialogPrimitive.Content
         data-slot="dialog-content"
@@ -89,7 +90,7 @@ function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="dialog-header"
       className={cn("flex flex-col gap-2", className)}
       {...props}
-    />
+    / {...devComponentAttrs('DialogHeader')}>
   )
 }
 
@@ -109,7 +110,7 @@ function DialogFooter({
         className
       )}
       {...props}
-    >
+     {...devComponentAttrs('DialogFooter')}>
       {children}
       {showCloseButton && (
         <DialogPrimitive.Close asChild>
@@ -132,7 +133,7 @@ function DialogTitle({
         className
       )}
       {...props}
-    />
+    / {...devComponentAttrs('DialogTitle')}>
   )
 }
 
@@ -148,7 +149,7 @@ function DialogDescription({
         className
       )}
       {...props}
-    />
+    / {...devComponentAttrs('DialogDescription')}>
   )
 }
 

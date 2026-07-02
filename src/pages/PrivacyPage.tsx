@@ -2,10 +2,11 @@ import { Link } from 'react-router-dom';
 
 import { PageContainer } from '@/components/layout/PageContainer';
 import { PageHeader } from '@/components/layout/PageHeader';
+import { devComponentAttrs } from '@/lib/devtools';
 
 export default function PrivacyPage() {
   return (
-    <PageContainer>
+    <PageContainer {...devComponentAttrs('PrivacyPage')}>
       <PageHeader
         title="Privacy Notice"
         description="How Duality stores, protects, and processes your reflections."

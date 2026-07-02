@@ -11,6 +11,7 @@ import { PageContainer } from '@/components/layout/PageContainer';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { StatusState } from '@/components/common/StatusState';
 import { supabase } from '@/lib/supabase';
+import { devComponentAttrs } from '@/lib/devtools';
 
 const resetPasswordSchema = z
   .object({
@@ -75,7 +76,7 @@ export default function ResetPasswordPage() {
 
   if (!isReady) {
     return (
-      <PageContainer>
+      <PageContainer {...devComponentAttrs('ResetPasswordPage')}>
         <div className="mx-auto max-w-md">
           <StatusState
             title="Preparing your reset link"

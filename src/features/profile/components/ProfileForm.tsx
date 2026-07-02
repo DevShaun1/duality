@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { useUpdateProfile } from '../hooks/useUpdateProfile';
 import { profileSchema, type ProfileFormValues } from '../schemas/profileSchema';
 import { Lock } from 'lucide-react';
+import { devComponentAttrs } from '@/lib/devtools';
 
 type ProfileFormProps = {
   defaultDisplayName?: string | null;
@@ -43,7 +44,7 @@ export default function ProfileForm({
   const isSaving = isSubmitting || updateProfileMutation.isPending;
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" {...devComponentAttrs('ProfileForm')}>
       <div className="space-y-2">
         <Label htmlFor="displayName">Display name</Label>
 

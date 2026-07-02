@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { BookText, Layers, PenSquare, UserRound } from 'lucide-react';
+import { devComponentAttrs } from '@/lib/devtools';
 
 const links = [
   {
@@ -33,7 +34,7 @@ export default function MobileBottomNavigation() {
     <nav
       aria-label="Primary mobile navigation"
       className="fixed inset-x-0 bottom-0 z-50 border-t border-border/70 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/90 md:hidden"
-    >
+     {...devComponentAttrs('MobileBottomNavigation')}>
       <ul className="mx-auto grid max-w-3xl grid-cols-4 gap-1 px-2 pb-4 pt-2">
         {links.map((link) => {
           const Icon = link.icon;

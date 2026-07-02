@@ -13,6 +13,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { devComponentAttrs } from '@/lib/devtools';
 import { useDeleteReflection } from '../hooks/useDeleteReflection';
 
 type ButtonVariant = ComponentProps<typeof Button>['variant'];
@@ -73,6 +74,7 @@ export function DeleteReflectionButton({
   return (
     <>
       <AlertDialog
+        {...devComponentAttrs('DeleteReflectionButton')}
         open={isOpen}
         onOpenChange={(open) => {
           setIsOpen(open);

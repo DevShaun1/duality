@@ -1,4 +1,5 @@
 import { Sparkles } from 'lucide-react';
+import { devComponentAttrs } from '@/lib/devtools';
 
 type InsightIntroProps = {
   generatedAt: string;
@@ -12,7 +13,7 @@ export default function InsightIntro({
   description = 'Take your time with this. These insights are invitations to reflect, not conclusions about who you are.',
 }: InsightIntroProps) {
   return (
-    <header className="insight-reveal insight-reveal-soft">
+    <header className="insight-reveal insight-reveal-soft" {...devComponentAttrs('InsightIntro')}>
       <div className="rounded-xl border border-dashed border-border/30 bg-background/20 p-5">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex items-center gap-2">

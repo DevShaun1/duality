@@ -1,3 +1,4 @@
+import { devComponentAttrs } from '@/lib/devtools';
 import {
   Card,
   CardContent,
@@ -14,7 +15,7 @@ type AuthCardProps = {
 
 export function AuthCard({ title, description, children }: AuthCardProps) {
   return (
-    <Card className="border-slate-800 bg-slate-900/80">
+    <Card className="border-slate-800 bg-slate-900/80" {...devComponentAttrs('AuthCard')}>
       <CardHeader>
         <CardTitle className="text-slate-100">{title}</CardTitle>
         <CardDescription>{description}</CardDescription>

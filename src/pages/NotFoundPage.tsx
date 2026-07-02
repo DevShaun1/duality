@@ -1,8 +1,9 @@
+import { devComponentAttrs } from '@/lib/devtools';
 import { Link } from 'react-router-dom'
 
 export default function NotFoundPage() {
   return (
-    <main className="flex min-h-[70vh] flex-col items-center justify-center px-4 text-center">
+    <main className="flex min-h-[70vh] flex-col items-center justify-center px-4 text-center" {...devComponentAttrs('NotFoundPage')}>
       <h1 className="text-4xl font-bold">404</h1>
 
       <h2 className="mt-4 text-xl font-semibold">Page not found</h2>

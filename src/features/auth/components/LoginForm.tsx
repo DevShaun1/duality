@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
+import { devComponentAttrs } from '@/lib/devtools';
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email address.'),
@@ -61,7 +62,7 @@ export default function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} {...devComponentAttrs('LoginForm')}>
       <FieldGroup>
         <Button
           type="button"

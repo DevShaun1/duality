@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import InsightIntro from '@/components/insights/InsightIntro';
 import InsightPills from '@/components/insights/InsightReadingList';
 import type { PatternReview } from '../types/patternReview';
+import { devComponentAttrs } from '@/lib/devtools';
 
 type PatternReviewCardProps = {
   review: PatternReview;
@@ -25,7 +26,7 @@ function InsightSection({
   contentClassName = 'mt-3',
 }: InsightSectionProps) {
   return (
-    <section className={className}>
+    <section className={className} {...devComponentAttrs('InsightSection')}>
       <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
         <span className="text-primary">{icon}</span>
         <h2>{title}</h2>
@@ -42,7 +43,7 @@ function InsightList({ items }: { items: string[] }) {
   }
 
   return (
-    <ul className="space-y-2">
+    <ul className="space-y-2" {...devComponentAttrs('InsightList')}>
       {items.map((item) => (
         <li key={item} className="flex gap-2 text-sm leading-6 text-foreground/90">
           <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary/70" />
@@ -55,7 +56,7 @@ function InsightList({ items }: { items: string[] }) {
 
 export function PatternReviewCard({ review }: PatternReviewCardProps) {
   return (
-    <article className="space-y-6">
+    <article className="space-y-6" {...devComponentAttrs('PatternReviewCard')}>
       <InsightIntro
         generatedAt={review.created_at}
         description="These patterns are invitations to reflect, not conclusions about who you are. They are here to help you notice the stories you may be returning to over time."

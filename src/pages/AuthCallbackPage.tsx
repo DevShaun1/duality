@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { StatusState } from '@/components/common/StatusState';
+import { devComponentAttrs } from '@/lib/devtools';
 
 export default function AuthCallbackPage() {
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ export default function AuthCallbackPage() {
   }, [navigate]);
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-md items-center px-4">
+    <div className="mx-auto flex min-h-screen max-w-md items-center px-4" {...devComponentAttrs('AuthCallbackPage')}>
       <StatusState
         title="Signing you in"
         description="We’re finishing your secure connection and bringing you back to your reflections."

@@ -1,3 +1,4 @@
+import { devComponentAttrs } from '@/lib/devtools';
 type ReflectionMetricFeedbackProps = {
   label: string;
   value: string;
@@ -10,7 +11,7 @@ export default function ReflectionMetricFeedback({
   description,
 }: ReflectionMetricFeedbackProps) {
   return (
-    <div className="space-y-1">
+    <div className="space-y-1" {...devComponentAttrs('ReflectionMetricFeedback')}>
       <div className="flex items-center justify-between gap-3 text-sm">
         <span className="font-medium text-primary">{label}</span>
         <span className="text-muted-foreground">{value}</span>

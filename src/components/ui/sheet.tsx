@@ -4,6 +4,7 @@ import { Dialog as SheetPrimitive } from 'radix-ui';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { XIcon } from 'lucide-react';
+import { devComponentAttrs } from '@/lib/devtools';
 
 function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />;
@@ -33,7 +34,7 @@ function SheetOverlay({
         className
       )}
       {...props}
-    />
+    / {...devComponentAttrs('SheetOverlay')}>
   );
 }
 
@@ -48,7 +49,7 @@ function SheetContent({
   showCloseButton?: boolean;
 }) {
   return (
-    <SheetPortal>
+    <SheetPortal {...devComponentAttrs('SheetContent')}>
       <SheetOverlay />
       <SheetPrimitive.Content
         data-slot="sheet-content"
@@ -79,7 +80,7 @@ function SheetHeader({ className, ...props }: React.ComponentProps<'div'>) {
       data-slot="sheet-header"
       className={cn('flex flex-col gap-0.5 p-4', className)}
       {...props}
-    />
+    / {...devComponentAttrs('SheetHeader')}>
   );
 }
 
@@ -89,7 +90,7 @@ function SheetFooter({ className, ...props }: React.ComponentProps<'div'>) {
       data-slot="sheet-footer"
       className={cn('mt-auto flex flex-col gap-2 p-4', className)}
       {...props}
-    />
+    / {...devComponentAttrs('SheetFooter')}>
   );
 }
 
@@ -99,7 +100,7 @@ function SheetTitle({ className, ...props }: React.ComponentProps<typeof SheetPr
       data-slot="sheet-title"
       className={cn('font-heading text-base font-medium text-foreground', className)}
       {...props}
-    />
+    / {...devComponentAttrs('SheetTitle')}>
   );
 }
 
@@ -112,7 +113,7 @@ function SheetDescription({
       data-slot="sheet-description"
       className={cn('text-sm text-muted-foreground', className)}
       {...props}
-    />
+    / {...devComponentAttrs('SheetDescription')}>
   );
 }
 

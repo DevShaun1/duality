@@ -15,6 +15,7 @@ import ResetPasswordPage from '@/pages/ResetPasswordPage';
 import ReflectionInsightPage from '@/pages/ReflectionInsightPage';
 import DiscoverPatternsPage from '@/pages/DiscoverPatternsPage';
 import PrivacyPage from '@/pages/PrivacyPage';
+import { devComponentAttrs } from '@/lib/devtools';
 
 export function AppRoutes() {
   const { isLoggedIn, isLoading } = useAuth();
@@ -22,7 +23,7 @@ export function AppRoutes() {
   if (isLoading) return <FullScreenLoader />;
 
   return (
-    <Routes>
+    <Routes {...devComponentAttrs('AppRoutes')}>
       <Route path="/auth/callback" element={<AuthCallbackPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
 

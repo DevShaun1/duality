@@ -1,3 +1,4 @@
+import { devComponentAttrs } from '@/lib/devtools';
 type InsightReadingListProps = {
   items: string[];
 };
@@ -8,7 +9,7 @@ export default function InsightReadingList({ items }: InsightReadingListProps) {
   }
 
   return (
-    <ul className="space-y-2.5">
+    <ul className="space-y-2.5" {...devComponentAttrs('InsightReadingList')}>
       {items.map((item) => (
         <li
           key={item}
