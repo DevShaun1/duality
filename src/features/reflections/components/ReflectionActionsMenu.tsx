@@ -10,28 +10,43 @@ import { Eye, MoreHorizontal, Sparkles, Trash2 } from 'lucide-react';
 import { DeleteReflectionButton } from './DeleteReflectionButton';
 import { useNavigate } from 'react-router-dom';
 import { devComponentAttrs } from '@/lib/devtools';
+import { useState } from 'react';
 
 type ReflectionActionsMenuProps = {
   reflectionId: string;
   isEditable: boolean;
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-  onDeleted: () => void;
+  showEditAction?: boolean;
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  onDeleted?: () => void;
 };
 
 export default function ReflectionActionsMenu({
   reflectionId,
   isEditable,
+  showEditAction = true,
   isOpen,
   onOpenChange,
   onDeleted,
 }: ReflectionActionsMenuProps) {
   const navigate = useNavigate();
+  const [internalOpen, setInternalOpen] = useState(false);
+
+  const isControlled = typeof isOpen === 'boolean';
+  const open = isControlled ? isOpen : internalOpen;
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!isControlled) {
+      setInternalOpen(nextOpen);
+    }
+
+    onOpenChange?.(nextOpen);
+  };
 
   return (
     <DropdownMenu
-      open={isOpen}
-      onOpenChange={onOpenChange}
+      open={open}
+      onOpenChange={handleOpenChange}
       {...devComponentAttrs('ReflectionActionsMenu')}
     >
       <DropdownMenuTrigger asChild>
@@ -50,7 +65,7 @@ export default function ReflectionActionsMenu({
           View insight
         </DropdownMenuItem>
 
-        {isEditable ? (
+        {isEditable && showEditAction ? (
           <DropdownMenuItem
             onSelect={() => {
               navigate('/reflect');
@@ -67,9 +82,12 @@ export default function ReflectionActionsMenu({
           reflectionId={reflectionId}
           hideErrorText
           triggerAsChild
-          onDeleted={onDeleted}
+          onDeleted={() => {
+            handleOpenChange(false);
+            onDeleted?.();
+          }}
           onCancel={() => {
-            onOpenChange(false);
+            handleOpenChange(false);
           }}
         >
           <DropdownMenuItem

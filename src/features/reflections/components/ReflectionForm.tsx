@@ -16,10 +16,10 @@ import { useUpdateReflection } from '../hooks/useUpdateReflection';
 import { SpeechToText } from '@/features/speech/SpeechToText';
 import type { Reflection } from '../types/reflection';
 import { getEnergyTone, getMoodTone, getSleepTone, getStressTone } from '../lib/ratingTones';
-import { DeleteReflectionButton } from './DeleteReflectionButton';
 import { MetricHelpPopover } from './MetricHelpPopover';
 import { devComponentAttrs } from '@/lib/devtools';
 import NumberStepper from '@/components/common/NumberStepper';
+import ReflectionActionsMenu from './ReflectionActionsMenu';
 
 type ReflectionFormProps = {
   todaysReflection?: Reflection | null;
@@ -135,10 +135,20 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
 
   return (
     <Card {...devComponentAttrs('ReflectionForm')}>
-      <CardHeader className="space-y-2">
+      <CardHeader className="flex flex-row items-start justify-between gap-4 space-y-0">
         <h2 className="text-lg font-semibold text-foreground">
           {isEditing ? 'Refine your reflection' : 'Write your reflection'}
         </h2>
+        {isEditing && todaysReflection ? (
+          <ReflectionActionsMenu
+            reflectionId={todaysReflection.id}
+            isEditable={isEditing}
+            showEditAction={false}
+            onDeleted={() => {
+              onDeleted?.();
+            }}
+          />
+        ) : null}
       </CardHeader>
 
       <CardContent>
@@ -370,7 +380,7 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
             )}
           </div>
 
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
+          <div>
             <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
               {isSubmitting
                 ? 'Saving...'
@@ -378,15 +388,6 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
                   ? 'Update Reflection'
                   : "Complete today's reflection"}
             </Button>
-
-            {isEditing && todaysReflection ? (
-              <DeleteReflectionButton
-                reflectionId={todaysReflection.id}
-                buttonVariant="destructive"
-                buttonClassName="w-full sm:w-auto"
-                onDeleted={onDeleted}
-              />
-            ) : null}
           </div>
 
           {submitError ? <p className="text-sm text-destructive">{submitError}</p> : null}
