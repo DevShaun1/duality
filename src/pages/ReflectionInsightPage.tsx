@@ -2,6 +2,7 @@ import FullScreenLoader from '@/components/common/FullScreenLoader';
 import { PageContainer } from '@/components/layout/PageContainer';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Button } from '@/components/ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useGenerateReflectionInsight } from '@/features/insights/hooks/useGenerateReflectionInsight';
 import { useReflectionInsight } from '@/features/insights/hooks/useReflectionInsight';
 import SourceReflectionSection from '@/features/reflections/components/SourceReflectionSection';
@@ -11,16 +12,43 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { CircleHelp, Compass, Heart, Layers3, Lightbulb, Sparkles } from 'lucide-react';
 import InsightSection from '@/components/insights/InsightSection';
 import InsightBulletList from '@/components/insights/InsightBulletList';
-import InsightList from '@/components/insights/InsightList';
 import InsightShell from '@/components/insights/InsightShell';
 import InsightIntro from '@/components/insights/InsightIntro';
 import SectionTitle from '@/components/common/SectionTitle';
 import { devComponentAttrs } from '@/lib/devtools';
 import ReflectionInsightActionsMenu from '@/features/reflections/components/ReflectionInsightActionMenu';
+import InsightThemeList from '@/features/insights/components/InsightThemeList';
 
 type ReflectionInsightLocationState = {
   autoGenerateInsight?: boolean;
 };
+
+type InsightInfoPopoverProps = {
+  label: string;
+  children: React.ReactNode;
+};
+
+function InsightInfoPopover({ label, children }: InsightInfoPopoverProps) {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <button
+          type="button"
+          className="inline-flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-background/70 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          aria-label={label}
+        >
+          <CircleHelp className="h-3.5 w-3.5" />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent
+        align="start"
+        className="max-w-xs border-border/70 bg-popover text-popover-foreground"
+      >
+        <p className="text-sm leading-6 text-muted-foreground">{children}</p>
+      </PopoverContent>
+    </Popover>
+  );
+}
 
 export default function ReflectionInsightPage() {
   const { reflectionId } = useParams<{ reflectionId: string }>();
@@ -223,24 +251,30 @@ export default function ReflectionInsightPage() {
             </div>
 
             <div className="insight-reveal" style={{ animationDelay: '140ms' }}>
-              <InsightSection
-                title="Another Side to Consider"
-                icon={<Compass className="h-4 w-4" />}
-                className="rounded-xl border border-border/70 border-l-2 border-l-primary/45 bg-primary/8 p-5"
-                contentClassName="mt-3"
-              >
+              <section className="rounded-xl border border-border/70 border-l-2 border-l-primary/45 bg-primary/8 p-5">
+                <div className="flex items-center gap-1.5">
+                  <SectionTitle icon={<Compass className="h-4 w-4" />}>
+                    Another Side to Consider
+                  </SectionTitle>
+                  <InsightInfoPopover label="Learn more about another side to consider">
+                    These are alternative ways of looking at your reflection. They are not meant to
+                    replace your experience or tell you what is true, but to gently widen the lens.
+                    Use them to ask: “What else might be possible here?” or “How would I view this
+                    with more compassion or distance?”
+                  </InsightInfoPopover>
+                </div>
                 {(insight.alternative_perspectives ?? []).length > 0 ? (
                   <InsightBulletList
                     items={insight.alternative_perspectives ?? []}
-                    className="space-y-2.5"
+                    className="mt-3 space-y-2.5"
                     itemClassName="gap-2.5"
                   />
                 ) : (
-                  <p className="text-sm text-muted-foreground">
+                  <p className="mt-3 text-sm text-muted-foreground">
                     No alternative perspectives available yet.
                   </p>
                 )}
-              </InsightSection>
+              </section>
             </div>
 
             <div
@@ -248,29 +282,41 @@ export default function ReflectionInsightPage() {
               style={{ animationDelay: '200ms' }}
             >
               <section className="rounded-xl border border-border/70 bg-background/35 p-5">
-                <SectionTitle icon={<Layers3 className="h-4 w-4" />}>Main Themes</SectionTitle>
-                {(insight.themes ?? []).length > 0 ? (
-                  <ul className="mt-3 flex flex-wrap gap-2">
-                    {(insight.themes ?? []).map((theme) => (
-                      <li
-                        key={theme}
-                        className="rounded-full border border-border/70 bg-background/70 px-3 py-1 text-xs font-medium text-foreground/90"
-                      >
-                        {theme}
-                      </li>
-                    ))}
-                  </ul>
+                <div className="flex items-center gap-1.5">
+                  <SectionTitle icon={<Layers3 className="h-4 w-4" />}>Main Themes</SectionTitle>
+                  <InsightInfoPopover label="Learn more about main themes">
+                    These are recurring ideas or topics Duality noticed in your reflection. They are
+                    not labels or conclusions, but gentle signals about what may have been
+                    emotionally or mentally present. Use them to ask: “Why did this stand out
+                    today?” or “Has this theme appeared before?”
+                  </InsightInfoPopover>
+                </div>
+                {(insight.themes ?? []).length > 0 && (
+                  <InsightThemeList themes={insight.themes ?? []} />
+                )}
+              </section>
+
+              <section className="rounded-xl border border-border/70 bg-background/35 p-5">
+                <div className="flex items-center gap-1.5">
+                  <SectionTitle icon={<Lightbulb className="h-4 w-4" />}>
+                    Possible Assumptions
+                  </SectionTitle>
+                  <InsightInfoPopover label="Learn more about possible assumptions">
+                    These are possible beliefs or interpretations that may be shaping how you see
+                    the situation. They are not facts, and they may not all be true. Use them as
+                    prompts to pause and ask: “What am I taking for granted here?” or “Is there
+                    another way to see this?”
+                  </InsightInfoPopover>
+                </div>
+                {(insight.assumptions ?? []).length > 0 ? (
+                  <InsightBulletList
+                    items={insight.assumptions ?? []}
+                    className="mt-3 space-y-2.5"
+                  />
                 ) : (
                   <p className="mt-3 text-sm text-muted-foreground">No insights available yet.</p>
                 )}
               </section>
-
-              <InsightList
-                title="Possible Assumptions"
-                icon={<Lightbulb className="h-4 w-4" />}
-                items={insight.assumptions ?? []}
-                className="rounded-xl border border-border/70 bg-background/35 p-5"
-              />
             </div>
 
             <div className="insight-reveal" style={{ animationDelay: '260ms' }}>
