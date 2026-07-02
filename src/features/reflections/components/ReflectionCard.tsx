@@ -1,28 +1,19 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+
 import {
   Activity,
   ArrowRight,
   Calendar,
   Compass,
   Dumbbell,
-  Eye,
   Moon,
-  MoreHorizontal,
   Smile,
   Sparkles,
-  Trash2,
   Zap,
 } from 'lucide-react';
-import { DeleteReflectionButton } from './DeleteReflectionButton';
+import ReflectionActionsMenu from './ReflectionActionsMenu';
 
 type ReflectionCardProps = {
   reflection: {
@@ -69,65 +60,18 @@ export default function ReflectionCard({
             </span>
           </div>
 
-          <DropdownMenu
-            open={openActionsReflectionId === reflection.id}
+          <ReflectionActionsMenu
+            reflectionId={reflection.id}
+            isEditable={reflection.id === editableReflectionId}
+            isOpen={openActionsReflectionId === reflection.id}
             onOpenChange={(open) => {
               setOpenActionsReflectionId(open ? reflection.id : null);
             }}
-          >
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="-mt-2">
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-
-            <DropdownMenuContent align="end" className="w-52">
-              <DropdownMenuItem
-                onSelect={() => {
-                  navigate(`/reflections/${reflection.id}`);
-                }}
-              >
-                <Eye className="h-4 w-4" />
-                View insight
-              </DropdownMenuItem>
-
-              {reflection.id === editableReflectionId ? (
-                <DropdownMenuItem
-                  onSelect={() => {
-                    navigate('/reflect');
-                  }}
-                >
-                  <Sparkles className="h-4 w-4" />
-                  Edit reflection
-                </DropdownMenuItem>
-              ) : null}
-
-              <DropdownMenuSeparator />
-
-              <DeleteReflectionButton
-                reflectionId={reflection.id}
-                hideErrorText
-                triggerAsChild
-                onDeleted={() => {
-                  setOpenActionsReflectionId(null);
-                  setCurrentPage((page) => Math.max(1, page));
-                }}
-                onCancel={() => {
-                  setOpenActionsReflectionId(null);
-                }}
-              >
-                <DropdownMenuItem
-                  variant="destructive"
-                  onSelect={(event) => {
-                    event.preventDefault();
-                  }}
-                >
-                  <Trash2 className="h-4 w-4" />
-                  Delete reflection
-                </DropdownMenuItem>
-              </DeleteReflectionButton>
-            </DropdownMenuContent>
-          </DropdownMenu>
+            onDeleted={() => {
+              setOpenActionsReflectionId(null);
+              setCurrentPage((page) => Math.max(1, page));
+            }}
+          />
         </div>
       </CardHeader>
 
