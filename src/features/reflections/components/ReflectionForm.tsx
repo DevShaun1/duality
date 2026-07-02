@@ -5,7 +5,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Badge } from '@/components/ui/badge';
@@ -20,6 +19,7 @@ import { getEnergyTone, getMoodTone, getSleepTone, getStressTone } from '../lib/
 import { DeleteReflectionButton } from './DeleteReflectionButton';
 import { MetricHelpPopover } from './MetricHelpPopover';
 import { devComponentAttrs } from '@/lib/devtools';
+import NumberStepper from '@/components/common/NumberStepper';
 
 type ReflectionFormProps = {
   todaysReflection?: Reflection | null;
@@ -34,7 +34,6 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
   const [isPromptOpen, setIsPromptOpen] = useState(false);
 
   const {
-    register,
     handleSubmit,
     setValue,
     control,
@@ -167,18 +166,20 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
                   {sleepTone.label}
                 </Badge>
               </div>
-              <InputGroup>
-                <InputGroupInput
-                  id="sleepHours"
-                  type="number"
-                  step="0.5"
-                  min="0"
-                  max="12"
-                  inputMode="decimal"
-                  {...register('sleepHours', { valueAsNumber: true })}
-                />
-                <InputGroupAddon align="inline-end">hours</InputGroupAddon>
-              </InputGroup>
+              <NumberStepper
+                value={sleepHours ?? 7}
+                min={0}
+                max={12}
+                step={0.5}
+                suffix="hours"
+                onChange={(value) =>
+                  setValue('sleepHours', value, {
+                    shouldDirty: true,
+                    shouldTouch: true,
+                    shouldValidate: true,
+                  })
+                }
+              />
               {errors.sleepHours && (
                 <p className="text-sm text-destructive">{errors.sleepHours.message}</p>
               )}
@@ -371,7 +372,11 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
             <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
-              {isSubmitting ? 'Saving...' : isEditing ? 'Update Reflection' : 'Complete today\'s reflection'}
+              {isSubmitting
+                ? 'Saving...'
+                : isEditing
+                  ? 'Update Reflection'
+                  : "Complete today's reflection"}
             </Button>
 
             {isEditing && todaysReflection ? (
