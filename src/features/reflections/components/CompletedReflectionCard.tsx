@@ -23,7 +23,8 @@ export default function CompletedReflectionCard({
         <CardHeader className="space-y-2">
           <CardTitle>Your reflection has been saved.</CardTitle>
           <CardDescription>
-            Now let's leave space for another perspective to emerge.
+            Now leave space for another perspective to emerge. Generate today's insight to gently
+            challenge your assumptions and, over time, uncover the patterns that shape your story.
           </CardDescription>
         </CardHeader>
 

@@ -61,8 +61,9 @@ export default function ReflectionPage() {
                   most important to you today.
                 </p>
                 <p>
-                  After you save your reflection, Duality will help you notice patterns, question
-                  assumptions and explore another perspective.
+                  After you save your reflection, Duality will help you explore another perspective.
+                  As you reflect consistently, your history can help reveal recurring themes and
+                  patterns over time.
                 </p>
                 <Button
                   type="button"
