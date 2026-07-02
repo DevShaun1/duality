@@ -1,4 +1,5 @@
 import { Sparkles } from 'lucide-react';
+import SectionTitle from '@/components/common/SectionTitle';
 import { devComponentAttrs } from '@/lib/devtools';
 
 type InsightIntroProps = {
@@ -16,11 +17,9 @@ export default function InsightIntro({
     <header className="insight-reveal insight-reveal-soft" {...devComponentAttrs('InsightIntro')}>
       <div className="rounded-xl border border-dashed border-border/30 bg-background/20 p-5">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-primary" />
-
-            <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
-          </div>
+          <SectionTitle icon={<Sparkles className="h-5 w-5" />}>
+            <span className="text-xl font-semibold tracking-tight">{title}</span>
+          </SectionTitle>
 
           <span className="shrink-0 text-sm text-muted-foreground">
             {new Date(generatedAt).toLocaleDateString('en-ZA', {

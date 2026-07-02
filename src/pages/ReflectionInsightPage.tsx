@@ -14,6 +14,7 @@ import InsightBulletList from '@/components/insights/InsightBulletList';
 import InsightList from '@/components/insights/InsightList';
 import InsightShell from '@/components/insights/InsightShell';
 import InsightIntro from '@/components/insights/InsightIntro';
+import SectionTitle from '@/components/common/SectionTitle';
 import { devComponentAttrs } from '@/lib/devtools';
 import ReflectionInsightActionsMenu from '@/features/reflections/components/ReflectionInsightActionMenu';
 
@@ -247,12 +248,7 @@ export default function ReflectionInsightPage() {
               style={{ animationDelay: '200ms' }}
             >
               <section className="rounded-xl border border-border/70 bg-background/35 p-5">
-                <h3 className="flex items-center gap-2 text-base font-semibold text-foreground">
-                  <span className="text-primary">
-                    <Layers3 className="h-4 w-4" />
-                  </span>
-                  Main Themes
-                </h3>
+                <SectionTitle icon={<Layers3 className="h-4 w-4" />}>Main Themes</SectionTitle>
                 {(insight.themes ?? []).length > 0 ? (
                   <ul className="mt-3 flex flex-wrap gap-2">
                     {(insight.themes ?? []).map((theme) => (

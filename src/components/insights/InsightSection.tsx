@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { clsx } from 'clsx';
+import SectionTitle from '@/components/common/SectionTitle';
 import { devComponentAttrs } from '@/lib/devtools';
 
 type InsightSectionProps = {
@@ -19,14 +20,11 @@ export default function InsightSection({
   titleClassName,
   contentClassName,
 }: InsightSectionProps) {
-  const baseTitleClassName = 'flex items-center gap-2 text-base font-semibold text-foreground';
-
   return (
     <section className={clsx(className ?? 'space-y-2')} {...devComponentAttrs('InsightSection')}>
-      <h3 className={clsx(baseTitleClassName, titleClassName)}>
-        {icon ? <span className="text-primary">{icon}</span> : null}
+      <SectionTitle icon={icon} className={titleClassName}>
         {title}
-      </h3>
+      </SectionTitle>
       <div className={contentClassName}>{children}</div>
     </section>
   );

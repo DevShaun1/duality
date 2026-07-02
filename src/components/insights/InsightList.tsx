@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import InsightBulletList from './InsightBulletList';
+import SectionTitle from '@/components/common/SectionTitle';
 import { devComponentAttrs } from '@/lib/devtools';
 
 type InsightListProps = {
@@ -13,10 +14,7 @@ export default function InsightList({ title, items, icon, className }: InsightLi
   if (items.length === 0) {
     return (
       <section className={className ?? 'space-y-3'} {...devComponentAttrs('InsightList')}>
-        <h3 className="flex items-center gap-2 text-base font-semibold text-foreground">
-          {icon ? <span className="text-primary">{icon}</span> : null}
-          {title}
-        </h3>
+        <SectionTitle icon={icon}>{title}</SectionTitle>
         <p className="text-sm text-muted-foreground">No insights available yet.</p>
       </section>
     );
@@ -24,10 +22,7 @@ export default function InsightList({ title, items, icon, className }: InsightLi
 
   return (
     <section className={className ?? 'space-y-3'}>
-      <h3 className="flex items-center gap-2 text-base font-semibold text-foreground">
-        {icon ? <span className="text-primary">{icon}</span> : null}
-        {title}
-      </h3>
+      <SectionTitle icon={icon}>{title}</SectionTitle>
       <InsightBulletList items={items} />
     </section>
   );
