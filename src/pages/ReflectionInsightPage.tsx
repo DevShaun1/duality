@@ -2,35 +2,20 @@ import FullScreenLoader from '@/components/common/FullScreenLoader';
 import { PageContainer } from '@/components/layout/PageContainer';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { DeleteReflectionButton } from '@/features/reflections/components/DeleteReflectionButton';
 import SourceReflectionSection from '@/features/reflections/components/SourceReflectionSection';
 import { useGenerateReflectionInsight } from '@/features/reflections/hooks/useGenerateReflectionInsight';
 import { useReflectionById } from '@/features/reflections/hooks/useReflectionById';
 import { useReflectionInsight } from '@/features/reflections/hooks/useReflectionInsight';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
-import {
-  CircleHelp,
-  Compass,
-  Heart,
-  Layers3,
-  Lightbulb,
-  MoreHorizontal,
-  Sparkles,
-  Trash2,
-} from 'lucide-react';
+import { CircleHelp, Compass, Heart, Layers3, Lightbulb, Sparkles } from 'lucide-react';
 import InsightSection from '@/components/insights/InsightSection';
 import InsightBulletList from '@/components/insights/InsightBulletList';
 import InsightList from '@/components/insights/InsightList';
 import InsightShell from '@/components/insights/InsightShell';
 import InsightIntro from '@/components/insights/InsightIntro';
 import { devComponentAttrs } from '@/lib/devtools';
+import ReflectionInsightActionsMenu from '@/features/reflections/components/ReflectionInsightActionMenu';
 
 type ReflectionInsightLocationState = {
   autoGenerateInsight?: boolean;
@@ -56,7 +41,6 @@ export default function ReflectionInsightPage() {
   const generateInsightMutation = useGenerateReflectionInsight();
   const [generationError, setGenerationError] = useState<string | null>(null);
   const [isAwaitingGeneratedInsight, setIsAwaitingGeneratedInsight] = useState(false);
-  const [isActionsMenuOpen, setIsActionsMenuOpen] = useState(false);
 
   const isLoading = isReflectionLoading || isInsightLoading;
 
@@ -81,15 +65,12 @@ export default function ReflectionInsightPage() {
     } catch (error) {
       setIsAwaitingGeneratedInsight(false);
       setGenerationError(
-        error instanceof Error ? error.message : 'We\'re having trouble generating your insight. Please try again.'
+        error instanceof Error
+          ? error.message
+          : "We're having trouble generating your insight. Please try again."
       );
     }
   }, [generateInsightMutation, reflection]);
-
-  const handleOnCancelDelete = useCallback(() => {
-    // Close the dropdown menu when the delete action is canceled
-    setIsActionsMenuOpen(false);
-  }, []);
 
   useEffect(() => {
     if (
@@ -136,39 +117,19 @@ export default function ReflectionInsightPage() {
         />
 
         {reflection ? (
-          <DropdownMenu open={isActionsMenuOpen} onOpenChange={setIsActionsMenuOpen}>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="mt-1 shrink-0">
-                <MoreHorizontal className="h-4 w-4" />
-                <span className="sr-only">Open reflection actions</span>
-              </Button>
-            </DropdownMenuTrigger>
-
-            <DropdownMenuContent align="end" className="w-56">
-              <DeleteReflectionButton
-                reflectionId={reflection.id}
-                hideErrorText
-                triggerAsChild
-                onDeleted={() => navigate('/reflections')}
-                onCancel={handleOnCancelDelete}
-              >
-                <DropdownMenuItem
-                  variant="destructive"
-                  onSelect={(event) => {
-                    event.preventDefault();
-                  }}
-                >
-                  <Trash2 className="h-4 w-4" />
-                  Delete reflection
-                </DropdownMenuItem>
-              </DeleteReflectionButton>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <ReflectionInsightActionsMenu
+            reflectionId={reflection.id}
+            onDeleted={() => {
+              navigate('/reflections');
+            }}
+          />
         ) : null}
       </div>
 
       {reflectionError ? (
-        <p className="text-destructive">We weren't able to load that reflection: {reflectionError.message}</p>
+        <p className="text-destructive">
+          We weren't able to load that reflection: {reflectionError.message}
+        </p>
       ) : !reflection ? (
         <section className="rounded-lg border bg-card p-5 text-card-foreground shadow-sm">
           <h2 className="text-lg font-semibold">Reflection not found</h2>
@@ -180,7 +141,9 @@ export default function ReflectionInsightPage() {
           </Button>
         </section>
       ) : insightError ? (
-        <p className="text-destructive">We weren't able to load that insight: {insightError.message}</p>
+        <p className="text-destructive">
+          We weren't able to load that insight: {insightError.message}
+        </p>
       ) : isGeneratingInsight ? (
         <section className="rounded-lg border bg-card p-5 text-card-foreground shadow-sm">
           <h2 className="text-lg font-semibold">Generating your insight...</h2>
