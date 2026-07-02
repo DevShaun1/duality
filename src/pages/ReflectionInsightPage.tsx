@@ -211,7 +211,7 @@ export default function ReflectionInsightPage() {
                 contentClassName="mt-2 whitespace-pre-wrap text-base leading-8 text-foreground/95"
               >
                 {insight.summary}
-                <div className="mt-4 flex w-fit max-w-full flex-wrap items-center gap-2 rounded-full border border-border/70 bg-background/70 px-3 py-1.5 text-sm text-foreground/90">
+                <div className="mt-4 flex max-w-full flex-col items-start gap-1.5 rounded-xl border border-border/70 bg-background/70 px-4 py-3 text-sm text-foreground/90 sm:w-fit sm:flex-row sm:items-center sm:gap-2 sm:rounded-full sm:px-3 sm:py-1.5">
                   <span className="inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-[0.08em] text-muted-foreground">
                     <Heart className="h-3.5 w-3.5" />
                     Emotional tone
