@@ -13,7 +13,7 @@ import { ChevronDown } from 'lucide-react';
 import { reflectionFormSchema, type ReflectionFormValues } from '../schemas/reflectionSchema';
 import { useCreateReflection } from '../hooks/useCreateReflection';
 import { useUpdateReflection } from '../hooks/useUpdateReflection';
-import { SpeechToText } from '@/features/speech/SpeechToText';
+import { SpeechToText } from '@/features/speech/components/SpeechToText';
 import type { Reflection } from '../types/reflection';
 import { getEnergyTone, getMoodTone, getSleepTone, getStressTone } from '../lib/ratingTones';
 import { MetricHelpPopover } from './MetricHelpPopover';
@@ -136,9 +136,15 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
   return (
     <Card {...devComponentAttrs('ReflectionForm')}>
       <CardHeader className="flex flex-row items-start justify-between gap-4 space-y-0">
-        <h2 className="text-lg font-semibold text-foreground">
-          {isEditing ? 'Refine your reflection' : 'Write your reflection'}
-        </h2>
+        <div className="space-y-1">
+          <h2 className="text-lg font-semibold text-foreground">
+            {isEditing ? "Update today's check-in" : 'Check in with yourself'}
+          </h2>
+          <p className="text-sm leading-6 text-muted-foreground">
+            Start with a few quick signals, then write or speak about what stood out today.
+          </p>
+        </div>
+
         {isEditing && todaysReflection ? (
           <ReflectionActionsMenu
             reflectionId={todaysReflection.id}
@@ -153,176 +159,194 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
 
       <CardContent>
         <form onSubmit={handleReflectionSubmit} className="space-y-6">
-          <div className="grid gap-6 lg:grid-cols-2">
-            <div className="space-y-3 rounded-xl border border-border/40 bg-background/20 p-4">
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex items-center gap-1.5">
-                  <Label htmlFor="sleepHours">Sleep duration</Label>
-                  <MetricHelpPopover
-                    label="Sleep duration"
-                    description="Enter roughly how many hours you slept last night. It does not need to be exact."
-                    anchors={[
-                      '< 6 hrs = Very short',
-                      '6–6.9 hrs = A little short',
-                      '7–9 hrs = Recommended range',
-                      '> 9 hrs = Long sleep',
-                    ]}
-                  />
-                </div>
-                <Badge
-                  variant="outline"
-                  className="rounded-full border-primary/30 bg-primary/10 text-xs font-medium text-primary"
-                >
-                  {sleepTone.label}
-                </Badge>
-              </div>
-              <NumberStepper
-                value={sleepHours ?? 7}
-                min={0}
-                max={12}
-                step={0.5}
-                suffix="hours"
-                onChange={(value) =>
-                  setValue('sleepHours', value, {
-                    shouldDirty: true,
-                    shouldTouch: true,
-                    shouldValidate: true,
-                  })
-                }
-              />
-              {errors.sleepHours && (
-                <p className="text-sm text-destructive">{errors.sleepHours.message}</p>
-              )}
+          <div className="space-y-3">
+            <div>
+              <h3 className="text-sm font-semibold text-foreground">Daily signals</h3>
+              <p className="text-xs leading-5 text-muted-foreground">
+                These help Duality notice patterns between how your day felt and what you reflect
+                on.
+              </p>
             </div>
 
-            <div className="space-y-3 rounded-xl border border-border/40 bg-background/20 p-4">
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex items-center gap-1.5">
-                  <Label htmlFor="energy">Energy level</Label>
-                  <MetricHelpPopover
-                    label="Energy level"
-                    description="Think about your overall physical and mental energy throughout today."
-                    anchors={[
-                      '1 = Completely drained',
-                      '5 = Fairly balanced',
-                      '10 = Full of energy',
-                    ]}
-                  />
-                </div>
-                <div className="flex items-center gap-2">
+            <div className="grid gap-6 lg:grid-cols-2">
+              <div className="space-y-3 rounded-xl border border-border/40 bg-background/20 p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-1.5">
+                    <Label htmlFor="sleepHours">Sleep duration</Label>
+                    <MetricHelpPopover
+                      label="Sleep duration"
+                      description="Enter roughly how many hours you slept last night. It does not need to be exact."
+                      anchors={[
+                        '< 6 hrs = Very short',
+                        '6–6.9 hrs = A little short',
+                        '7–9 hrs = Recommended range',
+                        '> 9 hrs = Long sleep',
+                      ]}
+                    />
+                  </div>
                   <Badge
                     variant="outline"
                     className="rounded-full border-primary/30 bg-primary/10 text-xs font-medium text-primary"
                   >
-                    {energyTone.label}
+                    {sleepTone.label}
                   </Badge>
-                  <span className="text-sm text-muted-foreground">{energy ?? 5}/10</span>
                 </div>
+                <NumberStepper
+                  value={sleepHours ?? 7}
+                  min={0}
+                  max={12}
+                  step={0.5}
+                  suffix="hours"
+                  onChange={(value) =>
+                    setValue('sleepHours', value, {
+                      shouldDirty: true,
+                      shouldTouch: true,
+                      shouldValidate: true,
+                    })
+                  }
+                />
+                {errors.sleepHours && (
+                  <p className="text-sm text-destructive">{errors.sleepHours.message}</p>
+                )}
               </div>
-              <Slider
-                id="energy"
-                min={1}
-                max={10}
-                step={1}
-                value={[energy ?? 5]}
-                onValueChange={([value]) => {
-                  setValue('energy', value, {
-                    shouldDirty: true,
-                    shouldTouch: true,
-                    shouldValidate: true,
-                  });
-                }}
-                aria-label="Energy level rating"
-              />
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span>Low</span>
-                <span>High</span>
-              </div>
-              {errors.energy && <p className="text-sm text-destructive">{errors.energy.message}</p>}
-            </div>
 
-            <div className="space-y-3 rounded-xl border border-border/40 bg-background/20 p-4">
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex items-center gap-1.5">
-                  <Label htmlFor="mood">Overall mood</Label>
-                  <MetricHelpPopover
-                    label="Overall mood"
-                    description="Consider how positive, neutral, or low your mood felt across most of the day."
-                    anchors={['1 = Very low', '5 = Neutral or mixed', '10 = Very positive']}
-                  />
+              <div className="space-y-3 rounded-xl border border-border/40 bg-background/20 p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-1.5">
+                    <Label htmlFor="energy">Energy level</Label>
+                    <MetricHelpPopover
+                      label="Energy level"
+                      description="Think about your overall physical and mental energy throughout today."
+                      anchors={[
+                        '1 = Completely drained',
+                        '5 = Fairly balanced',
+                        '10 = Full of energy',
+                      ]}
+                    />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge
+                      variant="outline"
+                      className="rounded-full border-primary/30 bg-primary/10 text-xs font-medium text-primary"
+                    >
+                      {energyTone.label}
+                    </Badge>
+                    <span className="text-sm text-muted-foreground">{energy ?? 5}/10</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Badge
-                    variant="outline"
-                    className="rounded-full border-primary/30 bg-primary/10 text-xs font-medium text-primary"
-                  >
-                    {moodTone.label}
-                  </Badge>
-                  <span className="text-sm text-muted-foreground">{mood ?? 5}/10</span>
+                <Slider
+                  id="energy"
+                  min={1}
+                  max={10}
+                  step={1}
+                  value={[energy ?? 5]}
+                  onValueChange={([value]) => {
+                    setValue('energy', value, {
+                      shouldDirty: true,
+                      shouldTouch: true,
+                      shouldValidate: true,
+                    });
+                  }}
+                  aria-label="Energy level rating"
+                />
+                <div className="flex justify-between text-xs text-muted-foreground">
+                  <span>Low</span>
+                  <span>High</span>
                 </div>
+                {errors.energy && (
+                  <p className="text-sm text-destructive">{errors.energy.message}</p>
+                )}
               </div>
-              <Slider
-                id="mood"
-                min={1}
-                max={10}
-                step={1}
-                value={[mood ?? 5]}
-                onValueChange={([value]) => {
-                  setValue('mood', value, {
-                    shouldDirty: true,
-                    shouldTouch: true,
-                    shouldValidate: true,
-                  });
-                }}
-                aria-label="Overall mood rating"
-              />
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span>Low</span>
-                <span>Positive</span>
-              </div>
-              {errors.mood && <p className="text-sm text-destructive">{errors.mood.message}</p>}
-            </div>
 
-            <div className="space-y-3 rounded-xl border border-border/40 bg-background/20 p-4">
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex items-center gap-1.5">
-                  <Label htmlFor="stress">Stress level</Label>
-                  <MetricHelpPopover
-                    label="Stress level"
-                    description="Consider how much pressure, tension, or overwhelm you felt during most of the day."
-                    anchors={['1 = Very relaxed', '5 = Moderate pressure', '10 = Highly stressed']}
-                  />
+              <div className="space-y-3 rounded-xl border border-border/40 bg-background/20 p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-1.5">
+                    <Label htmlFor="mood">Overall mood</Label>
+                    <MetricHelpPopover
+                      label="Overall mood"
+                      description="Consider how positive, neutral, or low your mood felt across most of the day."
+                      anchors={['1 = Very low', '5 = Neutral or mixed', '10 = Very positive']}
+                    />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge
+                      variant="outline"
+                      className="rounded-full border-primary/30 bg-primary/10 text-xs font-medium text-primary"
+                    >
+                      {moodTone.label}
+                    </Badge>
+                    <span className="text-sm text-muted-foreground">{mood ?? 5}/10</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Badge
-                    variant="outline"
-                    className="rounded-full border-primary/30 bg-primary/10 text-xs font-medium text-primary"
-                  >
-                    {stressTone.label}
-                  </Badge>
-                  <span className="text-sm text-muted-foreground">{stress ?? 5}/10</span>
+                <Slider
+                  id="mood"
+                  min={1}
+                  max={10}
+                  step={1}
+                  value={[mood ?? 5]}
+                  onValueChange={([value]) => {
+                    setValue('mood', value, {
+                      shouldDirty: true,
+                      shouldTouch: true,
+                      shouldValidate: true,
+                    });
+                  }}
+                  aria-label="Overall mood rating"
+                />
+                <div className="flex justify-between text-xs text-muted-foreground">
+                  <span>Low</span>
+                  <span>Positive</span>
                 </div>
+                {errors.mood && <p className="text-sm text-destructive">{errors.mood.message}</p>}
               </div>
-              <Slider
-                id="stress"
-                min={1}
-                max={10}
-                step={1}
-                value={[stress ?? 5]}
-                onValueChange={([value]) => {
-                  setValue('stress', value, {
-                    shouldDirty: true,
-                    shouldTouch: true,
-                    shouldValidate: true,
-                  });
-                }}
-                aria-label="Stress level rating"
-              />
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span>Relaxed</span>
-                <span>Stressed</span>
+
+              <div className="space-y-3 rounded-xl border border-border/40 bg-background/20 p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-1.5">
+                    <Label htmlFor="stress">Stress level</Label>
+                    <MetricHelpPopover
+                      label="Stress level"
+                      description="Consider how much pressure, tension, or overwhelm you felt during most of the day."
+                      anchors={[
+                        '1 = Very relaxed',
+                        '5 = Moderate pressure',
+                        '10 = Highly stressed',
+                      ]}
+                    />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge
+                      variant="outline"
+                      className="rounded-full border-primary/30 bg-primary/10 text-xs font-medium text-primary"
+                    >
+                      {stressTone.label}
+                    </Badge>
+                    <span className="text-sm text-muted-foreground">{stress ?? 5}/10</span>
+                  </div>
+                </div>
+                <Slider
+                  id="stress"
+                  min={1}
+                  max={10}
+                  step={1}
+                  value={[stress ?? 5]}
+                  onValueChange={([value]) => {
+                    setValue('stress', value, {
+                      shouldDirty: true,
+                      shouldTouch: true,
+                      shouldValidate: true,
+                    });
+                  }}
+                  aria-label="Stress level rating"
+                />
+                <div className="flex justify-between text-xs text-muted-foreground">
+                  <span>Relaxed</span>
+                  <span>Stressed</span>
+                </div>
+                {errors.stress && (
+                  <p className="text-sm text-destructive">{errors.stress.message}</p>
+                )}
               </div>
-              {errors.stress && <p className="text-sm text-destructive">{errors.stress.message}</p>}
             </div>
           </div>
 
@@ -340,8 +364,16 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
             <Label htmlFor="exercise">I exercised today</Label>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="reflection">Reflection</Label>
+          <div className="space-y-3">
+            <div>
+              <Label htmlFor="reflection" className="text-sm font-semibold">
+                Tell the story of your day
+              </Label>
+              <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                Write naturally, as though you&apos;re telling a trusted friend. You do not need to
+                write perfectly.
+              </p>
+            </div>
             <SpeechToText
               textareaId="reflection"
               textareaName="journalText"
@@ -350,10 +382,6 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
               onChange={handleJournalTextChange}
               placeholder="What happened today, and what stood out to you?"
             />
-            <p className="text-xs leading-5 text-muted-foreground">
-              Write naturally, as though you&apos;re telling a trusted friend about your day. You do
-              not need to write perfectly.
-            </p>
             <Collapsible
               open={isPromptOpen}
               onOpenChange={setIsPromptOpen}
@@ -382,11 +410,7 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
 
           <div>
             <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
-              {isSubmitting
-                ? 'Saving...'
-                : isEditing
-                  ? 'Update Reflection'
-                  : "Complete today's reflection"}
+              {isSubmitting ? 'Saving...' : isEditing ? 'Update reflection' : 'Complete reflection'}
             </Button>
           </div>
 

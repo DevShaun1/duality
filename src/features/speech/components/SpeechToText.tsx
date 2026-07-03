@@ -1,8 +1,9 @@
 import { useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { useSpeechToTextController } from './hooks/useSpeechToTextController';
+import { useSpeechToTextController } from '../hooks/useSpeechToTextController';
 import { devComponentAttrs } from '@/lib/devtools';
+import ClearReflectionDialog from './ClearReflectionDialog';
 
 type SpeechToTextProps = {
   value: string;
@@ -107,14 +108,14 @@ export function SpeechToText({
       )}
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="flex items-center gap-2 text-xs leading-5 text-muted-foreground">
-          <span
-            className={`h-2.5 w-2.5 rounded-full ${isListening ? 'bg-primary' : 'bg-muted-foreground'}`}
-          />
-          {isListening ? 'Listening' : 'Ready to record'}
-        </p>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <p className="flex items-center gap-2 text-xs leading-5 text-muted-foreground">
+            <span
+              className={`h-2.5 w-2.5 rounded-full ${isListening ? 'bg-primary' : 'bg-muted-foreground'}`}
+            />
+            {isListening ? 'Listening' : 'Ready to record'}
+          </p>
 
-        <div className="flex gap-2">
           {!isListening ? (
             <Button type="button" onClick={handleStartListening}>
               Start voice input
@@ -124,11 +125,9 @@ export function SpeechToText({
               Stop
             </Button>
           )}
-
-          <Button type="button" variant="outline" onClick={handleClearTranscript} disabled={!value}>
-            Clear
-          </Button>
         </div>
+
+        <ClearReflectionDialog value={value} handleClearTranscript={handleClearTranscript} />
       </div>
 
       <Textarea
