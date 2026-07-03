@@ -382,6 +382,9 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
               onChange={handleJournalTextChange}
               placeholder="What happened today, and what stood out to you?"
             />
+            {errors.journalText && (
+              <p className="text-sm text-destructive">{errors.journalText.message}</p>
+            )}
             <Collapsible
               open={isPromptOpen}
               onOpenChange={setIsPromptOpen}
@@ -403,9 +406,6 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
                 </ul>
               </CollapsibleContent>
             </Collapsible>
-            {errors.journalText && (
-              <p className="text-sm text-destructive">{errors.journalText.message}</p>
-            )}
           </div>
 
           <div>
