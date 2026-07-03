@@ -56,23 +56,31 @@ export default function DeleteAccountCard({ className }: DeleteAccountCardProps)
     }
 
     setDeleteError(null);
+    let didDeleteSucceed = false;
 
     try {
       await deleteAccount.mutateAsync();
-      await supabase.auth.signOut({ scope: 'local' });
-      setIsDialogOpen(false);
-      navigate('/login', { replace: true });
+      didDeleteSucceed = true;
     } catch (error) {
       setDeleteError(
         error instanceof Error
           ? error.message
           : "We weren't able to delete your account. Please try again or contact support if this persists."
       );
+    } finally {
+      if (didDeleteSucceed) {
+        await supabase.auth.signOut({ scope: 'local' }).catch(() => undefined);
+        setIsDialogOpen(false);
+        navigate('/login', { replace: true });
+      }
     }
   }
 
   return (
-    <Card className={`border-destructive/30 bg-destructive/5 ${className}`} {...devComponentAttrs('DeleteAccountCard')}>
+    <Card
+      className={`border-destructive/30 bg-destructive/5 ${className}`}
+      {...devComponentAttrs('DeleteAccountCard')}
+    >
       <CardHeader>
         <div className="flex items-start gap-3">
           <span className="rounded-full bg-destructive/10 p-2 text-destructive">
