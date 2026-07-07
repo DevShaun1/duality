@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSpeechToText } from './useSpeechToText';
 import { useLocalStorageDraft } from './useLocalStorageDraft';
 
 type UseSpeechToTextControllerOptions = {
-  onFinalTranscript?: (transcript: string) => void;
+  currentValue: string;
 };
 
 const STORAGE_KEY = 'speech-to-text-draft';
@@ -26,38 +26,61 @@ const joinText = (left: string, right: string) => {
  *
  * @returns {Object} View state and handlers for the speech to text UI
  */
-export function useSpeechToTextController({
-  onFinalTranscript,
-}: UseSpeechToTextControllerOptions = {}) {
+export function useSpeechToTextController({ currentValue }: UseSpeechToTextControllerOptions) {
   const {
     transcript,
     interimTranscript,
     isListening,
     isSupported,
     supportsContinuousListening,
+    speechError,
+    wasInterruptedBySystem,
     startListening,
     stopListening,
     resetTranscript,
-  } = useSpeechToText({ onFinalTranscript });
+    clearSpeechFeedback,
+  } = useSpeechToText();
 
   const { draft, setDraft, clearDraft } = useLocalStorageDraft(STORAGE_KEY);
   const [listeningBaseText, setListeningBaseText] = useState('');
+
+  useEffect(() => {
+    if (draft !== currentValue) {
+      setDraft(currentValue);
+    }
+  }, [currentValue, draft, setDraft]);
 
   const handleTextChange = (nextValue: string) => {
     setDraft(nextValue);
   };
 
-  const handleStartListening = () => {
-    setListeningBaseText(draft);
+  const commitPendingTranscript = () => {
+    const pendingTranscript = (transcript || interimTranscript).trim();
+
+    if (!pendingTranscript) {
+      return currentValue;
+    }
+
+    const nextValue = joinText(currentValue, pendingTranscript);
+    setDraft(nextValue);
     resetTranscript();
-    startListening();
+
+    return nextValue;
   };
 
-  const handleStopListening = () => {
-    stopListening();
-    setDraft(joinText(listeningBaseText, transcript));
-    setListeningBaseText('');
+  const handleStartListening = async () => {
+    clearSpeechFeedback();
+    setListeningBaseText(currentValue);
     resetTranscript();
+    await startListening();
+  };
+
+  const handleStopListening = async () => {
+    await stopListening();
+    const nextValue = commitPendingTranscript();
+    setListeningBaseText('');
+
+    return nextValue;
   };
 
   const handleClear = () => {
@@ -67,16 +90,19 @@ export function useSpeechToTextController({
   };
 
   const liveTranscript = transcript || interimTranscript;
-  const liveDisplayText = isListening ? joinText(listeningBaseText, liveTranscript) : draft;
+  const liveDisplayText = isListening ? joinText(listeningBaseText, liveTranscript) : currentValue;
 
   return {
-    displayText: draft,
+    displayText: currentValue,
     interimTranscript,
     isListening,
     isSupported,
     liveDisplayText,
+    speechError,
+    wasInterruptedBySystem,
     supportsContinuousListening,
     handleClear,
+    commitPendingTranscript,
     handleStartListening,
     handleStopListening,
     handleTextChange,
