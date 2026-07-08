@@ -1,11 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
 type UseSpeechToTextOptions = {
   onFinalTranscript?: (transcript: string) => void;
 };
-
-const ABORT_TIMEOUT_MS = 250;
 
 /**
  * Hook for Web Speech API integration with React
@@ -40,9 +38,6 @@ export function useSpeechToText({ onFinalTranscript }: UseSpeechToTextOptions = 
   } = useSpeechRecognition();
 
   const lastFinalTranscriptRef = useRef('');
-  const isManualStopRef = useRef(false);
-  const [speechError, setSpeechError] = useState<string | null>(null);
-  const [wasInterruptedBySystem, setWasInterruptedBySystem] = useState(false);
 
   useEffect(() => {
     const nextFinalTranscript = finalTranscript.trim();
@@ -53,64 +48,15 @@ export function useSpeechToText({ onFinalTranscript }: UseSpeechToTextOptions = 
     onFinalTranscript?.(nextFinalTranscript);
   }, [finalTranscript, onFinalTranscript]);
 
-  useEffect(() => {
-    if (typeof document === 'undefined' || typeof window === 'undefined') return;
-
-    const handleSystemInterruption = () => {
-      if (!listening || isManualStopRef.current) return;
-
-      setWasInterruptedBySystem(true);
-      void SpeechRecognition.abortListening();
-    };
-
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        handleSystemInterruption();
-      }
-    };
-
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    window.addEventListener('pagehide', handleSystemInterruption);
-
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-      window.removeEventListener('pagehide', handleSystemInterruption);
-    };
-  }, [listening]);
-
-  const startListening = async () => {
-    setSpeechError(null);
-    setWasInterruptedBySystem(false);
-    isManualStopRef.current = false;
-
-    const abortPromise = SpeechRecognition.abortListening().catch(() => undefined);
-
-    await Promise.race([
-      abortPromise,
-      new Promise<void>((resolve) => {
-        setTimeout(resolve, ABORT_TIMEOUT_MS);
-      }),
-    ]);
-
-    try {
-      await SpeechRecognition.startListening({
-        continuous: browserSupportsContinuousListening,
-        interimResults: true,
-        language: 'en-ZA',
-      });
-    } catch {
-      setSpeechError('Could not start voice input. Please tap Start voice input again.');
-    }
+  const startListening = () => {
+    SpeechRecognition.startListening({
+      continuous: true,
+      language: 'en-ZA',
+    });
   };
 
-  const stopListening = async () => {
-    isManualStopRef.current = true;
-
-    try {
-      await SpeechRecognition.stopListening();
-    } catch {
-      setSpeechError('Could not stop voice input cleanly.');
-    }
+  const stopListening = () => {
+    SpeechRecognition.stopListening();
   };
 
   return {
@@ -120,14 +66,8 @@ export function useSpeechToText({ onFinalTranscript }: UseSpeechToTextOptions = 
     isListening: listening,
     isSupported: browserSupportsSpeechRecognition,
     supportsContinuousListening: browserSupportsContinuousListening,
-    speechError,
-    wasInterruptedBySystem,
     startListening,
     stopListening,
     resetTranscript,
-    clearSpeechFeedback: () => {
-      setSpeechError(null);
-      setWasInterruptedBySystem(false);
-    },
   };
 }

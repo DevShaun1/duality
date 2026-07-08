@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useSpeechToTextController } from '../hooks/useSpeechToTextController';
@@ -42,57 +42,33 @@ export function SpeechToText({
   placeholder = 'Start speaking about your day...',
   onRecordingControlChange,
 }: SpeechToTextProps) {
+  const handleFinalTranscript = useCallback(
+    (transcript: string) => {
+      const nextValue = `${value} ${transcript}`.trim();
+      onChange(nextValue);
+    },
+    [onChange, value]
+  );
+
   const {
     interimTranscript,
     isListening,
     isSupported,
-    speechError,
-    wasInterruptedBySystem,
-    liveDisplayText,
     supportsContinuousListening,
     handleClear,
-    commitPendingTranscript,
     handleStartListening,
     handleStopListening,
     handleTextChange,
-  } = useSpeechToTextController({ currentValue: value });
+  } = useSpeechToTextController({ onFinalTranscript: handleFinalTranscript });
 
-  const hasCommittedSystemInterruptionRef = useRef(false);
-
-  const handleStopRecording = useCallback(async () => {
-    const nextValue = await handleStopListening();
-    onChange(nextValue);
-  }, [handleStopListening, onChange]);
-
-  const handleStopRecordingWithoutAwait = useCallback(() => {
-    void handleStopRecording();
-  }, [handleStopRecording]);
+  const liveDisplayText = interimTranscript ? `${value} ${interimTranscript}`.trim() : value;
 
   useEffect(() => {
     onRecordingControlChange?.({
       isListening,
-      stopRecording: handleStopRecordingWithoutAwait,
+      stopRecording: handleStopListening,
     });
-  }, [handleStopRecordingWithoutAwait, isListening, onRecordingControlChange]);
-
-  useEffect(() => {
-    if (isListening) {
-      hasCommittedSystemInterruptionRef.current = false;
-      return;
-    }
-
-    if (!wasInterruptedBySystem || hasCommittedSystemInterruptionRef.current) {
-      return;
-    }
-
-    const nextValue = commitPendingTranscript();
-
-    if (nextValue !== value) {
-      onChange(nextValue);
-    }
-
-    hasCommittedSystemInterruptionRef.current = true;
-  }, [commitPendingTranscript, isListening, onChange, value, wasInterruptedBySystem]);
+  }, [isListening, handleStopListening, onRecordingControlChange]);
 
   const handleClearTranscript = () => {
     handleClear();
@@ -131,19 +107,6 @@ export function SpeechToText({
         </p>
       )}
 
-      {wasInterruptedBySystem && (
-        <p className="rounded-md border border-muted bg-muted/40 px-3 py-2 text-xs leading-5 text-muted-foreground">
-          Recording paused when your phone locked or the app moved to the background. Tap Start
-          voice input to continue.
-        </p>
-      )}
-
-      {speechError && (
-        <p className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs leading-5 text-destructive">
-          {speechError}
-        </p>
-      )}
-
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <p className="flex items-center gap-2 text-xs leading-5 text-muted-foreground">
@@ -158,7 +121,7 @@ export function SpeechToText({
               Start voice input
             </Button>
           ) : (
-            <Button type="button" onClick={handleStopRecordingWithoutAwait}>
+            <Button type="button" onClick={handleStopListening}>
               Stop
             </Button>
           )}
