@@ -45,6 +45,7 @@ export function SpeechToText({
   const {
     interimTranscript,
     isListening,
+    isRecognitionActive,
     isSupported,
     speechError,
     wasInterruptedBySystem,
@@ -77,12 +78,17 @@ export function SpeechToText({
   }, [handleStopRecordingWithoutAwait, isListening, onRecordingControlChange]);
 
   useEffect(() => {
-    if (isListening) {
+    if (!isListening) {
       hasCommittedUnexpectedStopRef.current = false;
       return;
     }
 
-    if (wasInterruptedBySystem || hasCommittedUnexpectedStopRef.current) {
+    if (
+      supportsContinuousListening ||
+      isRecognitionActive ||
+      wasInterruptedBySystem ||
+      hasCommittedUnexpectedStopRef.current
+    ) {
       return;
     }
 
@@ -93,7 +99,15 @@ export function SpeechToText({
     }
 
     hasCommittedUnexpectedStopRef.current = true;
-  }, [commitPendingTranscript, isListening, onChange, value, wasInterruptedBySystem]);
+  }, [
+    commitPendingTranscript,
+    isListening,
+    isRecognitionActive,
+    onChange,
+    supportsContinuousListening,
+    value,
+    wasInterruptedBySystem,
+  ]);
 
   useEffect(() => {
     if (isListening) {

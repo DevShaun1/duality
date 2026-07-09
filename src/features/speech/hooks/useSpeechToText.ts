@@ -211,6 +211,7 @@ export function useSpeechToText({ onFinalTranscript }: UseSpeechToTextOptions = 
     interimTranscript,
     finalTranscript,
     isListening: isRecording,
+    isRecognitionActive: listening,
     isSupported: browserSupportsSpeechRecognition,
     supportsContinuousListening: browserSupportsContinuousListening,
     speechError,
