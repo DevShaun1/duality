@@ -58,6 +58,7 @@ export function SpeechToText({
   } = useSpeechToTextController({ currentValue: value });
 
   const hasCommittedSystemInterruptionRef = useRef(false);
+  const hasCommittedUnexpectedStopRef = useRef(false);
 
   const handleStopRecording = useCallback(async () => {
     const nextValue = await handleStopListening();
@@ -74,6 +75,25 @@ export function SpeechToText({
       stopRecording: handleStopRecordingWithoutAwait,
     });
   }, [handleStopRecordingWithoutAwait, isListening, onRecordingControlChange]);
+
+  useEffect(() => {
+    if (isListening) {
+      hasCommittedUnexpectedStopRef.current = false;
+      return;
+    }
+
+    if (wasInterruptedBySystem || hasCommittedUnexpectedStopRef.current) {
+      return;
+    }
+
+    const nextValue = commitPendingTranscript();
+
+    if (nextValue !== value) {
+      onChange(nextValue);
+    }
+
+    hasCommittedUnexpectedStopRef.current = true;
+  }, [commitPendingTranscript, isListening, onChange, value, wasInterruptedBySystem]);
 
   useEffect(() => {
     if (isListening) {
