@@ -8,6 +8,7 @@ type UseSpeechToTextOptions = {
 const ABORT_TIMEOUT_MS = 250;
 const INTERRUPTION_DEBOUNCE_MS = 800;
 const START_GRACE_PERIOD_MS = 1500;
+const AUTO_RESTART_DELAY_MS = 300;
 
 /**
  * Hook for Web Speech API integration with React
@@ -45,6 +46,8 @@ export function useSpeechToText({ onFinalTranscript }: UseSpeechToTextOptions = 
   const isManualStopRef = useRef(false);
   const interruptionTimeoutRef = useRef<number | null>(null);
   const ignoreInterruptionUntilRef = useRef(0);
+  const shouldAutoRestartRef = useRef(false);
+  const restartTimeoutRef = useRef<number | null>(null);
   const [speechError, setSpeechError] = useState<string | null>(null);
   const [wasInterruptedBySystem, setWasInterruptedBySystem] = useState(false);
 
@@ -71,6 +74,7 @@ export function useSpeechToText({ onFinalTranscript }: UseSpeechToTextOptions = 
       if (!listening || isManualStopRef.current) return;
       if (Date.now() < ignoreInterruptionUntilRef.current) return;
 
+      shouldAutoRestartRef.current = false;
       setWasInterruptedBySystem(true);
       void SpeechRecognition.abortListening();
     };
@@ -98,10 +102,49 @@ export function useSpeechToText({ onFinalTranscript }: UseSpeechToTextOptions = 
     };
   }, [listening]);
 
+  useEffect(() => {
+    if (typeof document === 'undefined' || typeof window === 'undefined') return;
+
+    if (listening || !shouldAutoRestartRef.current || document.hidden) {
+      if (restartTimeoutRef.current !== null) {
+        window.clearTimeout(restartTimeoutRef.current);
+        restartTimeoutRef.current = null;
+      }
+      return;
+    }
+
+    restartTimeoutRef.current = window.setTimeout(async () => {
+      restartTimeoutRef.current = null;
+
+      if (!shouldAutoRestartRef.current || document.hidden || isManualStopRef.current) {
+        return;
+      }
+
+      try {
+        await SpeechRecognition.startListening({
+          continuous: browserSupportsContinuousListening,
+          interimResults: true,
+          language: 'en-ZA',
+        });
+      } catch {
+        setSpeechError('Voice input paused. Tap Start voice input to continue.');
+        shouldAutoRestartRef.current = false;
+      }
+    }, AUTO_RESTART_DELAY_MS);
+
+    return () => {
+      if (restartTimeoutRef.current !== null) {
+        window.clearTimeout(restartTimeoutRef.current);
+        restartTimeoutRef.current = null;
+      }
+    };
+  }, [browserSupportsContinuousListening, listening]);
+
   const startListening = async () => {
     setSpeechError(null);
     setWasInterruptedBySystem(false);
     isManualStopRef.current = false;
+    shouldAutoRestartRef.current = true;
     ignoreInterruptionUntilRef.current = Date.now() + START_GRACE_PERIOD_MS;
 
     const abortPromise = SpeechRecognition.abortListening().catch(() => undefined);
@@ -126,6 +169,7 @@ export function useSpeechToText({ onFinalTranscript }: UseSpeechToTextOptions = 
 
   const stopListening = async () => {
     isManualStopRef.current = true;
+    shouldAutoRestartRef.current = false;
 
     try {
       await SpeechRecognition.stopListening();
