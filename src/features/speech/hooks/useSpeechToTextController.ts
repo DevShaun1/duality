@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useSpeechToText } from './useSpeechToText';
 import { useLocalStorageDraft } from './useLocalStorageDraft';
 
@@ -43,7 +43,6 @@ export function useSpeechToTextController({ currentValue }: UseSpeechToTextContr
   } = useSpeechToText();
 
   const { draft, setDraft, clearDraft } = useLocalStorageDraft(STORAGE_KEY);
-  const [listeningBaseText, setListeningBaseText] = useState('');
 
   useEffect(() => {
     if (draft !== currentValue) {
@@ -71,7 +70,6 @@ export function useSpeechToTextController({ currentValue }: UseSpeechToTextContr
 
   const handleStartListening = async () => {
     clearSpeechFeedback();
-    setListeningBaseText(currentValue);
     resetTranscript();
     await startListening();
   };
@@ -79,19 +77,22 @@ export function useSpeechToTextController({ currentValue }: UseSpeechToTextContr
   const handleStopListening = async () => {
     await stopListening();
     const nextValue = commitPendingTranscript();
-    setListeningBaseText('');
 
     return nextValue;
   };
 
   const handleClear = () => {
     clearDraft();
-    setListeningBaseText('');
     resetTranscript();
   };
 
   const liveTranscript = transcript || interimTranscript;
-  const liveDisplayText = isListening ? joinText(listeningBaseText, liveTranscript) : currentValue;
+  // During recording, show live speech appended to the latest committed value.
+  // Fall back to draft when the recogniser pauses (liveTranscript is empty) so the
+  // textarea does not revert to listeningBaseText after a mobile utterance ends.
+  const liveDisplayText = isListening
+    ? (liveTranscript ? joinText(currentValue, liveTranscript) : draft)
+    : currentValue;
 
   return {
     displayText: currentValue,

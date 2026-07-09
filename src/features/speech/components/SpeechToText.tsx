@@ -61,6 +61,14 @@ export function SpeechToText({
   const hasCommittedSystemInterruptionRef = useRef(false);
   const hasCommittedUnexpectedStopRef = useRef(false);
 
+  // Reset the mobile-pause commit guard each time raw recognition re-arms so every
+  // subsequent utterance pause can commit its transcript independently.
+  useEffect(() => {
+    if (isRecognitionActive) {
+      hasCommittedUnexpectedStopRef.current = false;
+    }
+  }, [isRecognitionActive]);
+
   const handleStopRecording = useCallback(async () => {
     const nextValue = await handleStopListening();
     onChange(nextValue);
