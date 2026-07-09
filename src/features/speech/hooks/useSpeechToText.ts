@@ -48,6 +48,7 @@ export function useSpeechToText({ onFinalTranscript }: UseSpeechToTextOptions = 
   const ignoreInterruptionUntilRef = useRef(0);
   const shouldAutoRestartRef = useRef(false);
   const restartTimeoutRef = useRef<number | null>(null);
+  const [isRecording, setIsRecording] = useState(false);
   const [speechError, setSpeechError] = useState<string | null>(null);
   const [wasInterruptedBySystem, setWasInterruptedBySystem] = useState(false);
 
@@ -75,6 +76,7 @@ export function useSpeechToText({ onFinalTranscript }: UseSpeechToTextOptions = 
       if (Date.now() < ignoreInterruptionUntilRef.current) return;
 
       shouldAutoRestartRef.current = false;
+      setIsRecording(false);
       setWasInterruptedBySystem(true);
       void SpeechRecognition.abortListening();
     };
@@ -129,6 +131,7 @@ export function useSpeechToText({ onFinalTranscript }: UseSpeechToTextOptions = 
       } catch {
         setSpeechError('Voice input paused. Tap Start voice input to continue.');
         shouldAutoRestartRef.current = false;
+        setIsRecording(false);
       }
     }, AUTO_RESTART_DELAY_MS);
 
@@ -145,6 +148,7 @@ export function useSpeechToText({ onFinalTranscript }: UseSpeechToTextOptions = 
     setWasInterruptedBySystem(false);
     isManualStopRef.current = false;
     shouldAutoRestartRef.current = true;
+    setIsRecording(true);
     ignoreInterruptionUntilRef.current = Date.now() + START_GRACE_PERIOD_MS;
 
     const abortPromise = SpeechRecognition.abortListening().catch(() => undefined);
@@ -163,6 +167,8 @@ export function useSpeechToText({ onFinalTranscript }: UseSpeechToTextOptions = 
         language: 'en-ZA',
       });
     } catch {
+      shouldAutoRestartRef.current = false;
+      setIsRecording(false);
       setSpeechError('Could not start voice input. Please tap Start voice input again.');
     }
   };
@@ -170,6 +176,12 @@ export function useSpeechToText({ onFinalTranscript }: UseSpeechToTextOptions = 
   const stopListening = async () => {
     isManualStopRef.current = true;
     shouldAutoRestartRef.current = false;
+    setIsRecording(false);
+
+    if (restartTimeoutRef.current !== null) {
+      window.clearTimeout(restartTimeoutRef.current);
+      restartTimeoutRef.current = null;
+    }
 
     try {
       await SpeechRecognition.stopListening();
@@ -182,7 +194,7 @@ export function useSpeechToText({ onFinalTranscript }: UseSpeechToTextOptions = 
     transcript,
     interimTranscript,
     finalTranscript,
-    isListening: listening,
+    isListening: isRecording,
     isSupported: browserSupportsSpeechRecognition,
     supportsContinuousListening: browserSupportsContinuousListening,
     speechError,
