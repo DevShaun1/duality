@@ -43,6 +43,7 @@ export function useSpeechToText({ onFinalTranscript }: UseSpeechToTextOptions = 
   } = useSpeechRecognition();
 
   const lastFinalTranscriptRef = useRef('');
+  const lastCommittedTranscriptRef = useRef('');
   const isManualStopRef = useRef(false);
   const interruptionTimeoutRef = useRef<number | null>(null);
   const ignoreInterruptionUntilRef = useRef(0);
@@ -60,6 +61,20 @@ export function useSpeechToText({ onFinalTranscript }: UseSpeechToTextOptions = 
     lastFinalTranscriptRef.current = nextFinalTranscript;
     onFinalTranscript?.(nextFinalTranscript);
   }, [finalTranscript, onFinalTranscript]);
+
+  useEffect(() => {
+    if (listening || !shouldAutoRestartRef.current) return;
+
+    const pendingTranscript = [transcript, interimTranscript]
+      .filter(Boolean)
+      .join(' ')
+      .trim();
+
+    if (!pendingTranscript || pendingTranscript === lastCommittedTranscriptRef.current) return;
+
+    lastCommittedTranscriptRef.current = pendingTranscript;
+    onFinalTranscript?.(pendingTranscript);
+  }, [interimTranscript, listening, onFinalTranscript, transcript]);
 
   useEffect(() => {
     if (typeof document === 'undefined' || typeof window === 'undefined') return;
@@ -146,6 +161,7 @@ export function useSpeechToText({ onFinalTranscript }: UseSpeechToTextOptions = 
   const startListening = async () => {
     setSpeechError(null);
     setWasInterruptedBySystem(false);
+    lastCommittedTranscriptRef.current = '';
     isManualStopRef.current = false;
     shouldAutoRestartRef.current = true;
     setIsRecording(true);
