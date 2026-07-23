@@ -15,24 +15,19 @@ type SpeechToTextProps = {
 };
 
 /**
- * SpeechToText Component
+ * Provides speech-assisted journal input while keeping the transcript
+ * synchronised with the parent-controlled reflection value.
  *
- * A React component for capturing voice-to-text journal entries using Web Speech API.
- * Provides a user interface for starting/stopping speech recognition, displaying real-time
- * transcription, and clearing entries.
+ * Responsibilities:
+ * - Displays interim and final speech-recognition results.
+ * - Prevents manual edits while recognition is actively updating the transcript.
+ * - Preserves pending speech across mobile pauses and system interruptions.
+ * - Exposes recording controls for parent submission and navigation workflows.
+ * - Falls back to typed input when speech recognition is unsupported.
+ * - Allows the transcript and internal recognition buffers to be reset together.
  *
- * Browser Support:
- * - Chrome, Edge, and modern browsers with Web Speech API support
- * - Falls back to unsupported message for older browsers or Safari
- *
- * Features:
- * - Real-time speech capture with visual listening indicator
- * - Display of both interim (currently being spoken) and final transcript text
- * - Editable textarea (read-only while listening, editable when stopped)
- * - Browser compatibility warnings for limited continuous listening support
- * - Clear button to reset all transcript data
- *
- * @returns {JSX.Element} The rendered Voice Journal interface
+ * The speech-recognition lifecycle and transcript assembly are owned by
+ * `useSpeechToTextController`.
  */
 export function SpeechToText({
   value,
@@ -61,23 +56,30 @@ export function SpeechToText({
   const hasCommittedSystemInterruptionRef = useRef(false);
   const hasCommittedUnexpectedStopRef = useRef(false);
 
-  // Reset the mobile-pause commit guard each time raw recognition re-arms so every
-  // subsequent utterance pause can commit its transcript independently.
+  // Some mobile browsers end each recognition session after a pause even though
+  // the user is still in listening mode. Re-arm the guard whenever recognition
+  // starts again so each completed utterance can be committed exactly once.
   useEffect(() => {
     if (isRecognitionActive) {
       hasCommittedUnexpectedStopRef.current = false;
     }
   }, [isRecognitionActive]);
 
+  // Stopping recognition may flush a final result asynchronously, so wait for
+  // the controller to return the complete transcript before updating the form.
   const handleStopRecording = useCallback(async () => {
     const nextValue = await handleStopListening();
     onChange(nextValue);
   }, [handleStopListening, onChange]);
 
+  // Button and parent callbacks must remain synchronous event handlers; the
+  // async stop operation is intentionally started without blocking the caller.
   const handleStopRecordingWithoutAwait = useCallback(() => {
     void handleStopRecording();
   }, [handleStopRecording]);
 
+  // Expose only the minimal recording API needed by parent workflows, such as
+  // stopping active recognition before submitting or navigating away.
   useEffect(() => {
     onRecordingControlChange?.({
       isListening,
@@ -85,12 +87,18 @@ export function SpeechToText({
     });
   }, [handleStopRecordingWithoutAwait, isListening, onRecordingControlChange]);
 
+  // On mobile browsers without reliable continuous listening, recognition can stop
+  // after a pause without the user pressing Stop. Commit the pending transcript
+  // before the controller automatically starts listening for the next utterance.
   useEffect(() => {
     if (!isListening) {
       hasCommittedUnexpectedStopRef.current = false;
       return;
     }
 
+    // If continuous listening is supported, the controller will automatically
+    // commit the transcript when recognition stops. If the user manually stopped
+    // recording, the transcript is already committed in handleStopRecording.
     if (
       supportsContinuousListening ||
       isRecognitionActive ||
@@ -106,6 +114,8 @@ export function SpeechToText({
       onChange(nextValue);
     }
 
+    // Prevent repeated renders during the same stopped session from appending
+    // the same pending transcript more than once.
     hasCommittedUnexpectedStopRef.current = true;
   }, [
     commitPendingTranscript,
@@ -117,6 +127,9 @@ export function SpeechToText({
     wasInterruptedBySystem,
   ]);
 
+  // System interruptions such as locking the phone or backgrounding the app can
+  // end recognition before the normal stop handler runs. Persist any pending
+  // speech once so the user's last phrase is not lost.
   useEffect(() => {
     if (isListening) {
       hasCommittedSystemInterruptionRef.current = false;
@@ -133,19 +146,25 @@ export function SpeechToText({
       onChange(nextValue);
     }
 
+    // Keep the interruption commit idempotent until a new listening session starts.
     hasCommittedSystemInterruptionRef.current = true;
   }, [commitPendingTranscript, isListening, onChange, value, wasInterruptedBySystem]);
 
+  // Clear both the controller's internal transcript buffers and the parent form
+  // value so stale speech cannot reappear when recognition starts again.
   const handleClearTranscript = () => {
     handleClear();
     onChange('');
   };
 
+  // Keep manually edited text aligned with the controller's base transcript;
+  // future speech results are appended to this updated value.
   const handleTranscriptChange = (nextValue: string) => {
     handleTextChange(nextValue);
     onChange(nextValue);
   };
 
+  // If the browser doesn't support speech recognition, render a standard textarea
   if (!isSupported) {
     return (
       <div className="space-y-2" {...devComponentAttrs('SpeechToText')}>
@@ -190,7 +209,9 @@ export function SpeechToText({
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <p className="flex items-center gap-2 text-xs leading-5 text-muted-foreground">
             <span
-              className={`h-2.5 w-2.5 rounded-full ${isListening ? 'bg-primary' : 'bg-muted-foreground'}`}
+              className={`h-2.5 w-2.5 rounded-full ${
+                isListening ? 'bg-primary' : 'bg-muted-foreground'
+              }`}
             />
             {isListening ? 'Listening' : 'Ready to record'}
           </p>
@@ -226,6 +247,7 @@ export function SpeechToText({
         </p>
       )}
 
+      {/* Show a message when the recogniser is waiting for speech after a pause. */}
       {isListening && !interimTranscript && (
         <p className="text-xs leading-5 text-muted-foreground">Listening... waiting for speech.</p>
       )}
