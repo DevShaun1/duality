@@ -201,6 +201,27 @@
   }
 }
 
+@keyframes speechWaveBar {
+  0%,
+  100% {
+    transform: scaleY(var(--speech-wave-min, 0.3));
+  }
+
+  50% {
+    transform: scaleY(var(--speech-wave-max, 1));
+  }
+}
+
+@layer components {
+  .speech-wave-bar {
+    animation-name: speechWaveBar;
+    animation-duration: var(--speech-wave-duration, 1000ms);
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-delay: var(--speech-wave-delay, 0ms);
+  }
+}
+
 @layer components {
   .insight-reveal {
     --insight-reveal-distance: 12px;
