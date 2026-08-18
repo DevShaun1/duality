@@ -28,18 +28,17 @@ const joinText = (left: string, right: string) => {
  */
 export function useSpeechToTextController({ currentValue }: UseSpeechToTextControllerOptions) {
   const {
-    transcript,
-    interimTranscript,
     isListening,
     isRecognitionActive,
+    hasPendingTranscript,
     isSupported,
-    supportsContinuousListening,
     speechError,
     wasInterruptedBySystem,
     startListening,
     stopListening,
     resetTranscript,
     clearSpeechFeedback,
+    getBufferedTranscript,
   } = useSpeechToText();
 
   const { draft, setDraft, clearDraft } = useLocalStorageDraft(STORAGE_KEY);
@@ -55,7 +54,7 @@ export function useSpeechToTextController({ currentValue }: UseSpeechToTextContr
   };
 
   const commitPendingTranscript = () => {
-    const pendingTranscript = (transcript || interimTranscript).trim();
+    const pendingTranscript = getBufferedTranscript();
 
     if (!pendingTranscript) {
       return currentValue;
@@ -86,28 +85,25 @@ export function useSpeechToTextController({ currentValue }: UseSpeechToTextContr
     resetTranscript();
   };
 
-  const liveTranscript = transcript || interimTranscript;
-  // During recording, show live speech appended to the latest committed value.
-  // Fall back to draft when the recogniser pauses (liveTranscript is empty) so the
-  // textarea does not revert to listeningBaseText after a mobile utterance ends.
-  const liveDisplayText = isListening
-    ? (liveTranscript ? joinText(currentValue, liveTranscript) : draft)
-    : currentValue;
+  // Discards the active recognition session without appending it to the journal.
+  const handleCancelListening = async () => {
+    await stopListening();
+    resetTranscript();
+  };
 
   return {
     displayText: currentValue,
-    interimTranscript,
     isListening,
     isRecognitionActive,
+    hasPendingTranscript,
     isSupported,
-    liveDisplayText,
     speechError,
     wasInterruptedBySystem,
-    supportsContinuousListening,
     handleClear,
     commitPendingTranscript,
     handleStartListening,
     handleStopListening,
+    handleCancelListening,
     handleTextChange,
   };
 }
