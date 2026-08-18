@@ -30,11 +30,13 @@ type ReflectionFormProps = {
 export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: ReflectionFormProps) {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isListening, setIsListening] = useState(false);
-  const stopRecordingRef = useRef<(() => void) | null>(null);
+  const isListeningRef = useRef(isListening);
+  const stopRecordingRef = useRef<(() => Promise<void>) | null>(null);
   const [isPromptOpen, setIsPromptOpen] = useState(false);
 
   const {
     handleSubmit,
+    getValues,
     setValue,
     control,
     formState: { errors, isSubmitting },
@@ -69,7 +71,7 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
   const stressTone = getStressTone(stress ?? 5);
 
   const handleRecordingControlChange = useCallback(
-    ({ isListening, stopRecording }: { isListening: boolean; stopRecording: () => void }) => {
+    ({ isListening, stopRecording }: { isListening: boolean; stopRecording: () => Promise<void> }) => {
       setIsListening((currentIsListening) =>
         currentIsListening === isListening ? currentIsListening : isListening
       );
@@ -94,16 +96,18 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
 
     // Stop recording if the user submits the form while recording is in progress
     if (isListening) {
-      stopRecordingRef.current?.();
+      await stopRecordingRef.current?.();
     }
+
+    const finalizedData = { ...data, journalText: getValues('journalText') };
 
     try {
       const savedReflection = todaysReflection
         ? await updateReflectionMutation.mutateAsync({
             reflectionId: todaysReflection.id,
-            values: data,
+            values: finalizedData,
           })
-        : await createReflectionMutation.mutateAsync(data);
+        : await createReflectionMutation.mutateAsync(finalizedData);
 
       if (!savedReflection) {
         throw new Error("We weren't able to save your reflection. Please try again.");
@@ -119,14 +123,20 @@ export function ReflectionForm({ todaysReflection, onSaved, onDeleted }: Reflect
     }
   };
 
-  // Stop recording if the component unmounts while recording is in progress
+  // Stop recording if the component unmounts while recording is in progress.
+  // The ref keeps this effect from reacting to every isListening change; only
+  // its cleanup on actual unmount should trigger the stop.
+  useEffect(() => {
+    isListeningRef.current = isListening;
+  }, [isListening]);
+
   useEffect(() => {
     return () => {
-      if (isListening) {
+      if (isListeningRef.current) {
         stopRecordingRef.current?.();
       }
     };
-  }, [isListening]);
+  }, []);
 
   // React Hook Form returns an event handler here. It does not call `onSubmit` during render,
   // but the refs lint rule cannot infer that and flags the `stopRecordingRef` access inside `onSubmit`.
