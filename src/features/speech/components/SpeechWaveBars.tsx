@@ -7,6 +7,8 @@ const WAVE_BARS = [
   { delay: 240, min: 0.4, max: 0.75, duration: 950 },
   { delay: 60, min: 0.3, max: 1, duration: 1050 },
   { delay: 180, min: 0.35, max: 0.85, duration: 1000 },
+  { delay: 300, min: 0.3, max: 0.95, duration: 1000 },
+  { delay: 90, min: 0.35, max: 0.8, duration: 1100 },
 ];
 
 /** Renders an animated waveform indicating active voice recording. */
@@ -16,7 +18,7 @@ export function SpeechWaveBars() {
       {WAVE_BARS.map((bar, index) => (
         <span
           key={index}
-          className="speech-wave-bar w-5 rounded-full bg-primary sm:w-1.5"
+          className="speech-wave-bar w-1 rounded-full bg-primary sm:w-1.5"
           style={
             {
               height: '100%',
